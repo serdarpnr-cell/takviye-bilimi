@@ -34,7 +34,7 @@ Bilmen gerekenler:
 | `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
 | `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
 | `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), ürün sayfalarındaki beyanlar, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, alfabetik katalog ürünleri. Kanıt kartı olmayan maddede bunu söyler ve kataloğu gösterir. |
-| `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan) ve en fazla 3 hedef. Cevaplar eksikse soruları döndürür. |
+| `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten) ve `tahlil_onerisi` (D vitamini, B12, ferritin). Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları döndürür. |
 
 Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
 
@@ -63,6 +63,7 @@ data/
   urunler.json                  # orzax.com.tr'den alınan katalog (etiket bilgisi; fiyat yok)
   kurallar.json                 # etken maddeler, EFSA üst sınırları, etkileşim kuralları, ilaç grupları
   kaynaklar.json                # doğrulanmış kaynak kayıtları (DOI, PMID veya URL + erişim tarihi)
+  karne_kurallari.json          # karneden takviye kanıtına, güvenlik uyarısına ve tahlile köprü kuralları
   beyanlar/urun_beyanlari.json  # ürün sayfalarındaki sağlık ve beslenme beyanları (kelimesi kelimesine)
   beyanlar/beyanlar.json        # etken madde düzeyindeki beyan metinleri (regülasyon onayı bekliyor)
   ham/                          # indirilen sayfaların önbelleği (git'e girmez)

@@ -60,15 +60,15 @@
     "semantic_hash": ""
   },
   "server/araclar.py": {
-    "mtime": 1793289390.9158423,
-    "seen": 1793289530.3220603,
-    "ast_hash": "5cc4394d6734cbdd65ff06d813b58043",
+    "mtime": 1793290010.7878134,
+    "seen": 1793290034.5913026,
+    "ast_hash": "6dddad58ee2a9ab4d62ed7900037f855",
     "semantic_hash": ""
   },
   "server/veri.py": {
-    "mtime": 1793289490.532443,
-    "seen": 1793289530.3220623,
-    "ast_hash": "45c4de363bad508f85b62b390960cfdd",
+    "mtime": 1793289987.0518317,
+    "seen": 1793290034.5913048,
+    "ast_hash": "7eb7e10babb13ab766cca4e5953909f5",
     "semantic_hash": ""
   },
   "tests/conftest.py": {
@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "tests/test_veri.py": {
-    "mtime": 1793288916.9171548,
-    "seen": 1793288957.3250017,
-    "ast_hash": "dd916dff84b6de1992e9df6cf577d939",
+    "mtime": 1793290029.26108,
+    "seen": 1793290034.591327,
+    "ast_hash": "3392d2d021d230decddc04a87dddaddf",
     "semantic_hash": ""
   },
   "tests/test_yasam_karnesi.py": {
@@ -126,9 +126,9 @@
     "semantic_hash": "7fa0c67b5339931301e3b47017ead503"
   },
   "README.md": {
-    "mtime": 1793289524.561322,
-    "seen": 1793289530.3220897,
-    "ast_hash": "6781ca38723145ce8215afb1e79e8e76",
+    "mtime": 1793290029.2618444,
+    "seen": 1793290034.5913365,
+    "ast_hash": "43468a924d239efe2beb846e7d3d205b",
     "semantic_hash": ""
   },
   "docs/KANIT_PROTOKOLU.md": {
@@ -225,6 +225,18 @@
     "mtime": 1793289282.0364869,
     "seen": 1793289530.3220913,
     "ast_hash": "ac14e698aa71876955aa1df692f2e51d",
+    "semantic_hash": ""
+  },
+  "data/karne_kurallari.json": {
+    "mtime": 1793289987.0507994,
+    "seen": 1793290034.5912657,
+    "ast_hash": "63a4ea5cb69a5ef833554e7fc967bf6b",
+    "semantic_hash": ""
+  },
+  "tests/test_karne_kurallari.py": {
+    "mtime": 1793290010.7941613,
+    "seen": 1793290034.5913138,
+    "ast_hash": "8f81542173fed20450f9fe002855c676",
     "semantic_hash": ""
   }
 }

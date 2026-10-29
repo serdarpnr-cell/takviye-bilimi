@@ -45,6 +45,11 @@ def kurallar() -> dict:
 
 
 @lru_cache(maxsize=1)
+def karne_kurallari() -> list[dict]:
+    return _yukle("karne_kurallari.json")["kurallar"]
+
+
+@lru_cache(maxsize=1)
 def katalog_tarihi() -> str:
     return _yukle("urunler.json")["erisim_tarihi"]
 

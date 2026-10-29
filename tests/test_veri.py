@@ -74,7 +74,7 @@ def _metin_alanlari(deger, haric=("brd", "miktar_metni", "okuma_notlari")):
 async def test_yasakli_ifade_yok():
     araclar = await mcp.list_tools()
     metinler = [TALIMATLAR] + [t.description for t in araclar]
-    for dosya in ["urunler.json", "kurallar.json", "beyanlar/beyanlar.json", "beyanlar/urun_beyanlari.json"]:
+    for dosya in ["urunler.json", "kurallar.json", "karne_kurallari.json", "beyanlar/beyanlar.json", "beyanlar/urun_beyanlari.json"]:
         metinler += _metin_alanlari(json.loads((veri.VERI_DIZINI / dosya).read_text(encoding="utf-8")))
     hepsi = "\n".join(metinler).casefold()
     for desen in YASAKLI:

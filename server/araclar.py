@@ -452,6 +452,49 @@ def _puanla(anahtar: str, deger) -> int:
     raise KeyError(anahtar)
 
 
+def _aralik(anahtar: str, deger) -> tuple:
+    """Cevabı (alt, üst) aralığına çevirir. Sayı ve kategorik cevap tek noktadır."""
+    return (deger, deger)
+
+
+def _kural_saglanir(kosul: dict, cevaplar: dict) -> bool:
+    if not kosul:
+        return True
+    alt, ust = _aralik(kosul["alan"], cevaplar[kosul["alan"]])
+    if "ust_sinir_kucuktur" in kosul:
+        return ust < kosul["ust_sinir_kucuktur"]
+    if "icinde" in kosul:
+        return alt in kosul["icinde"]
+    raise ValueError(f"Tanımsız karne kuralı koşulu: {kosul}")
+
+
+def _kopruler(girilen: dict) -> tuple[dict, list[str]]:
+    """Karne cevaplarından takviye bağlantıları, güvenlik uyarıları ve tahlil önerisi üretir."""
+    baglantilar, uyarilar, tahliller, kaynak_idleri = [], [], [], []
+    for k in veri.karne_kurallari():
+        if not _kural_saglanir(k["kosul"], girilen):
+            continue
+        kaynak_idleri += k["kaynaklar"]
+        if k["tur"] == "takviye_baglantisi":
+            baglantilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
+                                "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
+        elif k["tur"] == "guvenlik":
+            uyarilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
+                             "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
+        else:
+            tahliller.append({"etken_madde": _rehber_adi(k["etken_madde"]), "mesaj": k["mesaj"]})
+    return {
+        "takviye_baglantilari": baglantilar,
+        "guvenlik_uyarilari": uyarilar,
+        "tahlil_onerisi": {
+            "maddeler": tahliller,
+            "not": "Bu maddelerde ihtiyaç karneyle değil, hekimin gerekli gördüğü kan tahliliyle değerlendirilir.",
+        },
+        "kopru_notu": ("Bağlantılar takviye önerisi değildir; ilgili kanıtı incelemek için yönlendirmedir. "
+                       "Kurallar medikal kurul onayı bekler."),
+    }, kaynak_idleri
+
+
 def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None = None) -> dict:
     if isinstance(cevaplar, dict) or cevaplar is None:
         cevaplar = KarneCevaplari.model_validate(cevaplar or {})
@@ -488,6 +531,7 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
     if yas is not None and yas < 18:
         notlar.append("Bu karnenin eşikleri yetişkinler içindir; çocuk ve gençlerde uyku ve hareket ihtiyacı farklıdır.")
 
+    kopru, kopru_kaynaklari = _kopruler(girilen)
     return veri.zarf({
         "kisa_ozet": f"Karne: {toplam}/12. {len(hedefler)} hedef seçildi." if hedefler else f"Karne: {toplam}/12. Altı alanın hepsi iyi düzeyde.",
         "karne": karne,
@@ -497,8 +541,9 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
         "hedef_secimi": "En düşük puanlı alanlardan en fazla 3 hedef seçilir; eşitlikte tütün, hareket, uyku, beslenme, balık, dinlenme sırası izlenir.",
         "esik_notu": ESIK_NOTU,
         "notlar": notlar,
+        **kopru,
         "gizlilik": "Cevaplar yalnızca bu karneyi üretmek için işlendi; saklanmadı ve loglanmadı.",
-    }, veri.kaynaklar(KARNE_KAYNAKLARI))
+    }, veri.kaynaklar(KARNE_KAYNAKLARI + kopru_kaynaklari))
 
 
 # --------------------------------------------------------------------------- #
