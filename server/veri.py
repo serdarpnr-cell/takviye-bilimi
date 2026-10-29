@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -81,7 +82,11 @@ def _kaynak_gorunumu(k: dict) -> dict:
 def kaynaklar(kimlikler, ekler: list[dict] | None = None) -> list[dict]:
     """Kimlikleri yanıt şemasındaki kaynak listesine çevirir. Doğrulanmamış kaynak listeye girmez."""
     kayitlar = kaynak_kayitlari()
-    liste = [_kaynak_gorunumu(kayitlar[k]) for k in dict.fromkeys(kimlikler) if kayitlar[k].get("dogrulandi")]
+    # İnsan incelemesi bekleyen üretici içeriği (yasaklı ifade bulgusu) de gösterilmez.
+    liste = [
+        _kaynak_gorunumu(kayitlar[k]) for k in dict.fromkeys(kimlikler)
+        if kayitlar[k].get("dogrulandi") and kayitlar[k].get("inceleme") != "gerekli"
+    ]
     for e in ekler or []:
         if e not in liste:
             liste.append(e)
@@ -112,7 +117,7 @@ def etken_madde_id(ad: str) -> str | None:
     """Serbest metinle yazılmış etken madde adını kurallar.json kimliğine çevirir."""
     aranan = normalize(ad)
     for em_id, bilgi in kurallar()["etken_maddeler"].items():
-        if aranan == em_id or aranan in (normalize(e) for e in bilgi["esanlamlar"]):
+        if aranan in (em_id, normalize(bilgi["ad"])) or aranan in (normalize(e) for e in bilgi["esanlamlar"]):
             return em_id
     return None
 
@@ -174,3 +179,40 @@ def urun_ara(sorgu: str) -> list[dict]:
         u for u in urunler()
         if all(k in normalize(u["ad"]).split() or k in normalize(u["ad"]).replace(" ", "") for k in kelimeler)
     ]
+
+
+# --------------------------------------------------------------------------- #
+# Kanıt tabanı: data/etken_maddeler/<id>/monografi.json ve kartlar/*.json
+# --------------------------------------------------------------------------- #
+
+def taslaklar_gosterilsin() -> bool:
+    """Kurul onayı almamış kartlar yalnızca TB_TASLAK_GOSTER=1 iken (test ve deneme) sunulur."""
+    return os.environ.get("TB_TASLAK_GOSTER") == "1"
+
+
+@lru_cache(maxsize=1)
+def _monografiler() -> dict[str, dict]:
+    sonuc = {}
+    for yol in sorted((VERI_DIZINI / "etken_maddeler").glob("*/monografi.json")):
+        m = json.loads(yol.read_text(encoding="utf-8"))
+        m["kartlar"] = [
+            json.loads(k.read_text(encoding="utf-8")) for k in sorted((yol.parent / "kartlar").glob("*.json"))
+        ]
+        sonuc[m["id"]] = m
+    return sonuc
+
+
+def monografi(em_id: str) -> dict | None:
+    """Sunulabilir monografiyi döndürür: onaylı ya da taslak gösterimi açıkken taslak. Kartlar da aynı süzgeçten geçer."""
+    m = _monografiler().get(em_id)
+    if m is None or not _sunulabilir(m):
+        return None
+    return {**m, "kartlar": [k for k in m["kartlar"] if _sunulabilir(k)]}
+
+
+def kanit_tabani_kimlikleri() -> list[str]:
+    return sorted(_monografiler())
+
+
+def _sunulabilir(kayit: dict) -> bool:
+    return kayit["durum"] == "onaylandi" or (kayit["durum"] == "taslak" and taslaklar_gosterilsin())

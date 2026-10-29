@@ -120,6 +120,26 @@ def yasam_karnesi(
     return araclar.yasam_karnesi(cevaplar, yas)
 
 
+@mcp.tool(
+    title="Etken madde rehberi",
+    description=(
+        "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, EFSA üst sınırını, etkileşimlerini ve katalogdaki "
+        "ürünleri kaynaklarıyla verir. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
+        "sorulduğunda. Kullanma: belirli bir ürün sorulduğunda."
+    ),
+    annotations=SALT_OKUMA,
+)
+def etken_madde_rehberi(
+    etken_madde: Annotated[str, Field(description="Etken madde adı, ör. 'D vitamini', 'omega-3', 'magnezyum', 'multivitamin'")],
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş (yıl)")] = None,
+    cinsiyet: araclar.Cinsiyet | None = None,
+    evre: Annotated[araclar.Evre | None, Field(description="İsteğe bağlı gebelik veya emzirme durumu")] = None,
+    sigara: Annotated[araclar.Sigara | None, Field(description="İsteğe bağlı tütün kullanımı")] = None,
+    ilac_grubu: Annotated[list[araclar.IlacGrubu] | None, Field(description="İsteğe bağlı ilaç grupları; ilaç adı gerekmez")] = None,
+) -> dict[str, Any]:
+    return araclar.etken_madde_rehberi(etken_madde, yas, cinsiyet, evre, sigara, ilac_grubu)
+
+
 def main() -> None:
     mcp.run(transport="streamable-http")
 

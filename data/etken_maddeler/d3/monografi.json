@@ -1,0 +1,74 @@
+{
+  "id": "d3",
+  "ad": "D vitamini",
+  "katalog_kimlikleri": ["d3"],
+  "beyan_anahtarlari": ["d vitamini", "d3"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-29",
+  "kisa_ozet": "D vitamini kemiklerin, kasların ve bağışıklık sisteminin normal çalışması için gereklidir. Eksikliği olmayan sağlıklı yetişkinlerde büyük çalışmalar kırık, kanser ya da kalp-damar olaylarında azalma göstermedi; solunum yolu enfeksiyonlarında küçük bir azalma görüldü. Bir kılavuz çocuklar, 75 yaş üstü, gebeler ve yüksek riskli prediyabeti olanlar için ayrıca öneri veriyor.",
+  "kimde_kanit_var": [
+    {
+      "grup": "1–18 yaş çocuk ve ergenler",
+      "gerekce": "Endocrine Society kılavuzu, beslenmeye bağlı raşitizmi önlemek ve solunum yolu enfeksiyonu riskini azaltma potansiyeli nedeniyle öneriyor.",
+      "kaynaklar": ["endocrine_d_2024"]
+    },
+    {"grup": "75 yaş ve üstü", "gerekce": "Endocrine Society kılavuzu, ölüm riskini azaltma potansiyeli nedeniyle öneriyor.", "kaynaklar": ["endocrine_d_2024"]},
+    {
+      "grup": "Gebeler",
+      "gerekce": "Endocrine Society kılavuzu, preeklampsi ve erken doğum gibi gebelik sorunlarının riskini azaltma potansiyeli nedeniyle öneriyor.",
+      "kaynaklar": ["endocrine_d_2024"]
+    },
+    {
+      "grup": "Yüksek riskli prediyabeti olanlar",
+      "gerekce": "Endocrine Society kılavuzu, diyabete ilerlemeyi azaltma potansiyeli nedeniyle öneriyor.",
+      "kaynaklar": ["endocrine_d_2024"]
+    },
+    {
+      "grup": "75 yaş altı sağlıklı yetişkinler",
+      "gerekce": "Aynı kılavuz, hastalık riskini azaltmak amacıyla referans alımın üzerinde D vitamini kullanımını önermiyor.",
+      "kaynaklar": ["endocrine_d_2024"]
+    }
+  ],
+  "kimde_kanit_var_notu": "Öneriler ABD Endocrine Society kılavuzundandır; kişisel karar ve miktar hekimle verilir.",
+  "besinle_karsilama": {
+    "metin": "D vitamini açısından zengin doğal besin azdır. Endocrine Society kılavuzu, ihtiyacın zenginleştirilmiş gıdalar ve D vitamini içeren takviyelerin birlikte kullanımıyla karşılanabileceğini belirtir.",
+    "kaynaklar": ["endocrine_d_2024"]
+  },
+  "tahlil_notu": {
+    "metin": "Belirtisi olmayan sağlıklı kişilerde rutin D vitamini ölçümünü Endocrine Society önermiyor, USPSTF ise yararını belirsiz buluyor. Ölçüm gerekip gerekmediğine hekim karar verir.",
+    "kaynaklar": ["endocrine_d_2024", "uspstf_d_tarama_2021"]
+  },
+  "dikkat_kurallari": [
+    {
+      "kosul": {},
+      "mesaj": "EFSA üst sınırı besin ve takviye dahil tüm kaynaklardan gelen toplam içindir; birden fazla D vitamini içeren ürün kullanılıyorsa toplam birlikte değerlendirilmelidir.",
+      "kaynaklar": ["efsa_ul_d_vitamini_2023"]
+    },
+    {
+      "kosul": {},
+      "mesaj": "USPSTF, D vitamini ile kalsiyumun birlikte kullanımında böbrek taşı sıklığının arttığını belirtir.",
+      "kaynaklar": ["uspstf_kirik_2018"]
+    },
+    {"kosul": {"yas_max": 10}, "mesaj": "1–10 yaş çocuklarda EFSA üst sınırı yetişkinlerin yarısıdır (50 µg/gün).", "kaynaklar": ["efsa_ul_d_vitamini_2023"]},
+    {
+      "kosul": {"evre": ["gebe", "gebelik_planliyor"]},
+      "mesaj": "Endocrine Society kılavuzu gebelikte D vitamini kullanımını öneriyor; miktarı hekiminiz belirler.",
+      "kaynaklar": ["endocrine_d_2024"]
+    },
+    {
+      "kosul": {"yas_min": 51},
+      "mesaj": "Endocrine Society kılavuzu, 50 yaş üstünde D vitamini kullanılacaksa aralıklı yüksek dozlar yerine günlük kullanımı öneriyor.",
+      "kaynaklar": ["endocrine_d_2024"]
+    }
+  ],
+  "hekime_sorulacaklar": [
+    "Benim durumumda D vitamini kullanmam gerekli mi?",
+    "D vitamini düzeyimin ölçülmesi gerekir mi?",
+    "Kullandığım ürünlerden gelen toplam D vitamini miktarı uygun mu?",
+    "Kalsiyum da kullanıyorsam böbrek taşı riski açısından dikkat etmem gereken bir şey var mı?"
+  ],
+  "uretici_icerikleri": ["orzax_blog_d_vitamini_damla"],
+  "kaynaklar": ["endocrine_d_2024", "uspstf_d_tarama_2021", "efsa_ul_d_vitamini_2023"]
+}

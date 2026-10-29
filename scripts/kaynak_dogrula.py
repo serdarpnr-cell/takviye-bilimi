@@ -39,6 +39,7 @@ AJAN = {"User-Agent": "TakviyeBilimi-kaynak-dogrulama/0.1"}
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from json_yaz import yaz  # noqa: E402
+from lint_ifadeler import bul as yasakli_ifadeler  # noqa: E402
 
 
 def _getir(url: str, onbellek: str) -> bytes:
@@ -92,7 +93,8 @@ def _crossref(doi: str) -> dict:
 def _pubmed(pmid: str) -> dict:
     x = _ncbi("efetch.fcgi", db="pubmed", id=pmid, retmode="xml").decode("utf-8")
     baslik = _xml_metin(re.search(r"<ArticleTitle>(.*?)</ArticleTitle>", x, re.S).group(1)).strip()
-    dergi = _xml_metin(re.search(r"<Title>(.*?)</Title>", x, re.S).group(1)).strip()
+    kisa = re.search(r"<ISOAbbreviation>(.*?)</ISOAbbreviation>", x, re.S)
+    dergi = _xml_metin((kisa or re.search(r"<Title>(.*?)</Title>", x, re.S)).group(1)).strip()
     yil = re.search(r"<PubDate>.*?<Year>(\d{4})</Year>", x, re.S) or re.search(r"<MedlineDate>(\d{4})", x)
     ozet = _xml_metin(" ".join(re.findall(r"<AbstractText[^>]*>(.*?)</AbstractText>", x, re.S)))
     doi = re.search(r'<ArticleId IdType="doi">(.*?)</ArticleId>', x)
@@ -125,16 +127,18 @@ def dogrula(kayit: dict) -> tuple[dict, list[str]]:
     k = dict(kayit)
     sorunlar: list[str] = []
     metinler: list[str] = []
+    # Künye DOI/PMID'li kayıtlarda API'den yazılır (PubMed önceliklidir); elle girilen yalnızca URL'li kayıtlardadır.
     if k.get("doi"):
         cr = _crossref(k["doi"])
         for alan in ("baslik", "kurum_veya_dergi", "yil"):
-            k.setdefault(alan, cr[alan])
+            k[alan] = cr[alan]
         if sade(cr["baslik"])[:50] != sade(k["baslik"])[:50]:
             sorunlar.append(f"Başlık Crossref ile uyuşmuyor: {cr['baslik']!r}")
     if k.get("pmid"):
         pm = _pubmed(str(k["pmid"]))
         for alan in ("baslik", "kurum_veya_dergi", "yil"):
-            k.setdefault(alan, pm[alan])
+            if pm[alan]:
+                k[alan] = pm[alan]
         if k.get("doi") and pm["doi"] and pm["doi"].casefold() != k["doi"].casefold():
             sorunlar.append(f"PubMed DOI'si farklı: {pm['doi']}")
         if pm["geri_cekildi"]:
@@ -143,8 +147,15 @@ def dogrula(kayit: dict) -> tuple[dict, list[str]]:
         if pm["pmcid"]:
             metinler.append(_tam_metin(pm["pmcid"]))
     if k.get("url") and not k.get("doi") and not k.get("pmid"):
-        metinler.append(_sayfa_metni(k["url"]))
+        sayfa = _sayfa_metni(k["url"])
+        metinler.append(sayfa)
         k.setdefault("erisim_tarihi", dt.date.today().isoformat())
+        if k["tur"] == "uretici_icerigi":
+            # Yasaklı ifade içeren üretici içeriği reddedilmez, insan incelemesine düşer (CLAUDE.md).
+            # Site alt bilgisi ve çerez bandı taramaya katılmaz.
+            bulgular = yasakli_ifadeler(sayfa.split("Tüm hakları saklıdır")[0])
+            k["inceleme"] = "gerekli" if bulgular else "gerekmiyor"
+            k["lint_bulgulari"] = [b["baglam"] for b in bulgular]
     for alinti in k.get("alintilar", []):
         if not any(sade(alinti) in sade(m) for m in metinler if m):
             sorunlar.append(f"Alıntı kaynakta bulunamadı: {alinti[:80]!r}")

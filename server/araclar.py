@@ -499,3 +499,254 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
         "notlar": notlar,
         "gizlilik": "Cevaplar yalnızca bu karneyi üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, veri.kaynaklar(KARNE_KAYNAKLARI))
+
+
+# --------------------------------------------------------------------------- #
+# 5. etken_madde_rehberi
+# --------------------------------------------------------------------------- #
+
+Sigara = Literal["hayir", "ara_sira", "her_gun"]
+
+# Kanıt kartı ilk seti. "multivitamin" bir etken madde değil, ürün türüdür; kataloğa ayrı ölçütle bağlanır.
+REHBER_KAPSAMI = [
+    "d3", "omega3", "b12", "folik_asit", "demir", "magnezyum",
+    "c_vitamini", "cinko", "multivitamin", "beta_karoten", "e_vitamini", "probiyotik",
+]
+_MULTIVITAMIN_ADLARI = {"multivitamin", "multi vitamin", "multivitamin mineral", "vitamin mineral", "multi"}
+# Bir ürünün multivitamin sayılması için içermesi gereken en az farklı vitamin/mineral sayısı.
+_MULTIVITAMIN_ESIGI = 5
+_VITAMIN_MINERAL = {
+    "d3", "k2", "a_vitamini", "b1", "b2", "b3", "b5", "b6", "biotin", "folik_asit", "b12", "c_vitamini", "e_vitamini",
+    "magnezyum", "demir", "cinko", "kalsiyum", "selenyum", "iyot", "bakir", "manganez", "krom", "molibden",
+}
+# Omega-3 rehberi EPA ve DHA'yı ayrı satır olarak yazan ürünleri de kapsar.
+_KATALOG_KIMLIKLERI = {"omega3": {"omega3", "epa", "dha", "toplam_omega3"}}
+TASLAK_NOTU = "Taslak: bu kanıt kartı medikal kurul onayı bekliyor."
+
+
+def _rehber_id(ad: str) -> str | None:
+    if veri.normalize(ad) in _MULTIVITAMIN_ADLARI:
+        return "multivitamin"
+    return veri.etken_madde_id(ad)
+
+
+def _rehber_adi(em_id: str) -> str:
+    return "Multivitamin" if em_id == "multivitamin" else veri.etken_madde_adi(em_id)
+
+
+def _katalog_eslesmesi(em_id: str, u: dict) -> list[dict]:
+    """Ürünün bu rehberle eşleşen içerik satırları; multivitaminde tüm vitamin/mineral satırları."""
+    if em_id == "multivitamin":
+        satirlar = [e for e in u["etken_maddeler"] if e["etken_madde"] in _VITAMIN_MINERAL]
+        return satirlar if len({e["etken_madde"] for e in satirlar}) >= _MULTIVITAMIN_ESIGI else []
+    kimlikler = _KATALOG_KIMLIKLERI.get(em_id, {em_id})
+    return [e for e in u["etken_maddeler"] if e["etken_madde"] in kimlikler]
+
+
+def _urun_beyanlari(u: dict, anahtarlar: list[str], tek_icerik: bool) -> list[str]:
+    """Ürün sayfasındaki sağlık beyanlarından bu etken maddeyi anlatanlar (tek içerikli üründe hepsi)."""
+    beyanlar = veri.urun_beyanlari().get(u["id"], {}).get("saglik", [])
+    if tek_icerik or not anahtarlar:
+        return beyanlar
+    return [b for b in beyanlar if any(a in veri.normalize(b) for a in anahtarlar)]
+
+
+def _beyan_anahtari(beyan: str, anahtarlar: list[str]) -> str:
+    """"D vitamini normal kemiklerin…" ile "Normal kemiklerin…" aynı beyandır: baştaki madde adı karşılaştırmaya katılmaz."""
+    n = veri.normalize(beyan)
+    for a in anahtarlar:
+        if n.startswith(a + " "):
+            return n[len(a) + 1:]
+    return n
+
+
+def _tek_icerikli(u: dict, em_id: str) -> bool:
+    kimlikler = {e["etken_madde"] for e in u["etken_maddeler"] if e["etken_madde"]}
+    return bool(kimlikler) and kimlikler <= _KATALOG_KIMLIKLERI.get(em_id, {em_id})
+
+
+def _kosul_saglanir(kosul: dict, profil: dict) -> bool:
+    yas = profil.get("yas")
+    if "yas_min" in kosul and (yas is None or yas < kosul["yas_min"]):
+        return False
+    if "yas_max" in kosul and (yas is None or yas > kosul["yas_max"]):
+        return False
+    for alan in ("evre", "sigara", "cinsiyet"):
+        if alan in kosul and profil.get(alan) not in kosul[alan]:
+            return False
+    if "ilac_grubu" in kosul and not set(kosul["ilac_grubu"]) & set(profil.get("ilac_grubu") or []):
+        return False
+    return True
+
+
+def _kunye(kid: str) -> str:
+    k = veri.kaynak_kayitlari()[kid]
+    return f"{k['kurum_veya_dergi']}, {k['yil']}" if k.get("yil") else k["kurum_veya_dergi"]
+
+
+def etken_madde_rehberi(
+    etken_madde: str,
+    yas: int | None = None,
+    cinsiyet: str | None = None,
+    evre: str | None = None,
+    sigara: str | None = None,
+    ilac_grubu: list[str] | None = None,
+) -> dict:
+    em_id = _rehber_id(etken_madde)
+    if em_id is None:
+        aranan = veri.normalize(etken_madde)
+        urunler = sorted(
+            (u["ad"] for u in veri.urunler()
+             if aranan and any(aranan in veri.normalize(e["etiketteki_ad"]) for e in u["etken_maddeler"])),
+            key=veri.normalize,
+        )
+        return veri.zarf({
+            "kisa_ozet": (
+                f"'{etken_madde}' için kanıt kartı yok."
+                + (" Katalogda bu adı içeren ürünler aşağıda." if urunler else " Adı farklı yazmayı deneyin (ör. 'D vitamini', 'omega-3').")
+            ),
+            "kanit_karti_hazirlanan_maddeler": [_rehber_adi(i) for i in REHBER_KAPSAMI],
+            "katalogda_bu_adi_iceren_urunler": urunler,
+            "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
+        }, veri.kaynaklar(["orzax_urunler"]))
+
+    profil = {"yas": yas, "cinsiyet": cinsiyet, "evre": evre, "sigara": sigara,
+              "ilac_grubu": [i for i in (ilac_grubu or []) if i != "yok"]}
+    m = veri.monografi(em_id)
+    ad = m["ad"] if m else _rehber_adi(em_id)
+    kaynak_idleri: list[str] = []
+
+    # Kanıt düzeyi: sonuç alanı bazında.
+    kanit = []
+    for k in (m or {}).get("kartlar", []):
+        kanit.append({
+            "sonuc_alani": k["sonuc_alani"],
+            "populasyon": k["populasyon"],
+            "duzey": k["kanit_duzeyi"],
+            "sonuc_yonu": k["sonuc_yonu"],
+            "gerekce": k["gerekce"],
+            "halk_ozeti": k["halk_ozeti"],
+            "mutlak_fark": k["mutlak_fark"]["metin"],
+            "calismalarda_kullanilan_dozlar": k["calisilan_dozlar"],
+            "ne_bilmiyoruz": k["ne_bilmiyoruz"],
+            "dayanak": [_kunye(i) for i in k["kaynaklar"]],
+            **({"durum": TASLAK_NOTU} if k["durum"] == "taslak" else {}),
+        })
+        kaynak_idleri += k["kaynaklar"]
+
+    # Profile göre dikkat edilecekler ve hekime sorulacaklar.
+    dikkat, sorular = [], list((m or {}).get("hekime_sorulacaklar", []))
+    for kural in (m or {}).get("dikkat_kurallari", []):
+        if _kosul_saglanir(kural["kosul"], profil):
+            dikkat.append(kural["mesaj"])
+            kaynak_idleri += kural["kaynaklar"]
+
+    # Etkileşim kural tablosu (kurallar.json): bu maddeyi içeren kurallar.
+    kurallar = veri.kurallar()
+    etkilesimler = []
+    for kural in kurallar["etkilesimler"]:
+        kosul = kural["kosul"]
+        if em_id not in _liste(kosul["etken_madde"]):
+            continue
+        karsi = [kurallar["ilac_gruplari"][i] for i in _liste(kosul.get("ilac_grubu", []))]
+        if "diger_etken_madde" in kosul:
+            karsi.append(veri.etken_madde_adi(kosul["diger_etken_madde"]))
+        etkilesimler.append({"ile": karsi, "seviye": kural["seviye"], "mesaj": kural["mesaj"]})
+        if set(_liste(kosul.get("ilac_grubu", []))) & set(profil["ilac_grubu"]):
+            dikkat.append(kural["mesaj"])
+            sorular.append(kural["soru"])
+
+    # EFSA üst sınırı: güvenlik tavanı, öneri değil.
+    sinir_kaydi = kurallar["ust_sinirlar"].get(em_id)
+    efsa = None
+    if sinir_kaydi:
+        sinir = veri.ust_sinir(em_id, yas if yas is not None else 18)
+        efsa = {
+            "deger": _sinir_metni(em_id, sinir),
+            "yas_grubu": "yetişkin" if yas is None else f"{yas} yaş",
+            "kapsam": sinir_kaydi["kapsam"],
+            "not": "Bu değer bir güvenlik tavanıdır; alınması gereken miktar değildir.",
+        }
+        kaynak_idleri += sinir_kaydi["kaynaklar"]
+
+    # Katalog: nötr ve belgelenmiş sıra (alfabetik).
+    anahtarlar = [veri.normalize(a) for a in (m or {}).get("beyan_anahtarlari", [])]
+    katalog, beyan_metinleri, beyan_urunleri = [], [], []
+    for u in sorted(veri.urunler(), key=lambda x: veri.normalize(x["ad"])):
+        satirlar = _katalog_eslesmesi(em_id, u)
+        if not satirlar:
+            continue
+        tek = _tek_icerikli(u, em_id)
+        beyanlar = _urun_beyanlari(u, anahtarlar, tek)
+        katalog.append({
+            "ad": u["ad"],
+            "marka": u["marka"],
+            "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in satirlar],
+            "onayli_beyanlar": beyanlar,
+            "parti_analizi_var": False,
+            "urun_sayfasi": u["kaynak"]["url"],
+        })
+        if tek and em_id != "multivitamin":
+            for b in beyanlar:
+                anahtar = _beyan_anahtari(b, anahtarlar)
+                onceki = next((i for i, x in enumerate(beyan_metinleri) if _beyan_anahtari(x, anahtarlar) == anahtar), None)
+                if onceki is None:
+                    beyan_metinleri.append(b)
+                elif veri.normalize(b) != anahtar and veri.normalize(beyan_metinleri[onceki]) == anahtar:
+                    beyan_metinleri[onceki] = b  # Etken madde adını içeren yazım tercih edilir.
+            beyan_urunleri.append(u)
+
+    if m is None:
+        durum_metni = (f"{ad} için kanıt kartı henüz hazırlanmadı ya da medikal kurul onayı bekliyor. "
+                       "Aşağıda yalnızca EFSA değeri, ürün sayfalarındaki beyanlar ve katalog bilgisi var.")
+    kaynak_idleri += (m or {}).get("kaynaklar", []) + (m or {}).get("uretici_icerikleri", [])
+    for alan in ("besinle_karsilama", "tahlil_notu"):
+        kaynak_idleri += (m or {}).get(alan, {}).get("kaynaklar", [])
+    for g in (m or {}).get("kimde_kanit_var", []):
+        kaynak_idleri += g["kaynaklar"]
+    if not kaynak_idleri:
+        kaynak_idleri = ["orzax_urunler"]
+    # Bağımsız kaynaklar önce, üretici içerikleri sonra.
+    kayitlar = veri.kaynak_kayitlari()
+    sirali = sorted(dict.fromkeys(kaynak_idleri), key=lambda i: kayitlar[i]["tur"] == "uretici_icerigi")
+    kaynak_listesi = veri.kaynaklar(sirali)
+    kaynak_listesi = (
+        [k for k in kaynak_listesi if k["tur"] != "uretici_icerigi"]
+        + [veri.urun_kaynagi(u) for u in beyan_urunleri]
+        + [k for k in kaynak_listesi if k["tur"] == "uretici_icerigi"]
+    )
+
+    return veri.zarf({
+        "kisa_ozet": m["kisa_ozet"] if m else durum_metni,
+        **({"kanit_durumu": TASLAK_NOTU} if m and m["durum"] == "taslak" else {}),
+        "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in (m or {}).get("kimde_kanit_var", [])],
+        **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m and m.get("kimde_kanit_var_notu") else {}),
+        "kanit_duzeyi": kanit,
+        "kanit_duzeyi_olcegi": (
+            "guclu: birden fazla yüksek kaliteli çalışmada tutarlı; orta: tutarlı ama sınırlı ya da kalite sorunlu; "
+            "zayif: küçük ya da çelişkili çalışmalar; yetersiz: anlamlı insan çalışması yok. "
+            "sonuc_yonu ayrıca fayda, etkisiz, zarar ya da belirsiz olabilir."
+        ),
+        "onayli_saglik_beyanlari": {
+            "metinler": beyan_metinleri,
+            "not": (
+                "Yalnızca bu maddeyi içeren katalog ürünlerinin sayfalarındaki, TGK Beslenme ve Sağlık Beyanları "
+                "Yönetmeliği'ne atıf yapan beyanlardır." if beyan_metinleri else
+                "Katalogda yalnızca bu maddeyi içeren ürün olmadığı için etken madde düzeyinde beyan listelenmedi."
+            ),
+        },
+        "besinle_karsilama": (m or {}).get("besinle_karsilama", {}).get("metin"),
+        **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m and m.get("tahlil_notu") else {}),
+        "efsa_ust_sinir": efsa,
+        "etkilesimler": etkilesimler,
+        "etkilesim_notu": (
+            None if etkilesimler else
+            "Kural tablosunda bu madde için tanımlı etkileşim yok; bu, etkileşim olmadığı anlamına gelmez."
+        ),
+        "dikkat_edecekler": dikkat,
+        "hekime_sorulacaklar": list(dict.fromkeys(sorular)),
+        "katalogdaki_urunler": katalog,
+        "katalog_kapsami": "Katalog şu an yalnızca Orzax ürünlerini içerir.",
+        "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
+        "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
+    }, kaynak_listesi)

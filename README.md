@@ -33,6 +33,7 @@ Bilmen gerekenler:
 | `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı, beslenme referans değeri ve EFSA değeri, yorum yok), bileşim, etiketteki kullanım, yaş sınırı, ürün sayfasındaki sağlık beyanları, ürün sayfası bağlantısı. Belirsiz adda adayları, bulunamazsa benzer adlı ürünleri alfabetik döndürür. |
 | `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
 | `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
+| `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), ürün sayfalarındaki beyanlar, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, alfabetik katalog ürünleri. Kanıt kartı olmayan maddede bunu söyler ve kataloğu gösterir. |
 | `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan) ve en fazla 3 hedef. Cevaplar eksikse soruları döndürür. |
 
 Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
@@ -78,6 +79,14 @@ docs/KANIT_PROTOKOLU.md
 ```
 
 Ürün düzeyindeki etki ifadeleri yalnızca `data/beyanlar/urun_beyanlari.json` dosyasındaki, ürün sayfasından alınmış beyanlardan gelir.
+
+### Kanıt tabanı
+
+`data/etken_maddeler/<id>/` altında `monografi.json`, `kartlar/*.json` (etken madde × sonuç alanı × popülasyon) ve `arama_kaydi.md` bulunur. Şema ve süreç `docs/KANIT_PROTOKOLU.md` dosyasındadır. Testler şunları zorunlu kılar: her kartta en az 2 doğrulanmış kaynak ve bunlardan en az biri kılavuz ya da düzenleyici; karttaki her sayının kaynak alıntısında ya da `mutlak_fark.hesap` alanında geçmesi; halk özetinin en fazla 60 kelime olması; yasaklı ifade bulunmaması.
+
+Sunucu yalnızca `durum: "onaylandi"` kayıtları sunar. Deneme sunucusunda `TB_TASLAK_GOSTER=1` verilirse kurul onayı bekleyen taslaklar "taslak" notuyla gösterilir (`render.yaml` bu ayarla gelir; yayın sunucusunda kaldırılır).
+
+İlk set: D vitamini (pilot, taslak). Omega-3, B12, folat, demir, magnezyum, C vitamini, çinko, multivitamin, beta-karoten, E vitamini ve probiyotik için araç EFSA değeri, ürün beyanları ve kataloğu verir; kanıt kartları pilot onaylandıktan sonra eklenecek.
 
 ### Kataloğu güncelleme
 

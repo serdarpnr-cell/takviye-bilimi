@@ -11,3 +11,7 @@ services:
         value: 0.0.0.0
       - key: PYTHON_VERSION
         value: 3.12.7
+      # Deneme sunucusu: kurul onayı bekleyen (taslak) kanıt kartlarını "taslak" notuyla gösterir.
+      # Yayın sunucusunda bu satır kaldırılır; o zaman yalnızca onaylı kartlar sunulur.
+      - key: TB_TASLAK_GOSTER
+        value: "1"

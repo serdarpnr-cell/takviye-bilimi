@@ -246,6 +246,8 @@ Rakamları protokole yazma; güncel değerleri kaynaktan çek.
 
 Yanıt yapısı: `kisa_ozet`, `kartlar[]`, `kaynaklar[]` (PubMed veya DOI bağlantısıyla), `uyari`, `guncelleme`.
 
+Uygulamada `bilimsel_temel` aracının işlevini `etken_madde_rehberi`, `urun_bilimi` aracının işlevini `urun_rehberi` üstlenir. Kanıt düzeyi yanıtta dört basamakla (`guclu`, `orta`, `zayif`, `yetersiz`) ve ayrı bir `sonuc_yonu` alanıyla (`fayda`, `etkisiz`, `zarar`, `belirsiz`) verilir; böylece "Etkisiz" ve "Dikkat" sonuçları kaybolmaz: "Etkisiz" = güçlü/orta kanıt + `etkisiz`, "Dikkat" = `zarar`.
+
 `uyari` alanı her yanıtta bulunur: "Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."
 
 Araç açıklamaları kısa ve abartısız yazılır; araçlar yalnızca takviye bilimiyle ilgili sorularda çağrılacak şekilde tarif edilir.
