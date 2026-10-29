@@ -10,14 +10,17 @@ from mcp.server.transport_security import TransportSecuritySettings
 from mcp.types import ToolAnnotations
 from pydantic import Field
 
-from . import araclar
+from . import araclar, arayuz
 
 TALIMATLAR = (
     "Takviye Bilimi, takviye edici gıdalar hakkında Türkçe, markadan bağımsız etiket ve kanıt bilgisi sunar. "
     "Orzax tarafından geliştirilmiştir. Araçları yalnızca takviye ürünleri, takviye rutini, parti analizi "
     "veya yaşam tarzı karnesiyle ilgili sorularda çağır. Tanı koyma, kişiye doz önerme, belirli bir ürünü "
-    "alması gerektiğini söyleme. Her yanıtta 'uyari' alanındaki notu kullanıcıya ilet."
+    "alması gerektiğini söyleme. Her yanıtta 'uyari' alanındaki notu kullanıcıya ilet. "
+    "Karne sorularını tek seferde ve seçenekleriyle sor; kullanıcı aralık seçerse seçenek kodunu ilet."
 )
+KARNE_ARAYUZU = "ui://takviye-bilimi/karne"
+MCP_APP_MIME = "text/html;profile=mcp-app"
 
 # Sadece okuma yapan, dış dünyaya dokunmayan araçlar.
 SALT_OKUMA = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
@@ -106,6 +109,8 @@ def kisisel_rutin(
 
 @mcp.tool(
     title="Yaşam karnesi",
+    # MCP Apps: destekleyen istemcide karne seçenekli form olarak açılır; desteklemeyende metin seçeneklerine düşülür.
+    meta={"ui": {"resourceUri": KARNE_ARAYUZU}},
     description=(
         "Hareket, uyku, sebze-meyve, balık, tütün ve dinlenme üzerine 6 soruluk testin karnesini çıkarır "
         "ve en fazla 3 hedef seçer. Cevaplar eksikse soruları döndürür. "
@@ -114,7 +119,10 @@ def kisisel_rutin(
     annotations=SALT_OKUMA,
 )
 def yasam_karnesi(
-    cevaplar: Annotated[araclar.KarneCevaplari | None, Field(description="6 sorunun cevapları")] = None,
+    cevaplar: Annotated[
+        araclar.KarneCevaplari | None,
+        Field(description="6 sorunun cevapları; sayısal sorularda sayı ya da seçenek kodu (ör. '1_2_gun')"),
+    ] = None,
     yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş")] = None,
 ) -> dict[str, Any]:
     return araclar.yasam_karnesi(cevaplar, yas)
@@ -138,6 +146,17 @@ def etken_madde_rehberi(
     ilac_grubu: Annotated[list[araclar.IlacGrubu] | None, Field(description="İsteğe bağlı ilaç grupları; ilaç adı gerekmez")] = None,
 ) -> dict[str, Any]:
     return araclar.etken_madde_rehberi(etken_madde, yas, cinsiyet, evre, sigara, ilac_grubu)
+
+
+@mcp.resource(
+    KARNE_ARAYUZU,
+    name="karne",
+    title="Yaşam karnesi formu",
+    description="Yaşam karnesi sorularını seçenekli form olarak gösterir ve sonucu kart olarak çizer.",
+    mime_type=MCP_APP_MIME,
+)
+def karne_arayuzu() -> str:
+    return arayuz.karne_html()
 
 
 def main() -> None:

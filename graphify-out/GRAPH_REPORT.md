@@ -1,22 +1,22 @@
 # Graph Report - takviye-bilimi  (2026-10-29)
 
 ## Corpus Check
-- 39 files · ~56,722 words
+- 41 files · ~58,803 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 1 file(s) not represented in the graph (top: (none) 1)
 
 ## Summary
-- 369 nodes · 748 edges · 29 communities (16 shown, 13 thin omitted)
+- 395 nodes · 804 edges · 30 communities (17 shown, 13 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c4aae45b`
+- Built from commit: `63f38f92`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- kaynaklar
+- parti_analizi
 - Server App & Schemas
 - MCP HTTP Integration Tests
 - test_kanit_kartlari.py
@@ -41,11 +41,12 @@
 - Lifestyle Scorecard Tool
 - etken_madde_rehberi
 - D vitamini · arama kaydı
+- test_veri.py
 
 ## God Nodes (most connected - your core abstractions)
 1. `etken_madde_rehberi()` - 36 edges
 2. `kisisel_rutin()` - 34 edges
-3. `yasam_karnesi()` - 24 edges
+3. `yasam_karnesi()` - 31 edges
 4. `urun_rehberi()` - 18 edges
 5. `kurallar()` - 16 edges
 6. `ayristir()` - 13 edges
@@ -74,31 +75,31 @@
 - **Evidence pipeline: search -> grade -> card -> validate -> board** — docs_kanit_protokolu_arama_ve_secim, docs_kanit_protokolu_kanit_duzeyi, docs_kanit_protokolu_kanit_karti_semasi, docs_kanit_protokolu_otomatik_dogrulama, docs_kanit_protokolu_medikal_kurul [INFERRED 0.85]
 - **Public exposure and client connection** — readme_render_deploy, readme_ngrok_tunnel, readme_dns_rebinding_protection, readme_claude_connector, readme_chatgpt_developer_mode [INFERRED 0.85]
 
-## Communities (29 total, 13 thin omitted)
+## Communities (30 total, 13 thin omitted)
 
-### Community 0 - "kaynaklar"
-Cohesion: 0.12
-Nodes (10): parti_analizi(), _parti_no_coz(), _urun_kaynaklari(), _kaynak_gorunumu(), kaynaklar(), urun_kaynagi(), zarf(), test_kaynaksiz_yanit_uretilemez() (+2 more)
+### Community 0 - "parti_analizi"
+Cohesion: 0.38
+Nodes (4): parti_analizi(), _parti_no_coz(), test_karekod_ve_parti_no_bicimleri_cozulur(), test_yayimlanmis_analiz_yoksa_uydurma_sonuc_donmez()
 
 ### Community 1 - "Server App & Schemas"
-Cohesion: 0.13
-Nodes (7): etken_madde_rehberi(), _guvenlik(), kisisel_rutin(), main(), parti_analizi(), urun_rehberi(), yasam_karnesi()
+Cohesion: 0.11
+Nodes (10): etken_madde_rehberi(), _guvenlik(), kisisel_rutin(), main(), parti_analizi(), urun_rehberi(), yasam_karnesi(), DigerUrun (+2 more)
 
 ### Community 2 - "MCP HTTP Integration Tests"
-Cohesion: 0.15
+Cohesion: 0.14
 Nodes (9): _arac_testleri(), _bos_port(), http_sunucu(), _initialize(), test_bellek_ici_protokol(), test_izinli_ngrok_adresi_kabul_edilir(), test_izinsiz_host_reddedilir(), test_render_adresi_kabul_edilir() (+1 more)
 
 ### Community 3 - "test_kanit_kartlari.py"
-Cohesion: 0.12
-Nodes (16): _kunye(), kaynak_kayitlari(), _kelime_sayisi(), _rakamlar(), test_kart_semasi(), test_kartta_en_az_iki_kaynak_biri_kilavuz_veya_duzenleyici(), test_karttaki_sayilar_kaynak_alintisinda_gecer(), test_monografi_semasi_ve_kaynaklari() (+8 more)
+Cohesion: 0.23
+Nodes (9): _kelime_sayisi(), _rakamlar(), test_kart_semasi(), test_kartta_en_az_iki_kaynak_biri_kilavuz_veya_duzenleyici(), test_karttaki_sayilar_kaynak_alintisinda_gecer(), test_monografi_semasi_ve_kaynaklari(), test_sunucu_yalnizca_onayli_kayitlari_sunar(), test_yasakli_ifade_yok() (+1 more)
 
 ### Community 4 - "kisisel_rutin"
-Cohesion: 0.20
-Nodes (19): kisisel_rutin(), _soru_var(), test_bos_rutin(), test_cocukta_d3_siniri_yasa_gore_degisir(), test_demir_ve_kalsiyum_arasinda_2_saat(), test_doz_onermez_ve_urun_tavsiye_etmez(), test_etiketteki_en_yuksek_gunluk_kullanim_esas_alinir(), test_gunluk_miktari_hesaplanamayan_urun_belirtilir() (+11 more)
+Cohesion: 0.15
+Nodes (21): kisisel_rutin(), _birim_kodu(), standart_miktar(), _soru_var(), test_bos_rutin(), test_cocukta_d3_siniri_yasa_gore_degisir(), test_demir_ve_kalsiyum_arasinda_2_saat(), test_doz_onermez_ve_urun_tavsiye_etmez() (+13 more)
 
 ### Community 5 - "veri.py"
-Cohesion: 0.06
-Nodes (36): _urun_beyanlari(), urun_rehberi(), beyanlar(), _birim_kodu(), etken_madde_id(), kanit_tabani_kimlikleri(), karne_kurallari(), katalog_tarihi() (+28 more)
+Cohesion: 0.07
+Nodes (36): _kunye(), _urun_kaynaklari(), urun_rehberi(), beyanlar(), kanit_tabani_kimlikleri(), karne_kurallari(), katalog_tarihi(), _kaynak_gorunumu() (+28 more)
 
 ### Community 6 - "Evidence Pipeline Rules"
 Cohesion: 0.18
@@ -125,8 +126,8 @@ Cohesion: 0.33
 Nodes (5): bilimsel_temel MCP tool (planned), Evidence levels (simplified GRADE: A/B/C/D/Etkisiz/Dikkat), Evidence card schema, Monograph schema, uyari response field (not a medicine disclaimer)
 
 ### Community 12 - "yasam_karnesi"
-Cohesion: 0.16
-Nodes (18): _puanla(), _rehber_id(), yasam_karnesi(), _idler(), test_baglanti_etken_madde_adi_rehberde_cozulur(), test_balik_omega3_baglantisi(), test_dil_takviye_almaya_yonlendirmez(), test_her_sey_iyiyken_baglanti_ve_uyari_yok() (+10 more)
+Cohesion: 0.06
+Nodes (30): karne_arayuzu(), _aralik(), _puan(), _puanla(), yasam_karnesi(), karne_html(), uyari_var(), _idler() (+22 more)
 
 ### Community 14 - "Public Exposure & ChatGPT"
 Cohesion: 0.67
@@ -134,31 +135,35 @@ Nodes (3): ChatGPT Developer Mode setup, DNS rebinding protection / TB_ALLOWED_H
 
 ### Community 27 - "etken_madde_rehberi"
 Cohesion: 0.08
-Nodes (34): _aralik(), _beyan_anahtari(), DigerUrun, _etiket_miktari(), etken_madde_rehberi(), Icerik, KarneCevaplari, _katalog_eslesmesi() (+26 more)
+Nodes (38): _beyan_anahtari(), _cevap_metni(), _etiket_miktari(), etken_madde_rehberi(), _katalog_eslesmesi(), _kopruler(), _kosul_saglanir(), _kural_saglanir() (+30 more)
 
 ### Community 28 - "D vitamini · arama kaydı"
 Cohesion: 0.40
 Nodes (4): Açık kalanlar, D vitamini · arama kaydı, Hatalı kimlikler, Hedefli doğrulama (kanıt protokolü, Katman 1 ve 3)
 
+### Community 29 - "test_veri.py"
+Cohesion: 0.20
+Nodes (4): _metin_alanlari(), test_bilesik_adlari_elementel_mineralle_eslesmez(), test_ust_sinirlar_dogrulanmis_kaynaklara_bagli(), test_yasakli_ifade_yok()
+
 ## Knowledge Gaps
 - **28 isolated node(s):** `takviye-bilimi`, `kisisel_rutin tool`, `Monograph schema`, `uyari response field (not a medicine disclaimer)`, `Tier 3: mandatory large RCTs (VITAL, D-Health, DO-HEALTH, ViDA, ASCEND, STRENGTH, REDUCE-IT, MRC)` (+23 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 125 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 135 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `kisisel_rutin()` connect `kisisel_rutin` to `kaynaklar`, `Server App & Schemas`, `etken_madde_rehberi`, `veri.py`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+- **Why does `kisisel_rutin()` connect `kisisel_rutin` to `Server App & Schemas`, `etken_madde_rehberi`, `veri.py`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
 - **What connects `takviye-bilimi`, `kisisel_rutin tool`, `Monograph schema` to the rest of the system?**
   _28 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `kaynaklar` be split into smaller, more focused modules?**
-  _Cohesion score 0.12418300653594772 - nodes in this community are weakly interconnected._
-- **Why does `etken_madde_rehberi()` connect `etken_madde_rehberi` to `kaynaklar`, `Server App & Schemas`, `test_kanit_kartlari.py`, `veri.py`, `yasam_karnesi`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Should `Server App & Schemas` be split into smaller, more focused modules?**
-  _Cohesion score 0.1349206349206349 - nodes in this community are weakly interconnected._
-- **Why does `yasam_karnesi()` connect `yasam_karnesi` to `kaynaklar`, `Server App & Schemas`, `etken_madde_rehberi`, `test_kanit_kartlari.py`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+  _Cohesion score 0.11290322580645161 - nodes in this community are weakly interconnected._
+- **Why does `etken_madde_rehberi()` connect `etken_madde_rehberi` to `Server App & Schemas`, `veri.py`?**
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Should `MCP HTTP Integration Tests` be split into smaller, more focused modules?**
-  _Cohesion score 0.14736842105263157 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1380952380952381 - nodes in this community are weakly interconnected._
+- **Why does `yasam_karnesi()` connect `yasam_karnesi` to `Server App & Schemas`, `etken_madde_rehberi`, `veri.py`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
+- **Should `veri.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.06745098039215686 - nodes in this community are weakly interconnected._

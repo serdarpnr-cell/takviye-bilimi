@@ -34,7 +34,7 @@ Bilmen gerekenler:
 | `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
 | `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
 | `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), ürün sayfalarındaki beyanlar, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, alfabetik katalog ürünleri. Kanıt kartı olmayan maddede bunu söyler ve kataloğu gösterir. |
-| `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten) ve `tahlil_onerisi` (D vitamini, B12, ferritin). Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları döndürür. |
+| `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten) ve `tahlil_onerisi` (D vitamini, B12, ferritin). Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile döndürür. |
 
 Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
 
@@ -49,6 +49,10 @@ Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar 
 Betik DOI'yi Crossref'ten, PMID'yi PubMed'den, kurum belgelerini URL'den kontrol eder; kayıttaki `alintilar` kaynağın özetinde, açık erişimli tam metninde ya da sayfasında birebir geçmelidir. Doğrulanamayan kaynak (`dogrulandi: false`) yanıtlarda gösterilmez. EFSA üst sınırları bu şekilde doğrulanmış EFSA belgelerine bağlıdır. Ürün sayfaları `uretici_icerigi` olarak, bağımsız kaynakların yanında verilir.
 
 Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dışarıya istek atmaz.
+
+### Karne formu (MCP Apps)
+
+`yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.
 
 ### Gizlilik
 
@@ -74,7 +78,8 @@ scripts/
 server/
   veri.py                 # veri yükleme, birim çevirme, arama
   araclar.py              # araçların iş mantığı (saf fonksiyonlar)
-  app.py                  # FastMCP sunucusu ve araç tanımları
+  app.py                  # FastMCP sunucusu, araç tanımları ve ui:// kaynakları
+  arayuz.py, arayuz/      # MCP Apps arayüzleri (karne formu)
 tests/                    # her araç için test + MCP protokol ve HTTP testleri
 docs/KANIT_PROTOKOLU.md
 ```

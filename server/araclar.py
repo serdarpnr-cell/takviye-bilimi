@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field
 
@@ -370,14 +370,46 @@ def _liste(x) -> list:
 # 4. yasam_karnesi
 # --------------------------------------------------------------------------- #
 
+# Seçenekler: (etiket, kod, alt, üst). Aralık sınırları puan eşikleriyle (_puanla) birebir hizalıdır;
+# bir seçenek iki puan düzeyine taşmaz (testle zorunlu). Kategorik sorularda alt/üst yoktur.
+_SECENEKLER: dict[str, list[tuple]] = {
+    "hareket_gun": [
+        ("Hiç", "0_gun", 0, 0), ("1–2 gün", "1_2_gun", 1, 2), ("3–4 gün", "3_4_gun", 3, 4), ("5–7 gün", "5_7_gun", 5, 7),
+    ],
+    "uyku_saat": [
+        ("6 saatten az", "6_saatten_az", 0, 5.99), ("6 ile 7 saat arası", "6_7_saat", 6, 6.99),
+        ("7–9 saat", "7_9_saat", 7, 9), ("9 saatten fazla, en çok 10", "9_10_saat", 9.01, 10),
+        ("10 saatten fazla", "10_saatten_fazla", 10.01, 24),
+    ],
+    "sebze_meyve_porsiyon": [
+        ("0–2 porsiyon", "0_2_porsiyon", 0, 2.99), ("3–4 porsiyon", "3_4_porsiyon", 3, 4.99),
+        ("5 porsiyon ya da daha fazla", "5_ve_uzeri", 5, 30),
+    ],
+    "balik_haftalik": [
+        ("Hiç", "hic", 0, 0), ("Ayda 1–3 kez", "ayda_1_3", 0.25, 0.75), ("Haftada 1 kez", "haftada_1", 1, 1.99),
+        ("Haftada 2 kez ya da daha sık", "haftada_2_ve_uzeri", 2, 21),
+    ],
+    "sigara": [("Hayır", "hayir"), ("Ara sıra", "ara_sira"), ("Her gün", "her_gun")],
+    "stres": [("Hiç", "hic"), ("Bazen", "bazen"), ("Sık", "sik"), ("Neredeyse her gün", "neredeyse_her_gun")],
+}
+_ARALIKLAR = {(a, s[1]): (s[2], s[3]) for a, liste in _SECENEKLER.items() for s in liste if len(s) == 4}
+_ETIKETLER = {(a, s[1]): s[0] for a, liste in _SECENEKLER.items() for s in liste}
+
 SORULAR = [
-    {"anahtar": "hareket_gun", "soru": "Son bir haftada kaç gün en az 30 dakika tempolu hareket ettin? (0–7)"},
-    {"anahtar": "uyku_saat", "soru": "Gece ortalama kaç saat uyuyorsun?"},
-    {"anahtar": "sebze_meyve_porsiyon", "soru": "Günde kaç porsiyon sebze ve meyve yiyorsun? (1 porsiyon ≈ 1 avuç ya da 1 orta boy meyve)"},
-    {"anahtar": "balik_haftalik", "soru": "Haftada kaç kez balık yiyorsun?"},
-    {"anahtar": "sigara", "soru": "Sigara ya da tütün kullanıyor musun? (hayir / ara_sira / her_gun)"},
-    {"anahtar": "stres", "soru": "Son iki haftada kendini ne sıklıkla gergin ya da tükenmiş hissettin? (hic / bazen / sik / neredeyse_her_gun)"},
+    {"anahtar": "hareket_gun", "soru": "Son bir haftada kaç gün en az 30 dakika tempolu hareket ettin?", "sayi_araligi": "0–7"},
+    {"anahtar": "uyku_saat", "soru": "Gece ortalama kaç saat uyuyorsun?", "sayi_araligi": "0–24"},
+    {"anahtar": "sebze_meyve_porsiyon", "soru": "Günde kaç porsiyon sebze ve meyve yiyorsun? (1 porsiyon ≈ 1 avuç ya da 1 orta boy meyve)", "sayi_araligi": "0–30"},
+    {"anahtar": "balik_haftalik", "soru": "Haftada kaç kez balık yiyorsun?", "sayi_araligi": "0–21"},
+    {"anahtar": "sigara", "soru": "Sigara ya da tütün kullanıyor musun?"},
+    {"anahtar": "stres", "soru": "Son iki haftada kendini ne sıklıkla gergin ya da tükenmiş hissettin?"},
 ]
+for _s in SORULAR:
+    _s["secenekler"] = [{"etiket": x[0], "deger": x[1]} for x in _SECENEKLER[_s["anahtar"]]]
+
+SORU_YONERGESI = (
+    "Altı soruyu tek mesajda, seçenekleriyle birlikte sorun. Kullanıcı bir seçenek ya da aralık seçerse seçenek "
+    "kodunu (ör. '1_2_gun'), tam sayı verirse sayıyı iletin."
+)
 
 ESIK_NOTU = (
     "Eşikler yetişkinler için genel halk sağlığı önerilerinden sadeleştirilmiştir: haftada en az 150 dakika "
@@ -427,13 +459,23 @@ _HEDEFLER = {
 _ONCELIK = ["sigara", "hareket_gun", "uyku_saat", "sebze_meyve_porsiyon", "balik_haftalik", "stres"]
 
 
+def _kodlar(anahtar: str):
+    return Literal[tuple(x[1] for x in _SECENEKLER[anahtar])]  # type: ignore[valid-type]
+
+
 class KarneCevaplari(BaseModel):
-    hareket_gun: int | None = Field(default=None, ge=0, le=7, description="Son bir haftada en az 30 dk tempolu hareket edilen gün sayısı")
-    uyku_saat: float | None = Field(default=None, ge=0, le=24, description="Gecelik ortalama uyku süresi (saat)")
-    sebze_meyve_porsiyon: float | None = Field(default=None, ge=0, le=30, description="Günlük sebze ve meyve porsiyonu")
-    balik_haftalik: float | None = Field(default=None, ge=0, le=21, description="Haftada kaç kez balık")
-    sigara: Literal["hayir", "ara_sira", "her_gun"] | None = None
-    stres: Literal["hic", "bazen", "sik", "neredeyse_her_gun"] | None = None
+    """Sayısal sorular sayı ya da seçenek kodu kabul eder; aralık eşlemesini sunucu yapar."""
+
+    hareket_gun: Annotated[int, Field(ge=0, le=7)] | _kodlar("hareket_gun") | None = Field(
+        default=None, description="Son bir haftada en az 30 dk tempolu hareket edilen gün sayısı ya da kod (ör. '1_2_gun')")
+    uyku_saat: Annotated[float, Field(ge=0, le=24)] | _kodlar("uyku_saat") | None = Field(
+        default=None, description="Gecelik ortalama uyku süresi (saat) ya da kod (ör. '6_7_saat')")
+    sebze_meyve_porsiyon: Annotated[float, Field(ge=0, le=30)] | _kodlar("sebze_meyve_porsiyon") | None = Field(
+        default=None, description="Günlük sebze ve meyve porsiyonu ya da kod (ör. '3_4_porsiyon')")
+    balik_haftalik: Annotated[float, Field(ge=0, le=21)] | _kodlar("balik_haftalik") | None = Field(
+        default=None, description="Haftada kaç kez balık ya da kod (ör. 'ayda_1_3')")
+    sigara: _kodlar("sigara") | None = None
+    stres: _kodlar("stres") | None = None
 
 
 def _puanla(anahtar: str, deger) -> int:
@@ -453,8 +495,17 @@ def _puanla(anahtar: str, deger) -> int:
 
 
 def _aralik(anahtar: str, deger) -> tuple:
-    """Cevabı (alt, üst) aralığına çevirir. Sayı ve kategorik cevap tek noktadır."""
-    return (deger, deger)
+    """Cevabı (alt, üst) aralığına çevirir: sayı tek noktadır, seçenek kodu kendi aralığıdır, kategorik cevap kendisidir."""
+    return _ARALIKLAR.get((anahtar, deger), (deger, deger))
+
+
+def _puan(anahtar: str, deger) -> int:
+    """Cevabın puanı. Seçenek aralıkları eşiklerle hizalı olduğundan aralığın alt ucu yeterlidir."""
+    return _puanla(anahtar, _aralik(anahtar, deger)[0])
+
+
+def _cevap_metni(anahtar: str, deger) -> str:
+    return _ETIKETLER.get((anahtar, deger), _sayi(deger) if isinstance(deger, (int, float)) else str(deger))
 
 
 def _kural_saglanir(kosul: dict, cevaplar: dict) -> bool:
@@ -503,17 +554,18 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
 
     if eksik:
         return veri.zarf({
-            "kisa_ozet": f"Karne için 6 sorunun hepsi gerekli; {len(eksik)} soru cevaplanmadı. Soruları kullanıcıya sorun.",
+            "kisa_ozet": f"Karne için 6 sorunun hepsi gerekli; {len(eksik)} soru cevaplanmadı.",
+            "soru_yonergesi": SORU_YONERGESI,
             "eksik_sorular": eksik,
             "tum_sorular": SORULAR,
         }, veri.kaynaklar(KARNE_KAYNAKLARI))
 
     karne = []
     for s in SORULAR:
-        puan = _puanla(s["anahtar"], girilen[s["anahtar"]])
+        puan = _puan(s["anahtar"], girilen[s["anahtar"]])
         karne.append({
             "alan": _HEDEFLER[s["anahtar"]]["alan"],
-            "cevap": girilen[s["anahtar"]],
+            "cevap": _cevap_metni(s["anahtar"], girilen[s["anahtar"]]),
             "seviye": _SEVIYE[puan],
             "puan": puan,
         })
@@ -521,7 +573,7 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
 
     gelismeli = sorted(
         (s["anahtar"] for s, k in zip(SORULAR, karne) if k["puan"] < 2),
-        key=lambda a: (_puanla(a, girilen[a]), _ONCELIK.index(a)),
+        key=lambda a: (_puan(a, girilen[a]), _ONCELIK.index(a)),
     )
     hedefler = [{**_HEDEFLER[a]} for a in gelismeli[:3]]
 
