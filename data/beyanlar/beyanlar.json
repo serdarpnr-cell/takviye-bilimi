@@ -1,0 +1,15 @@
+{
+  "_not": "Beyan metinleri temsilidir. Kaynağı TİTCK kılavuz eki ve regülasyon ekibinin onayı olacaktır; onay gelene kadar 'durum' alanı 'regulasyon_onayi_bekliyor' kalır.",
+  "beyanlar": {
+    "epa_dha_kalp": {"etken_madde": "EPA ve DHA", "metin": "EPA ve DHA, kalbin normal fonksiyonuna katkıda bulunur.", "kosul": "Günde 250 mg EPA ve DHA alımıyla.", "durum": "regulasyon_onayi_bekliyor"},
+    "d_kemik": {"etken_madde": "D vitamini", "metin": "D vitamini, normal kemiklerin korunmasına katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "d_bagisiklik": {"etken_madde": "D vitamini", "metin": "D vitamini, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "d_cocuk_kemik": {"etken_madde": "D vitamini", "metin": "D vitamini, çocuklarda kemiklerin normal büyümesi ve gelişimi için gereklidir.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "k_kemik": {"etken_madde": "K vitamini", "metin": "K vitamini, normal kemiklerin korunmasına katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "mg_yorgunluk": {"etken_madde": "Magnezyum", "metin": "Magnezyum, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "mg_kas": {"etken_madde": "Magnezyum", "metin": "Magnezyum, normal kas fonksiyonuna katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "folat_gebelik": {"etken_madde": "Folat", "metin": "Folat, gebelik sırasında anne dokularının büyümesine katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "demir_yorgunluk": {"etken_madde": "Demir", "metin": "Demir, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"},
+    "b12_kan": {"etken_madde": "B12 vitamini", "metin": "B12 vitamini, normal kırmızı kan hücresi oluşumuna katkıda bulunur.", "kosul": null, "durum": "regulasyon_onayi_bekliyor"}
+  }
+}

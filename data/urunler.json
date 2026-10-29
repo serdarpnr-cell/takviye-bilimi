@@ -1,0 +1,287 @@
+{
+  "_not": "Tüm ürün, marka, miktar ve parti analizi verileri temsilidir. Gerçek etiket, regülasyon onayı veya medikal kurul görüşü yerine geçmez. Regülasyon ekibi gerçek etiketleri verdiğinde güncellenir.",
+  "urunler": [
+    {
+      "id": "ocean-balik-yagi",
+      "ad": "Ocean Balık Yağı",
+      "marka": "Orzax",
+      "form": "Yumuşak kapsül",
+      "gunluk_porsiyon": "1 kapsül",
+      "etken_maddeler": [
+        {"etken_madde": "epa", "miktar": 330, "birim": "mg", "kaynak_form": "Trigliserit (balık yağı)"},
+        {"etken_madde": "dha", "miktar": 250, "birim": "mg", "kaynak_form": "Trigliserit (balık yağı)"}
+      ],
+      "etiketteki_kullanim": "Günde 1 kapsül, yemekle birlikte.",
+      "yas_siniri": {"min": 12, "max": null},
+      "etiket_uyarilari": [
+        "Balık alerjisi olanlar kullanmamalıdır.",
+        "Kan sulandırıcı ilaç kullananlar ve ameliyat planlananlar kullanmadan önce hekime danışmalıdır.",
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["epa_dha_kalp"],
+      "ne_beklememeli": [
+        "Reçeteli, yüksek doz omega-3 ilaçlarıyla yapılan çalışmaların sonuçları bu ürüne aktarılamaz.",
+        "Kolesterol veya trigliserit ilacının yerini tutması beklenmemeli."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "Hamsi ve sardalya yağı, Peru (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "OBY-24B031",
+          "karekod": "https://takviyebilimi.example/k/OBY-24B031",
+          "uretim_tarihi": "2024-11-04",
+          "son_kullanma_tarihi": "2026-11-04",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-11-18",
+          "testler": [
+            {"parametre": "EPA", "beyan": "330 mg/kapsül", "olculen": "338 mg/kapsül", "sonuc": "uygun"},
+            {"parametre": "DHA", "beyan": "250 mg/kapsül", "olculen": "256 mg/kapsül", "sonuc": "uygun"},
+            {"parametre": "Toplam oksidasyon (TOTOX)", "limit": "≤ 26", "olculen": "11,8", "sonuc": "uygun"},
+            {"parametre": "Cıva", "limit": "≤ 0,1 mg/kg", "olculen": "< 0,01 mg/kg", "sonuc": "uygun"},
+            {"parametre": "Kurşun", "limit": "≤ 0,1 mg/kg", "olculen": "< 0,02 mg/kg", "sonuc": "uygun"},
+            {"parametre": "Dioksin ve dioksin benzeri PCB", "limit": "≤ 6,0 pg/g", "olculen": "0,9 pg/g", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocean-d3k2-damla",
+      "ad": "Ocean D3K2 Damla",
+      "marka": "Orzax",
+      "form": "Damla",
+      "gunluk_porsiyon": "2 damla",
+      "etken_maddeler": [
+        {"etken_madde": "d3", "miktar": 1000, "birim": "IU", "kaynak_form": "Kolekalsiferol (lanolin kaynaklı)"},
+        {"etken_madde": "k2", "miktar": 50, "birim": "µg", "kaynak_form": "Menakinon-7 (MK-7)"}
+      ],
+      "etiketteki_kullanim": "Günde 2 damla, yemekle birlikte.",
+      "yas_siniri": {"min": 12, "max": null},
+      "etiket_uyarilari": [
+        "K vitamini içerir. Varfarin gibi kan sulandırıcı ilaç kullananlar hekime danışmadan kullanmamalıdır.",
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["d_kemik", "k_kemik"],
+      "ne_beklememeli": [
+        "D vitamini düzeyi tahlil yapılmadan bilinemez; ürünün kişideki düzeye etkisi ancak ölçümle görülür.",
+        "Kemik erimesi tedavisinin yerini tutması beklenmemeli."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "D3: koyun yünü lanolini; K2: fermantasyon (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "D3K2-24A117",
+          "karekod": "https://takviyebilimi.example/k/D3K2-24A117",
+          "uretim_tarihi": "2024-09-12",
+          "son_kullanma_tarihi": "2026-09-12",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-09-30",
+          "testler": [
+            {"parametre": "D3 vitamini", "beyan": "1.000 IU/2 damla", "olculen": "1.080 IU/2 damla", "sonuc": "uygun"},
+            {"parametre": "K2 vitamini (MK-7)", "beyan": "50 µg/2 damla", "olculen": "52 µg/2 damla", "sonuc": "uygun"},
+            {"parametre": "Kurşun", "limit": "≤ 0,1 mg/kg", "olculen": "< 0,02 mg/kg", "sonuc": "uygun"},
+            {"parametre": "Mikrobiyolojik yük", "limit": "≤ 1.000 kob/g", "olculen": "< 10 kob/g", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocean-vitamin-d3-1000-sprey",
+      "ad": "Ocean Vitamin D3 1000 IU Sprey",
+      "marka": "Orzax",
+      "form": "Ağız spreyi",
+      "gunluk_porsiyon": "1 püskürtme",
+      "etken_maddeler": [
+        {"etken_madde": "d3", "miktar": 1000, "birim": "IU", "kaynak_form": "Kolekalsiferol (lanolin kaynaklı)"}
+      ],
+      "etiketteki_kullanim": "Günde 1 püskürtme, yanak içine.",
+      "yas_siniri": {"min": 4, "max": null},
+      "etiket_uyarilari": [
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız.",
+        "Başka D vitamini içeren ürünle birlikte kullanılacaksa toplam miktar için hekime veya eczacıya danışınız."
+      ],
+      "onayli_beyanlar": ["d_kemik", "d_bagisiklik"],
+      "ne_beklememeli": [
+        "D vitamini düzeyi tahlil yapılmadan bilinemez; ürünün kişideki düzeye etkisi ancak ölçümle görülür.",
+        "Soğuk algınlığını tedavi etmesi beklenmemeli."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "Koyun yünü lanolini (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "D3S-24C044",
+          "karekod": "https://takviyebilimi.example/k/D3S-24C044",
+          "uretim_tarihi": "2024-10-02",
+          "son_kullanma_tarihi": "2026-10-02",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-10-21",
+          "testler": [
+            {"parametre": "D3 vitamini", "beyan": "1.000 IU/püskürtme", "olculen": "1.040 IU/püskürtme", "sonuc": "uygun"},
+            {"parametre": "Mikrobiyolojik yük", "limit": "≤ 1.000 kob/g", "olculen": "< 10 kob/g", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocean-magnezyum",
+      "ad": "Ocean Magnezyum",
+      "marka": "Orzax",
+      "form": "Tablet",
+      "gunluk_porsiyon": "1 tablet",
+      "etken_maddeler": [
+        {"etken_madde": "magnezyum", "miktar": 200, "birim": "mg", "kaynak_form": "Magnezyum bisglisinat"}
+      ],
+      "etiketteki_kullanim": "Günde 1 tablet, yemekten sonra.",
+      "yas_siniri": {"min": 14, "max": null},
+      "etiket_uyarilari": [
+        "Böbrek hastalığı olanlar hekime danışmadan kullanmamalıdır.",
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["mg_yorgunluk", "mg_kas"],
+      "ne_beklememeli": [
+        "Uyku sorunlarını veya kas kramplarını çözmesi beklenmemeli; bu konulardaki kanıt kartları hazırlanıyor.",
+        "Yüksek miktarda alındığında ishal yapabilir."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "Belirtilecek (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "MG-24D210",
+          "karekod": "https://takviyebilimi.example/k/MG-24D210",
+          "uretim_tarihi": "2024-08-20",
+          "son_kullanma_tarihi": "2026-08-20",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-09-05",
+          "testler": [
+            {"parametre": "Magnezyum", "beyan": "200 mg/tablet", "olculen": "206 mg/tablet", "sonuc": "uygun"},
+            {"parametre": "Kurşun", "limit": "≤ 3,0 mg/kg", "olculen": "< 0,1 mg/kg", "sonuc": "uygun"},
+            {"parametre": "Kadmiyum", "limit": "≤ 1,0 mg/kg", "olculen": "< 0,05 mg/kg", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocean-balik-yagi-surup",
+      "ad": "Ocean Balık Yağı Şurup",
+      "marka": "Orzax",
+      "form": "Şurup",
+      "gunluk_porsiyon": "5 ml",
+      "etken_maddeler": [
+        {"etken_madde": "epa", "miktar": 120, "birim": "mg", "kaynak_form": "Trigliserit (balık yağı)"},
+        {"etken_madde": "dha", "miktar": 200, "birim": "mg", "kaynak_form": "Trigliserit (balık yağı)"},
+        {"etken_madde": "d3", "miktar": 400, "birim": "IU", "kaynak_form": "Kolekalsiferol"}
+      ],
+      "etiketteki_kullanim": "4–12 yaş için günde 5 ml, yemekle birlikte.",
+      "yas_siniri": {"min": 4, "max": 12},
+      "etiket_uyarilari": [
+        "Balık alerjisi olanlar kullanmamalıdır.",
+        "Başka D vitamini içeren ürünle birlikte kullanılacaksa hekime danışınız."
+      ],
+      "onayli_beyanlar": ["d_cocuk_kemik"],
+      "ne_beklememeli": [
+        "Okul başarısını veya dikkati artırması beklenmemeli; çocuklarda bu konudaki kanıt kartları hazırlanıyor.",
+        "Dengeli beslenmenin yerini tutması beklenmemeli."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "Balık yağı, Norveç (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "OBS-24E015",
+          "karekod": "https://takviyebilimi.example/k/OBS-24E015",
+          "uretim_tarihi": "2024-07-15",
+          "son_kullanma_tarihi": "2026-01-15",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-08-01",
+          "testler": [
+            {"parametre": "EPA", "beyan": "120 mg/5 ml", "olculen": "124 mg/5 ml", "sonuc": "uygun"},
+            {"parametre": "DHA", "beyan": "200 mg/5 ml", "olculen": "203 mg/5 ml", "sonuc": "uygun"},
+            {"parametre": "D3 vitamini", "beyan": "400 IU/5 ml", "olculen": "420 IU/5 ml", "sonuc": "uygun"},
+            {"parametre": "Toplam oksidasyon (TOTOX)", "limit": "≤ 26", "olculen": "14,2", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocean-folik-asit-demir",
+      "ad": "Ocean Folik Asit + Demir",
+      "marka": "Orzax",
+      "form": "Tablet",
+      "gunluk_porsiyon": "1 tablet",
+      "etken_maddeler": [
+        {"etken_madde": "demir", "miktar": 14, "birim": "mg", "kaynak_form": "Demir bisglisinat"},
+        {"etken_madde": "folik_asit", "miktar": 400, "birim": "µg", "kaynak_form": "Folik asit"},
+        {"etken_madde": "b12", "miktar": 2.5, "birim": "µg", "kaynak_form": "Metilkobalamin"}
+      ],
+      "etiketteki_kullanim": "Günde 1 tablet, aç karnına ya da hafif bir öğünle.",
+      "yas_siniri": {"min": 18, "max": null},
+      "etiket_uyarilari": [
+        "Demir içerir. Çocukların ulaşamayacağı yerde saklayınız; çocuklarda kazayla alınması zehirlenmeye yol açabilir.",
+        "Kalsiyum içeren ürünler, çay ve kahve ile aynı anda alınmamalıdır.",
+        "Gebelikte hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["folat_gebelik", "demir_yorgunluk", "b12_kan"],
+      "ne_beklememeli": [
+        "Kansızlığın nedeni belirlenmeden demirle düzelmesi beklenmemeli; nedeni hekim araştırır.",
+        "Demir sindirim yakınmalarına (kabızlık, mide rahatsızlığı) yol açabilir."
+      ],
+      "mensei": {"uretim_ulkesi": "Türkiye", "hammadde_kaynagi": "Belirtilecek (temsili)"},
+      "parti_analizi_yayimliyor": false,
+      "parti_analizleri": []
+    },
+    {
+      "id": "marka-a-d3-tablet",
+      "ad": "Marka A D3 Tablet",
+      "marka": "Marka A (temsili)",
+      "form": "Tablet",
+      "gunluk_porsiyon": "1 tablet",
+      "etken_maddeler": [
+        {"etken_madde": "d3", "miktar": 1000, "birim": "IU", "kaynak_form": "Kolekalsiferol (kaynak belirtilmemiş)"}
+      ],
+      "etiketteki_kullanim": "Günde 1 tablet.",
+      "yas_siniri": {"min": 12, "max": null},
+      "etiket_uyarilari": [
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["d_kemik"],
+      "ne_beklememeli": [
+        "D vitamini düzeyi tahlil yapılmadan bilinemez; ürünün kişideki düzeye etkisi ancak ölçümle görülür."
+      ],
+      "mensei": {"uretim_ulkesi": null, "hammadde_kaynagi": null},
+      "parti_analizi_yayimliyor": false,
+      "parti_analizleri": []
+    },
+    {
+      "id": "marka-b-d3-sprey",
+      "ad": "Marka B D3 Sprey",
+      "marka": "Marka B (temsili)",
+      "form": "Ağız spreyi",
+      "gunluk_porsiyon": "1 püskürtme",
+      "etken_maddeler": [
+        {"etken_madde": "d3", "miktar": 400, "birim": "IU", "kaynak_form": "Kolekalsiferol (liken kaynaklı, vegan)"}
+      ],
+      "etiketteki_kullanim": "Günde 1 püskürtme.",
+      "yas_siniri": {"min": 3, "max": null},
+      "etiket_uyarilari": [
+        "Gebelik ve emzirme döneminde hekime danışarak kullanınız."
+      ],
+      "onayli_beyanlar": ["d_kemik"],
+      "ne_beklememeli": [
+        "D vitamini düzeyi tahlil yapılmadan bilinemez; ürünün kişideki düzeye etkisi ancak ölçümle görülür."
+      ],
+      "mensei": {"uretim_ulkesi": "Almanya (temsili)", "hammadde_kaynagi": "Liken (temsili)"},
+      "parti_analizi_yayimliyor": true,
+      "parti_analizleri": [
+        {
+          "parti_no": "MB-D3-2407",
+          "karekod": "https://markab.example/parti/MB-D3-2407",
+          "uretim_tarihi": "2024-07-01",
+          "son_kullanma_tarihi": "2026-07-01",
+          "laboratuvar": "Bağımsız akredite laboratuvar (temsili)",
+          "rapor_tarihi": "2024-07-22",
+          "testler": [
+            {"parametre": "D3 vitamini", "beyan": "400 IU/püskürtme", "olculen": "410 IU/püskürtme", "sonuc": "uygun"}
+          ]
+        }
+      ]
+    }
+  ]
+}
