@@ -24,8 +24,12 @@ SALT_OKUMA = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempoten
 
 
 def _guvenlik() -> TransportSecuritySettings:
-    """DNS rebinding korumasını açık tutar; ngrok gibi ek adresler TB_ALLOWED_HOSTS ile eklenir."""
-    ekler = [h.strip() for h in os.environ.get("TB_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    """DNS rebinding korumasını açık tutar; ngrok gibi ek adresler TB_ALLOWED_HOSTS ile eklenir.
+
+    Render'da çalışırken Render'ın verdiği adres (RENDER_EXTERNAL_HOSTNAME) kendiliğinden eklenir.
+    """
+    ham = [os.environ.get("TB_ALLOWED_HOSTS", ""), os.environ.get("RENDER_EXTERNAL_HOSTNAME", "")]
+    ekler = [h.strip() for parca in ham for h in parca.split(",") if h.strip()]
     return TransportSecuritySettings(
         enable_dns_rebinding_protection=True,
         allowed_hosts=["127.0.0.1:*", "localhost:*", "[::1]:*", *ekler],
@@ -37,7 +41,8 @@ mcp = FastMCP(
     name="Takviye Bilimi",
     instructions=TALIMATLAR,
     host=os.environ.get("TB_HOST", "127.0.0.1"),
-    port=int(os.environ.get("TB_PORT", "8000")),
+    # Barındırma servisleri (ör. Render) portu PORT değişkeniyle verir.
+    port=int(os.environ.get("TB_PORT") or os.environ.get("PORT") or "8000"),
     streamable_http_path="/mcp",
     stateless_http=True,
     json_response=True,

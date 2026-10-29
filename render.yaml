@@ -1,0 +1,13 @@
+# Render "Blueprint" tanımı: sunucuyu ücretsiz planda tek tıkla yayına alır.
+services:
+  - type: web
+    name: takviye-bilimi
+    runtime: python
+    plan: free
+    buildCommand: pip install "mcp[cli]>=1.26,<2"
+    startCommand: python -m server
+    envVars:
+      - key: TB_HOST
+        value: 0.0.0.0
+      - key: PYTHON_VERSION
+        value: 3.12.7

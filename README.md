@@ -8,6 +8,24 @@ Takviye edici gıdalar için Türkçe, markadan bağımsız bir MCP sunucusu. Ch
 - Taşıma: Streamable HTTP, adres `http://127.0.0.1:8000/mcp`
 - Durumsuz (stateless) ve JSON yanıtlı; oturum ya da kullanıcı verisi tutulmaz
 
+## En kolay deneme yolu (kurulum gerektirmez)
+
+Bilgisayarına bir şey kurmadan, sunucuyu ücretsiz Render servisinde yayına alıp Claude'a bağlayabilirsin. Gerekenler: GitHub hesabı ve claude.ai hesabı.
+
+1. **Kodu ana dala al:** GitHub'da bu deponun Pull requests sekmesinde açık PR'ı aç, **Merge pull request** → **Confirm merge**.
+2. **Render hesabı aç:** [render.com](https://render.com) → **Get Started** → **GitHub** ile giriş yap.
+3. **Sunucuyu kur:** Render panelinde **New +** → **Blueprint**. GitHub erişimi isterse `takviye-bilimi` deposuna izin ver. Listeden `takviye-bilimi` deposunu seç, **Deploy Blueprint** (ya da **Apply**) düğmesine bas. Ayarlar `render.yaml` dosyasından otomatik gelir.
+4. **Bekle:** 3–5 dakika sonra servisin durumu **Live** olur. Servis sayfasının üstünde `https://takviye-bilimi.onrender.com` gibi bir adres görünür (ad doluysa sonuna ek gelebilir).
+5. **Claude'a bağla:** claude.ai → **Settings** → **Connectors** → **Add custom connector** → Ad: `Takviye Bilimi`, URL: Render adresinin sonuna `/mcp` ekleyerek yaz (ör. `https://takviye-bilimi.onrender.com/mcp`) → **Add**.
+6. **Dene:** Yeni sohbet aç ve sor: "Ocean D3K2 Damla'nın etiketinde ne yazıyor?" Claude aracı kullanmak için izin isterse **Allow** de.
+
+ChatGPT için de aynı adres kullanılır; adımlar aşağıda, "ChatGPT'ye Developer Mode ile bağlama" bölümünde.
+
+Bilmen gerekenler:
+
+- Ücretsiz planda sunucu 15 dakika kullanılmazsa uykuya geçer; ilk soruda uyanması yaklaşık 1 dakika sürer. Claude "bağlanamadı" derse bir dakika sonra tekrar dene.
+- Adresi bilen herkes araçları kullanabilir. Veriler temsilidir ve sunucu kullanıcı bilgisi saklamaz; yine de adresi yalnızca deneyecek kişilerle paylaş. İş bitince Render'da servisi **Settings** → **Delete Web Service** ile silebilirsin.
+
 ## Araçlar
 
 | Araç | Girdi | Ne döndürür |
@@ -77,8 +95,8 @@ Sunucu `http://127.0.0.1:8000/mcp` adresinde dinler. Ortam değişkenleri:
 | Değişken | Varsayılan | Açıklama |
 |---|---|---|
 | `TB_HOST` | `127.0.0.1` | Dinlenecek adres |
-| `TB_PORT` | `8000` | Port |
-| `TB_ALLOWED_HOSTS` | boş | Yerel adreslere ek olarak kabul edilecek `Host` başlıkları, virgülle (ör. ngrok adresi) |
+| `TB_PORT` | `8000` | Port (yoksa `PORT` kullanılır) |
+| `TB_ALLOWED_HOSTS` | boş | Yerel adreslere ek olarak kabul edilecek `Host` başlıkları, virgülle (ör. ngrok adresi). Render'da `RENDER_EXTERNAL_HOSTNAME` kendiliğinden eklenir. |
 
 DNS rebinding koruması açıktır: yalnızca yerel adresler ve `TB_ALLOWED_HOSTS` içindekiler kabul edilir.
 

@@ -64,7 +64,10 @@ def _bos_port() -> int:
 @pytest.fixture(scope="module")
 def http_sunucu():
     port = _bos_port()
-    ortam = {**os.environ, "TB_PORT": str(port), "TB_ALLOWED_HOSTS": "ornek.ngrok-free.app"}
+    ortam = {k: v for k, v in os.environ.items() if k not in ("TB_PORT", "TB_ALLOWED_HOSTS")}
+    # PORT ve RENDER_EXTERNAL_HOSTNAME, Render'daki gibi verilir.
+    ortam.update({"PORT": str(port), "TB_ALLOWED_HOSTS": "ornek.ngrok-free.app",
+                  "RENDER_EXTERNAL_HOSTNAME": "takviye-bilimi.onrender.com"})
     surec = subprocess.Popen([sys.executable, "-m", "server"], cwd=KOK, env=ortam,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     url = f"http://127.0.0.1:{port}/mcp"
@@ -105,6 +108,11 @@ async def test_izinli_ngrok_adresi_kabul_edilir(http_sunucu):
     yanit = await _initialize(http_sunucu, "ornek.ngrok-free.app")
     assert yanit.status_code == 200
     assert json.loads(yanit.text)["result"]["serverInfo"]["name"] == "Takviye Bilimi"
+
+
+async def test_render_adresi_kabul_edilir(http_sunucu):
+    yanit = await _initialize(http_sunucu, "takviye-bilimi.onrender.com")
+    assert yanit.status_code == 200
 
 
 async def test_izinsiz_host_reddedilir(http_sunucu):
