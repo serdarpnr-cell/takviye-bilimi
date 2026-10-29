@@ -1,0 +1,146 @@
+{
+  "_not": "Prototip verisidir. Üst sınır değerleri EFSA görüşlerinden alınmıştır ancak bu depoda kaynaktan henüz doğrulanmamıştır (dogrulandi: false; url alanları doğrulama sırasında doldurulacak). Kanıt protokolüne göre yayından önce kaynak URL ve erişim tarihiyle doğrulanmalıdır. Etkileşim kuralları medikal kurul onayı bekler.",
+  "etken_maddeler": {
+    "epa": {"ad": "EPA (omega-3)", "birim": "mg", "esanlamlar": ["epa", "eikozapentaenoik asit", "eikosapentaenoik asit"]},
+    "dha": {"ad": "DHA (omega-3)", "birim": "mg", "esanlamlar": ["dha", "dokozaheksaenoik asit"]},
+    "omega3": {"ad": "Omega-3 (EPA + DHA)", "birim": "mg", "esanlamlar": ["omega 3", "omega-3", "omega3", "balik yagi", "epa+dha", "epa dha"]},
+    "d3": {"ad": "D3 vitamini", "birim": "µg", "esanlamlar": ["d3", "d vitamini", "vitamin d", "vitamin d3", "d3 vitamini", "kolekalsiferol", "d2", "ergokalsiferol"]},
+    "k2": {"ad": "K vitamini", "birim": "µg", "esanlamlar": ["k2", "k vitamini", "vitamin k", "vitamin k2", "k2 vitamini", "mk-7", "mk7", "menakinon", "k1", "fitomenadion"]},
+    "magnezyum": {"ad": "Magnezyum", "birim": "mg", "esanlamlar": ["magnezyum", "magnesium", "mg"]},
+    "demir": {"ad": "Demir", "birim": "mg", "esanlamlar": ["demir", "iron", "fe"]},
+    "folik_asit": {"ad": "Folik asit", "birim": "µg", "esanlamlar": ["folik asit", "folat", "folic acid", "b9", "metilfolat"]},
+    "b12": {"ad": "B12 vitamini", "birim": "µg", "esanlamlar": ["b12", "b12 vitamini", "vitamin b12", "kobalamin", "metilkobalamin", "siyanokobalamin"]},
+    "kalsiyum": {"ad": "Kalsiyum", "birim": "mg", "esanlamlar": ["kalsiyum", "calcium", "ca"]},
+    "cinko": {"ad": "Çinko", "birim": "mg", "esanlamlar": ["cinko", "zinc", "zn"]}
+  },
+  "ust_sinirlar": {
+    "d3": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam D vitamini.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 10, "deger": 50},
+        {"yas_min": 11, "yas_max": null, "deger": 100}
+      ],
+      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for vitamin D (2023)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "folik_asit": {
+      "tur": "ust_sinir",
+      "kapsam": "Yalnızca sentetik folik asit (takviye ve zenginleştirilmiş gıda). Besinlerdeki doğal folat dahil değildir.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 200},
+        {"yas_min": 4, "yas_max": 6, "deger": 300},
+        {"yas_min": 7, "yas_max": 10, "deger": 400},
+        {"yas_min": 11, "yas_max": 14, "deger": 600},
+        {"yas_min": 15, "yas_max": 17, "deger": 800},
+        {"yas_min": 18, "yas_max": null, "deger": 1000}
+      ],
+      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for folate (2023)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "magnezyum": {
+      "tur": "ust_sinir",
+      "kapsam": "Yalnızca takviye, su ve gıdaya eklenen kolay çözünen magnezyum tuzları. Besinlerdeki magnezyum dahil değildir.",
+      "degerler": [
+        {"yas_min": 4, "yas_max": null, "deger": 250}
+      ],
+      "kaynak": {"kurum": "EFSA (SCF)", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "demir": {
+      "tur": "guvenli_alim_duzeyi",
+      "kapsam": "EFSA demir için üst sınır yerine 'güvenli alım düzeyi' belirlemiştir; tüm kaynaklardan toplam alım içindir.",
+      "degerler": [
+        {"yas_min": 18, "yas_max": null, "deger": 40}
+      ],
+      "eksik_veri_notu": "18 yaş altı değerler kaynaktan doğrulanarak eklenecek.",
+      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for iron (2024)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "omega3": {
+      "tur": "guvenli_alim_duzeyi",
+      "kapsam": "EFSA, yetişkinlerde takviyeden günde 5 g'a kadar EPA + DHA alımının güvenlik kaygısı oluşturmadığını belirtmiştir; bu bir üst sınır değildir.",
+      "degerler": [
+        {"yas_min": 18, "yas_max": null, "deger": 5000}
+      ],
+      "eksik_veri_notu": "Çocuklar için değer belirlenmemiştir.",
+      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level of EPA, DHA and DPA (2012)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "kalsiyum": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam kalsiyum.",
+      "degerler": [
+        {"yas_min": 18, "yas_max": null, "deger": 2500}
+      ],
+      "eksik_veri_notu": "18 yaş altı için değer belirlenmemiştir.",
+      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level of calcium (2012)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "k2": {"tur": "belirlenmedi", "kapsam": "EFSA, K vitamini için üst sınır belirlememiştir.", "degerler": [], "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}},
+    "b12": {"tur": "belirlenmedi", "kapsam": "EFSA, B12 vitamini için üst sınır belirlememiştir.", "degerler": [], "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}}
+  },
+  "toplamlar": {
+    "omega3": ["epa", "dha"]
+  },
+  "ilac_gruplari": {
+    "kan_sulandirici_varfarin": "Varfarin gibi K vitamini antagonisti kan sulandırıcılar",
+    "kan_sulandirici_diger": "Diğer kan sulandırıcılar ve pıhtılaşma önleyiciler",
+    "tiroid_hormonu": "Tiroid hormonu (levotiroksin)",
+    "antibiyotik_kinolon_tetrasiklin": "Kinolon veya tetrasiklin grubu antibiyotikler",
+    "mide_asidi_baskilayici": "Mide asidini baskılayan ilaçlar (ör. proton pompası inhibitörleri)",
+    "metformin": "Metformin",
+    "antiepileptik": "Sara (epilepsi) ilaçları",
+    "metotreksat": "Metotreksat"
+  },
+  "etkilesimler": [
+    {
+      "id": "k_vitamini_varfarin",
+      "kosul": {"etken_madde": "k2", "ilac_grubu": "kan_sulandirici_varfarin"},
+      "seviye": "hekime_danis",
+      "mesaj": "K vitamini, varfarin gibi K vitamini antagonisti kan sulandırıcıların etkisini değiştirebilir. Başlamadan, bırakmadan veya miktarı değiştirmeden önce hekiminize danışın.",
+      "soru": "Varfarin kullanırken K vitamini içeren bir ürün kullanmam INR takibimi etkiler mi?"
+    },
+    {
+      "id": "omega3_kan_sulandirici",
+      "kosul": {"etken_madde": "omega3", "ilac_grubu": ["kan_sulandirici_varfarin", "kan_sulandirici_diger"]},
+      "seviye": "hekime_danis",
+      "mesaj": "Omega-3 içeren ürünler kan sulandırıcılarla birlikte kullanılacaksa hekime danışılmalıdır.",
+      "soru": "Kullandığım kan sulandırıcıyla birlikte omega-3 içeren bir ürün kullanmamın sakıncası var mı?"
+    },
+    {
+      "id": "demir_kalsiyum",
+      "kosul": {"etken_madde": "demir", "diger_etken_madde": "kalsiyum"},
+      "seviye": "zamanlama",
+      "mesaj": "Demir ve kalsiyum birbirinin emilimini azaltabilir. Etiketlerde aralarına en az 2 saat bırakılması önerilir.",
+      "soru": "Demir ve kalsiyum içeren ürünlerimi günün hangi saatlerinde almam uygun olur?"
+    },
+    {
+      "id": "demir_tiroid",
+      "kosul": {"etken_madde": "demir", "ilac_grubu": "tiroid_hormonu"},
+      "seviye": "zamanlama",
+      "mesaj": "Demir, tiroid hormonunun emilimini azaltabilir. Aradaki süre için hekiminize veya eczacınıza danışın.",
+      "soru": "Tiroid ilacım ile demir içeren ürün arasında ne kadar süre bırakmalıyım?"
+    },
+    {
+      "id": "magnezyum_tiroid",
+      "kosul": {"etken_madde": "magnezyum", "ilac_grubu": "tiroid_hormonu"},
+      "seviye": "zamanlama",
+      "mesaj": "Magnezyum, tiroid hormonunun emilimini azaltabilir. Aradaki süre için hekiminize veya eczacınıza danışın.",
+      "soru": "Tiroid ilacım ile magnezyum içeren ürün arasında ne kadar süre bırakmalıyım?"
+    },
+    {
+      "id": "mineral_antibiyotik",
+      "kosul": {"etken_madde": ["demir", "magnezyum", "kalsiyum", "cinko"], "ilac_grubu": "antibiyotik_kinolon_tetrasiklin"},
+      "seviye": "zamanlama",
+      "mesaj": "Demir, magnezyum, kalsiyum ve çinko bazı antibiyotiklerin emilimini azaltabilir. Aradaki süre için eczacınıza danışın.",
+      "soru": "Antibiyotiğimi kullandığım sürece mineral içeren ürünlerime ara vermeli miyim ya da saatlerini değiştirmeli miyim?"
+    },
+    {
+      "id": "folik_asit_antiepileptik",
+      "kosul": {"etken_madde": "folik_asit", "ilac_grubu": ["antiepileptik", "metotreksat"]},
+      "seviye": "hekime_danis",
+      "mesaj": "Folik asit, bazı sara ilaçları ve metotreksat ile etkileşebilir. Kullanmadan önce hekiminize danışın.",
+      "soru": "Kullandığım ilaçla birlikte folik asit içeren bir ürün kullanabilir miyim?"
+    }
+  ],
+  "ilac_sorulari": [
+    {"ilac_grubu": "mide_asidi_baskilayici", "soru": "Uzun süredir mide ilacı kullanıyorum; B12 vitamini düzeyimin ölçülmesi gerekir mi?"},
+    {"ilac_grubu": "metformin", "soru": "Metformin kullanıyorum; B12 vitamini düzeyimin ölçülmesi gerekir mi?"},
+    {"ilac_grubu": "diger", "soru": "Kullandığım ilaçlarla bu takviyeler arasında bilmem gereken bir etkileşim var mı?"}
+  ]
+}
