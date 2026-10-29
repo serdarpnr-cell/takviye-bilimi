@@ -2,3 +2,8 @@ cache/
 .graphify_python
 .graphify_root
 cost.json
+.graphify_build_state.json
+.graphify_labels.json.sig
+.graphify_labels.pending.json
+# graphify update'in önceki grafiği yedeklediği tarihli klasörler
+20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
