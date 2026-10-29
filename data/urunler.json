@@ -1375,12 +1375,12 @@
           "etiketteki_ad": "D3 Vitamini",
           "etken_madde": "d3",
           "porsiyon": "Her Saşede",
-          "miktar": 25.0,
-          "birim": "mg",
+          "miktar": null,
+          "birim": null,
           "miktar_metni": "25 mg",
           "brd": "%500",
           "gunluk_carpan": 1.0,
-          "okuma_notlari": []
+          "okuma_notlari": ["'25 mg' EFSA yetişkin üst sınırının 10 katından fazla; birim sitede büyük olasılıkla hatalı. Değer hesaplamalara katılmadı."]
         },
         {
           "etiketteki_ad": "K2 Vitamini",
@@ -1441,12 +1441,12 @@
           "etiketteki_ad": "Selenyum",
           "etken_madde": "selenyum",
           "porsiyon": "Her Saşede",
-          "miktar": 55.0,
-          "birim": "mg",
+          "miktar": null,
+          "birim": null,
           "miktar_metni": "55 mg",
           "brd": "%100",
           "gunluk_carpan": 1.0,
-          "okuma_notlari": []
+          "okuma_notlari": ["'55 mg' EFSA yetişkin üst sınırının 10 katından fazla; birim sitede büyük olasılıkla hatalı. Değer hesaplamalara katılmadı."]
         }
       ],
       "bilesim": "Tip I–Tip III kollajen peptitleri, trimagnezyum sitrat, asitlik düzenleyici (sitrik asit), L-askorbik asit (C vitamini), çilek aroma verici, karpuz aroma verici, hyaluronik asit, Tip II kollajen peptitleri, tatlandırıcı (steviol glikozitler), çinko sülfat monohidrat, renklendirici (pancar kökü kırmızısı), kolekalsiferol (D3 vitamini), menakuinon-7 (K2 vitamini), D-pantotenat kalsiyum (B5 vitamini), piridoksin hidroklorür (B6 vitamini), D-biotin, siyanokobalamin (B12 vitamini), sodyum selenit.",
@@ -1656,12 +1656,12 @@
           "etiketteki_ad": "Selenyum",
           "etken_madde": "selenyum",
           "porsiyon": "Her Saşede",
-          "miktar": 55.0,
-          "birim": "g",
+          "miktar": null,
+          "birim": null,
           "miktar_metni": "55 g",
           "brd": "%100",
           "gunluk_carpan": 1.0,
-          "okuma_notlari": []
+          "okuma_notlari": ["'55 g' EFSA yetişkin üst sınırının 10 katından fazla; birim sitede büyük olasılıkla hatalı. Değer hesaplamalara katılmadı."]
         }
       ],
       "bilesim": "Tip I–Tip III kollajen peptitleri, asitlik düzenleyici (sitrik asit), L-askorbik asit (C vitamini), elma aroma verici, shiitake mantarı ekstresi, reishi mantarı ekstresi, çilek aroma verici, sodyum hyaluronat (hyaluronik asit), Tip II kollajen peptitleri, şizandra ekstresi, tatlandırıcı (steviol glikozitler), renklendirici (pancar kökü kırmızısı), topaklanmayı önleyici (silikon dioksit), çinko sülfat monohidrat, D-pantotenat kalsiyum (B5 vitamini), piridoksin hidroklorür (B6 vitamini), sodyum selenit.",

@@ -281,6 +281,21 @@ def _gunluk_kullanim(porsiyon: str | None, kullanim: str | None) -> dict | None:
             "carpan_en_az": k_min / p_adet, "carpan_en_cok": k_max / p_adet}
 
 
+MAKULLUK_KATSAYISI = 10
+_BIRIM_CARPANI = {"g": 1_000_000, "mg": 1_000, "µg": 1}
+
+
+def _makul_degil(em_id: str, satir: dict, kurallar: dict) -> bool:
+    """Porsiyondaki miktar EFSA yetişkin üst sınırının MAKULLUK_KATSAYISI katını aşıyorsa True."""
+    sinir = kurallar["ust_sinirlar"].get(em_id, {})
+    yetiskin = [d["deger"] for d in sinir.get("degerler", []) if d["yas_max"] is None]
+    hedef = kurallar["etken_maddeler"][em_id]["birim"]
+    if not yetiskin or satir["miktar"] is None or satir["birim"] not in _BIRIM_CARPANI or hedef not in _BIRIM_CARPANI:
+        return False
+    standart = satir["miktar"] * _BIRIM_CARPANI[satir["birim"]] / _BIRIM_CARPANI[hedef]
+    return standart > MAKULLUK_KATSAYISI * yetiskin[0]
+
+
 def ayristir() -> None:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from json_yaz import yaz
@@ -322,6 +337,14 @@ def ayristir() -> None:
             em_id = _etken_madde_eslestir(r["ad"], esanlam)
             if em_id is None:
                 eslesmeyen.setdefault(r["ad"], []).append(ad)
+            elif _makul_degil(em_id, r, kurallar):
+                # Ör. "25 mg D3 vitamini": birim sitede büyük olasılıkla hatalı. Doğru değer tahmin edilmez;
+                # miktar hesaplamalara katılmaz, not düşülür.
+                r["okuma_notlari"].append(
+                    f"'{r['miktar_metni']}' EFSA yetişkin üst sınırının {MAKULLUK_KATSAYISI} katından fazla; birim sitede "
+                    "büyük olasılıkla hatalı. Değer hesaplamalara katılmadı."
+                )
+                r["miktar"], r["birim"] = None, None
             gunluk = _gunluk_kullanim(r["porsiyon"], kullanim_metni)
             etkenler.append({
                 "etiketteki_ad": r["ad"], "etken_madde": em_id, "porsiyon": r["porsiyon"],

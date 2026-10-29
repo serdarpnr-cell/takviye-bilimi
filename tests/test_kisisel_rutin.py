@@ -151,3 +151,10 @@ def test_kisisel_veri_loglanmaz(caplog):
     kisisel_rutin(47, "kadin", evre="gebe", ilac_grubu=["metotreksat"], mevcut_urunler=["Ocean Methyl Folat Tablet"])
     assert "metotreksat" not in caplog.text
     assert "gebe" not in caplog.text
+
+
+def test_sitedeki_hatali_birim_toplamlara_katilmaz():
+    # Ürün sayfası D3 vitaminini "25 mg" yazıyor (µg olmalı). Değer tahmin edilmez, toplamlara katılmaz.
+    y = kisisel_rutin(40, "kadin", mevcut_urunler=["Day2Day The Collagen Mag Plus"])
+    assert all(k["etken_madde"] != "D3 vitamini" for k in y["ust_sinir_kontrolu"])
+    assert "Day2Day The Collagen Mag Plus: D3 vitamini" in y["birimi_cevrilemeyen_icerikler"]
