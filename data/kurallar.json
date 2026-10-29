@@ -1,5 +1,5 @@
 {
-  "_not": "Prototip verisidir. Üst sınır değerleri EFSA görüşlerinden alınmıştır ancak bu depoda kaynaktan henüz doğrulanmamıştır (dogrulandi: false; url alanları doğrulama sırasında doldurulacak). Kanıt protokolüne göre yayından önce kaynak URL ve erişim tarihiyle doğrulanmalıdır. Etkileşim kuralları medikal kurul onayı bekler.",
+  "_not": "Üst sınır değerleri data/kaynaklar.json'daki, API'den doğrulanmış EFSA belgelerinden alınmıştır; her değer kaynağın alıntısında geçer. Yaş bantları EFSA tablolarındaki gruplardır (1–3, 4–6, 7–10, 11–14, 15–17, yetişkin). Etkileşim kuralları medikal kurul onayı bekler.",
   "etken_maddeler": {
     "epa": {"ad": "EPA (omega-3)", "birim": "mg", "esanlamlar": ["epa", "eikozapentaenoik asit", "eikosapentaenoik asit"]},
     "dha": {"ad": "DHA (omega-3)", "birim": "mg", "esanlamlar": ["dha", "dokozaheksaenoik asit"]},
@@ -112,17 +112,11 @@
       "tur": "ust_sinir",
       "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam D vitamini.",
       "degerler": [{"yas_min": 1, "yas_max": 10, "deger": 50}, {"yas_min": 11, "yas_max": null, "deger": 100}],
-      "kaynak": {
-        "kurum": "EFSA",
-        "belge": "Scientific opinion on the tolerable upper intake level for vitamin D (2023)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "kaynaklar": ["efsa_ul_d_vitamini_2023", "efsa_ul_ozet_2025"]
     },
     "folik_asit": {
       "tur": "ust_sinir",
-      "kapsam": "Yalnızca sentetik folik asit (takviye ve zenginleştirilmiş gıda). Besinlerdeki doğal folat dahil değildir.",
+      "kapsam": "Takviye ve zenginleştirilmiş gıdalardaki folik asit ve metilfolat tuzları. Besinlerdeki doğal folat dahil değildir.",
       "degerler": [
         {"yas_min": 1, "yas_max": 3, "deger": 200},
         {"yas_min": 4, "yas_max": 6, "deger": 300},
@@ -131,76 +125,164 @@
         {"yas_min": 15, "yas_max": 17, "deger": 800},
         {"yas_min": 18, "yas_max": null, "deger": 1000}
       ],
-      "kaynak": {
-        "kurum": "EFSA",
-        "belge": "Scientific opinion on the tolerable upper intake level for folate (2023)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "kaynaklar": ["efsa_ul_folat_2023"]
     },
     "magnezyum": {
       "tur": "ust_sinir",
       "kapsam": "Yalnızca takviye, su ve gıdaya eklenen kolay çözünen magnezyum tuzları. Besinlerdeki magnezyum dahil değildir.",
       "degerler": [{"yas_min": 4, "yas_max": null, "deger": 250}],
-      "kaynak": {
-        "kurum": "EFSA (SCF)",
-        "belge": "Tolerable upper intake levels for vitamins and minerals (2006)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "kaynaklar": ["efsa_ul_ozet_2025"]
     },
     "demir": {
       "tur": "guvenli_alim_duzeyi",
       "kapsam": "EFSA demir için üst sınır yerine 'güvenli alım düzeyi' belirlemiştir; tüm kaynaklardan toplam alım içindir.",
-      "degerler": [{"yas_min": 18, "yas_max": null, "deger": 40}],
-      "eksik_veri_notu": "18 yaş altı değerler kaynaktan doğrulanarak eklenecek.",
-      "kaynak": {
-        "kurum": "EFSA",
-        "belge": "Scientific opinion on the tolerable upper intake level for iron (2024)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 10},
+        {"yas_min": 4, "yas_max": 6, "deger": 15},
+        {"yas_min": 7, "yas_max": 10, "deger": 20},
+        {"yas_min": 11, "yas_max": 14, "deger": 30},
+        {"yas_min": 15, "yas_max": 17, "deger": 35},
+        {"yas_min": 18, "yas_max": null, "deger": 40}
+      ],
+      "kaynaklar": ["efsa_ul_demir_2024", "efsa_ul_ozet_2025"]
     },
     "omega3": {
       "tur": "guvenli_alim_duzeyi",
       "kapsam": "EFSA, yetişkinlerde takviyeden günde 5 g'a kadar EPA + DHA alımının güvenlik kaygısı oluşturmadığını belirtmiştir; bu bir üst sınır değildir.",
       "degerler": [{"yas_min": 18, "yas_max": null, "deger": 5000}],
-      "eksik_veri_notu": "Çocuklar için değer belirlenmemiştir.",
-      "kaynak": {
-        "kurum": "EFSA",
-        "belge": "Scientific opinion on the tolerable upper intake level of EPA, DHA and DPA (2012)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "kaynaklar": ["efsa_ul_omega3_2012"],
+      "eksik_veri_notu": "Çocuklar için değer belirlenmemiştir."
     },
     "kalsiyum": {
       "tur": "ust_sinir",
       "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam kalsiyum.",
       "degerler": [{"yas_min": 18, "yas_max": null, "deger": 2500}],
-      "eksik_veri_notu": "18 yaş altı için değer belirlenmemiştir.",
-      "kaynak": {
-        "kurum": "EFSA",
-        "belge": "Scientific opinion on the tolerable upper intake level of calcium (2012)",
-        "url": null,
-        "erisim_tarihi": null,
-        "dogrulandi": false
-      }
+      "kaynaklar": ["efsa_ul_kalsiyum_2012", "efsa_ul_ozet_2025"],
+      "eksik_veri_notu": "18 yaş altı için değer belirlenmemiştir."
     },
-    "k2": {
-      "tur": "belirlenmedi",
-      "kapsam": "EFSA, K vitamini için üst sınır belirlememiştir.",
-      "degerler": [],
-      "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
-    },
+    "k2": {"tur": "belirlenmedi", "kapsam": "EFSA, K vitamini için üst sınır belirlememiştir.", "degerler": [], "kaynaklar": ["efsa_ul_ozet_2025"]},
     "b12": {
       "tur": "belirlenmedi",
-      "kapsam": "EFSA, B12 vitamini için üst sınır belirlememiştir.",
+      "kapsam": "EFSA, B12 vitamini için tanımlanmış bir olumsuz etki olmadığından üst sınır belirlememiştir.",
       "degerler": [],
-      "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "cinko": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam çinko.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 7},
+        {"yas_min": 4, "yas_max": 6, "deger": 10},
+        {"yas_min": 7, "yas_max": 10, "deger": 13},
+        {"yas_min": 11, "yas_max": 14, "deger": 18},
+        {"yas_min": 15, "yas_max": 17, "deger": 22},
+        {"yas_min": 18, "yas_max": null, "deger": 25}
+      ],
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "selenyum": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam selenyum.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 70},
+        {"yas_min": 4, "yas_max": 6, "deger": 95},
+        {"yas_min": 7, "yas_max": 10, "deger": 130},
+        {"yas_min": 11, "yas_max": 14, "deger": 180},
+        {"yas_min": 15, "yas_max": 17, "deger": 230},
+        {"yas_min": 18, "yas_max": null, "deger": 255}
+      ],
+      "kaynaklar": ["efsa_ul_selenyum_2023", "efsa_ul_ozet_2025"]
+    },
+    "iyot": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam iyot.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 200},
+        {"yas_min": 4, "yas_max": 6, "deger": 250},
+        {"yas_min": 7, "yas_max": 10, "deger": 300},
+        {"yas_min": 11, "yas_max": 14, "deger": 450},
+        {"yas_min": 15, "yas_max": 17, "deger": 500},
+        {"yas_min": 18, "yas_max": null, "deger": 600}
+      ],
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "bakir": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam bakır.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 1000},
+        {"yas_min": 4, "yas_max": 6, "deger": 2000},
+        {"yas_min": 7, "yas_max": 10, "deger": 3000},
+        {"yas_min": 11, "yas_max": 14, "deger": 4000},
+        {"yas_min": 15, "yas_max": 17, "deger": 4000},
+        {"yas_min": 18, "yas_max": null, "deger": 5000}
+      ],
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "molibden": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam molibden.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 100},
+        {"yas_min": 4, "yas_max": 6, "deger": 200},
+        {"yas_min": 7, "yas_max": 10, "deger": 250},
+        {"yas_min": 11, "yas_max": 14, "deger": 400},
+        {"yas_min": 15, "yas_max": 17, "deger": 500},
+        {"yas_min": 18, "yas_max": null, "deger": 600}
+      ],
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "a_vitamini": {
+      "tur": "ust_sinir",
+      "kapsam": "Yalnızca hazır A vitamini (retinol ve retinil esterleri), µg RE. Beta-karoten dahil değildir.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 800},
+        {"yas_min": 4, "yas_max": 6, "deger": 1100},
+        {"yas_min": 7, "yas_max": 10, "deger": 1500},
+        {"yas_min": 11, "yas_max": 14, "deger": 2000},
+        {"yas_min": 15, "yas_max": 17, "deger": 2600},
+        {"yas_min": 18, "yas_max": null, "deger": 3000}
+      ],
+      "kaynaklar": ["efsa_ul_a_vitamini_beta_karoten_2024", "efsa_ul_ozet_2025"]
+    },
+    "b6": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam B6 vitamini.",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 3.2},
+        {"yas_min": 4, "yas_max": 6, "deger": 4.5},
+        {"yas_min": 7, "yas_max": 10, "deger": 6.1},
+        {"yas_min": 11, "yas_max": 14, "deger": 8.6},
+        {"yas_min": 15, "yas_max": 17, "deger": 10.7},
+        {"yas_min": 18, "yas_max": null, "deger": 12}
+      ],
+      "kaynaklar": ["efsa_ul_b6_2023", "efsa_ul_ozet_2025"]
+    },
+    "e_vitamini": {
+      "tur": "ust_sinir",
+      "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam E vitamini (alfa-tokoferol).",
+      "degerler": [
+        {"yas_min": 1, "yas_max": 3, "deger": 100},
+        {"yas_min": 4, "yas_max": 6, "deger": 120},
+        {"yas_min": 7, "yas_max": 10, "deger": 160},
+        {"yas_min": 11, "yas_max": 14, "deger": 220},
+        {"yas_min": 15, "yas_max": 17, "deger": 260},
+        {"yas_min": 18, "yas_max": null, "deger": 300}
+      ],
+      "kaynaklar": ["efsa_ul_e_vitamini_2024", "efsa_ul_ozet_2025"]
+    },
+    "c_vitamini": {
+      "tur": "belirlenmedi",
+      "kapsam": "EFSA, C vitamini için üst sınır belirlemeye yeterli veri bulmamıştır.",
+      "degerler": [],
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    "biotin": {"tur": "belirlenmedi", "kapsam": "EFSA, biotin için üst sınır belirlemeye yeterli veri bulmamıştır.", "degerler": [], "kaynaklar": ["efsa_ul_ozet_2025"]},
+    "beta_karoten": {
+      "tur": "belirlenmedi",
+      "kapsam": "EFSA, beta-karoten için üst sınır belirleyememiştir. Sigara içenlerin beta-karoten içeren takviyelerden kaçınması gerektiğini belirtir.",
+      "degerler": [],
+      "kaynaklar": ["efsa_ul_a_vitamini_beta_karoten_2024", "efsa_ul_ozet_2025"]
     }
   },
   "toplamlar": {"omega3": ["epa", "dha"]},

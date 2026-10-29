@@ -45,10 +45,13 @@ def test_bilesik_adlari_elementel_mineralle_eslesmez():
                 assert e["etken_madde"] not in ("magnezyum", "omega3"), (u["ad"], e)
 
 
-def test_ust_sinir_kaynaklari_dogrulanmadi_olarak_isaretli():
-    # Kaynaklar API/kurum belgesinden doğrulanana kadar 'dogrulandi' true olamaz.
-    for kayit in veri.kurallar()["ust_sinirlar"].values():
-        assert kayit["kaynak"]["dogrulandi"] is False
+def test_ust_sinirlar_dogrulanmis_kaynaklara_bagli():
+    kayitlar = veri.kaynak_kayitlari()
+    for em_id, kayit in veri.kurallar()["ust_sinirlar"].items():
+        assert kayit["kaynaklar"], em_id
+        for k in kayit["kaynaklar"]:
+            assert kayitlar[k]["dogrulandi"] is True, (em_id, k)
+            assert kayitlar[k]["tur"] == "duzenleyici", (em_id, k)
 
 
 def test_etkilesim_kurallarinin_ilac_gruplari_tanimli():

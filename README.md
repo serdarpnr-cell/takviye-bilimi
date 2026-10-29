@@ -2,7 +2,7 @@
 
 Takviye edici gıdalar için Türkçe, markalar arasında ayrım yapmayan bir MCP sunucusu. ChatGPT ve Claude içinde çalışır. Orzax tarafından geliştirilmiştir.
 
-> **Prototip.** Ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır (`scripts/orzax_katalog.py`); katalog şu an yalnızca Orzax ürünlerini içerir. Yayımlanmış parti analizi yoktur. EFSA üst sınır değerleri henüz kaynaktan doğrulanmadı (`data/kurallar.json` içinde `dogrulandi: false`); etkileşim kuralları ve kanıt kartları medikal kurul onayı bekler. Takviye edici gıdalar ilaç değildir.
+> **Prototip.** Ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır (`scripts/orzax_katalog.py`); katalog şu an yalnızca Orzax ürünlerini içerir. Yayımlanmış parti analizi yoktur. EFSA üst sınırları API'den doğrulanmış EFSA belgelerine bağlıdır; etkileşim kuralları, karne eşikleri ve kanıt kartları medikal kurul onayı bekler. Takviye edici gıdalar ilaç değildir.
 
 - Python + resmi MCP Python SDK (`mcp` 1.x, `FastMCP`)
 - Taşıma: Streamable HTTP, adres `http://127.0.0.1:8000/mcp`
@@ -35,7 +35,17 @@ Bilmen gerekenler:
 | `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
 | `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan) ve en fazla 3 hedef. Cevaplar eksikse soruları döndürür. |
 
-Her yanıtta şu alanlar bulunur: `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+
+### Kaynaklar
+
+`kaynaklar[]` her öğede `baslik`, `kurum_veya_dergi`, `yil`, `tur` (`kilavuz` | `meta_analiz` | `rct` | `duzenleyici` | `uretici_icerigi`), `url` ve varsa `pmid` taşır. Kayıtlar `data/kaynaklar.json` dosyasındadır ve `scripts/kaynak_dogrula.py` ile doğrulanır:
+
+```bash
+.venv/bin/python scripts/kaynak_dogrula.py
+```
+
+Betik DOI'yi Crossref'ten, PMID'yi PubMed'den, kurum belgelerini URL'den kontrol eder; kayıttaki `alintilar` kaynağın özetinde, açık erişimli tam metninde ya da sayfasında birebir geçmelidir. Doğrulanamayan kaynak (`dogrulandi: false`) yanıtlarda gösterilmez. EFSA üst sınırları bu şekilde doğrulanmış EFSA belgelerine bağlıdır. Ürün sayfaları `uretici_icerigi` olarak, bağımsız kaynakların yanında verilir.
 
 Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dışarıya istek atmaz.
 
@@ -51,11 +61,13 @@ Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dı
 data/
   urunler.json                  # orzax.com.tr'den alınan katalog (etiket bilgisi; fiyat yok)
   kurallar.json                 # etken maddeler, EFSA üst sınırları, etkileşim kuralları, ilaç grupları
+  kaynaklar.json                # doğrulanmış kaynak kayıtları (DOI, PMID veya URL + erişim tarihi)
   beyanlar/urun_beyanlari.json  # ürün sayfalarındaki sağlık ve beslenme beyanları (kelimesi kelimesine)
   beyanlar/beyanlar.json        # etken madde düzeyindeki beyan metinleri (regülasyon onayı bekliyor)
   ham/                          # indirilen sayfaların önbelleği (git'e girmez)
 scripts/
   orzax_katalog.py              # katalog indirme ve ayrıştırma
+  kaynak_dogrula.py             # kaynakları Crossref, PubMed ve URL'den doğrular
   json_yaz.py                   # veri dosyalarını okunur biçimde yazar
 server/
   veri.py                 # veri yükleme, birim çevirme, arama
@@ -209,8 +221,7 @@ Menü adları platformlarda sık değişebilir; adım bulunamazsa ilgili yardım
 
 ## Açık konular
 
-- EFSA değerleri kaynaktan doğrulanıp `url` ve `erisim_tarihi` alanları doldurulmalı (kanıt protokolü, kural 1).
-- Demir için 18 yaş altı EFSA değerleri eklenmedi.
-- Etkileşim kuralları ve yaşam karnesi eşikleri medikal kurul onayı bekliyor.
-- Beyan metinleri regülasyon ekibinin onayını bekliyor.
+- Etkileşim kuralları ve yaşam karnesi eşikleri medikal kurul onayı bekliyor; etkileşim kurallarına henüz kaynak bağlanmadı.
+- Etken madde düzeyindeki beyan metinleri (`data/beyanlar/beyanlar.json`) regülasyon ekibinin onayını bekliyor.
+- `mevzuat.gov.tr` ve `hsgm.saglik.gov.tr` bulut ortamından erişilemiyor; TGK yönetmeliği ve Sağlık Bakanlığı belgelerinin URL'leri elle doğrulanmalı. `ods.od.nih.gov` otomatik istekleri reddediyor.
 - `calismalarda_kullanilan_dozlar` alanı kanıt kartları hazırlanınca dolacak.

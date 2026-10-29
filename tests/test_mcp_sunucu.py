@@ -41,6 +41,7 @@ async def _arac_testleri(oturum: ClientSession) -> None:
         sonuc = await oturum.call_tool(ad, arg)
         assert not sonuc.isError, (ad, sonuc.content)
         assert sonuc.structuredContent["uyari"] == UYARI
+        assert sonuc.structuredContent["kaynaklar"], ad
         assert "Takviye edici gıdalar ilaç değildir" in sonuc.content[0].text
 
 

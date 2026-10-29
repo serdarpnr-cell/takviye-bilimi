@@ -16,7 +16,7 @@ UYARI = (
 GELISTIRICI = "Orzax tarafından geliştirilmiştir."
 VERI_NOTU = (
     "Prototip: ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır ve katalog yalnızca Orzax ürünlerini içerir. "
-    "EFSA değerleri, etkileşim kuralları ve kanıt kartları medikal kurul onayı bekler."
+    "Etkileşim kuralları, karne eşikleri ve kanıt kartları medikal kurul onayı bekler."
 )
 
 _TR_HARF = str.maketrans("çğıöşüâîûÇĞİÖŞÜ", "cgiosuaiucgiosu")
@@ -59,9 +59,53 @@ def urun_beyanlari() -> dict:
     return _yukle("beyanlar/urun_beyanlari.json")["urunler"]
 
 
-def zarf(govde: dict) -> dict:
-    """Her araç yanıtına ortak alanları ekler."""
-    return {**govde, "uyari": UYARI, "gelistirici": GELISTIRICI, "veri_notu": VERI_NOTU}
+@lru_cache(maxsize=1)
+def kaynak_kayitlari() -> dict:
+    return _yukle("kaynaklar.json")["kaynaklar"]
+
+
+def _kaynak_gorunumu(k: dict) -> dict:
+    """Kaynağı yanıt şemasına çevirir: baslik, kurum_veya_dergi, yil, tur, url, pmid."""
+    url = k.get("url") or (f"https://doi.org/{k['doi']}" if k.get("doi") else f"https://pubmed.ncbi.nlm.nih.gov/{k['pmid']}/")
+    return {
+        "baslik": k["baslik"],
+        "kurum_veya_dergi": k["kurum_veya_dergi"],
+        "yil": k.get("yil"),
+        "tur": k["tur"],
+        "url": url,
+        "pmid": k.get("pmid"),
+        **({"erisim_tarihi": k["erisim_tarihi"]} if k.get("erisim_tarihi") else {}),
+    }
+
+
+def kaynaklar(kimlikler, ekler: list[dict] | None = None) -> list[dict]:
+    """Kimlikleri yanıt şemasındaki kaynak listesine çevirir. Doğrulanmamış kaynak listeye girmez."""
+    kayitlar = kaynak_kayitlari()
+    liste = [_kaynak_gorunumu(kayitlar[k]) for k in dict.fromkeys(kimlikler) if kayitlar[k].get("dogrulandi")]
+    for e in ekler or []:
+        if e not in liste:
+            liste.append(e)
+    return liste
+
+
+def urun_kaynagi(u: dict) -> dict:
+    """Ürün sayfası, üretici içeriği olarak kaynak gösterilir."""
+    return {
+        "baslik": f"{u['ad']} ürün sayfası",
+        "kurum_veya_dergi": u["marka"],
+        "yil": int(u["kaynak"]["erisim_tarihi"][:4]),
+        "tur": "uretici_icerigi",
+        "url": u["kaynak"]["url"],
+        "pmid": None,
+        "erisim_tarihi": u["kaynak"]["erisim_tarihi"],
+    }
+
+
+def zarf(govde: dict, kaynak_listesi: list[dict]) -> dict:
+    """Her araç yanıtına ortak alanları ekler. Her yanıt en az bir kaynak taşır."""
+    if not kaynak_listesi:
+        raise ValueError("Araç yanıtı kaynaksız olamaz.")
+    return {**govde, "kaynaklar": kaynak_listesi, "uyari": UYARI, "gelistirici": GELISTIRICI, "veri_notu": VERI_NOTU}
 
 
 def etken_madde_id(ad: str) -> str | None:
@@ -112,7 +156,7 @@ def ust_sinir(em_id: str, yas: float | None) -> dict | None:
                 "birim": kurallar()["etken_maddeler"][em_id]["birim"],
                 "tur": kayit["tur"],
                 "kapsam": kayit["kapsam"],
-                "kaynak": kayit["kaynak"],
+                "kaynaklar": kayit["kaynaklar"],
             }
     return None
 

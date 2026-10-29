@@ -63,6 +63,15 @@ def _urun_karti(u: dict) -> dict:
     }
 
 
+def _urun_kaynaklari(u: dict) -> list[dict]:
+    """Ürün sayfası ve karttaki EFSA değerlerinin kaynakları."""
+    sinir_kaynaklari = [
+        k for em in u["etken_maddeler"] if em["etken_madde"]
+        for k in veri.kurallar()["ust_sinirlar"].get(em["etken_madde"], {}).get("kaynaklar", [])
+    ]
+    return [veri.urun_kaynagi(u), *veri.kaynaklar(sinir_kaynaklari or ["efsa_ul_ozet_2025"])]
+
+
 def urun_rehberi(urun: str) -> dict:
     adaylar = veri.urun_ara(urun)
     if len(adaylar) == 1:
@@ -70,13 +79,13 @@ def urun_rehberi(urun: str) -> dict:
         return veri.zarf({
             "kisa_ozet": f"{u['ad']} ({u['marka']}) için etiket bilgileri. Ürün düzeyindeki etki ifadeleri yalnızca ürün sayfasındaki beyanlardan gelir.",
             "urun": _urun_karti(u),
-        })
+        }, _urun_kaynaklari(u))
     if len(adaylar) > 1:
         return veri.zarf({
             "kisa_ozet": f"'{urun}' birden fazla ürünle eşleşti. Hangisini kastettiğinizi belirtin.",
             "adaylar": sorted((a["ad"] for a in adaylar), key=veri.normalize),
             "siralama_olcutu": "Alfabetik.",
-        })
+        }, veri.kaynaklar(["orzax_urunler"]))
     # Eşleşme yoksa sorgudaki kelimelerden en az birini içeren ürünleri listeler.
     kelimeler = set(veri.normalize(urun).split())
     benzer = sorted(
@@ -89,7 +98,7 @@ def urun_rehberi(urun: str) -> dict:
         "katalogdaki_urun_sayisi": len(veri.urunler()),
         "katalog_kapsami": "Katalog şu an yalnızca Orzax ürünlerini içerir.",
         "siralama_olcutu": "Alfabetik. Ücretli veya öncelikli sıralama yoktur.",
-    })
+    }, veri.kaynaklar(["orzax_urunler"]))
 
 
 # --------------------------------------------------------------------------- #
@@ -119,7 +128,7 @@ def parti_analizi(karekod_veya_parti_no: str) -> dict:
         "aranan_parti_no": parti_no,
         "not": "Parti numarası kutunun alt ya da yan yüzünde, son kullanma tarihinin yanında yazar. "
                "Ürünün etiket bilgileri için ürün rehberine bakılabilir.",
-    })
+    }, veri.kaynaklar(["orzax_urunler"]))
 
 
 # --------------------------------------------------------------------------- #
@@ -185,7 +194,7 @@ def kisisel_rutin(
     kurallar = veri.kurallar()
 
     # Her etken madde için: hangi üründen ne kadar geliyor (standart birimde).
-    kaynaklar: dict[str, list[tuple[str, float | None]]] = {}
+    icerik_kaynaklari: dict[str, list[tuple[str, float | None]]] = {}
     tanimsiz_urunler: list[str] = []
     tanimsiz_icerikler: list[str] = []
     bulunan_urunler: list[dict] = []
@@ -207,7 +216,7 @@ def kisisel_rutin(
                 carpan = em.get("gunluk_carpan")
                 if carpan is None:
                     carpansiz.add(u["ad"])
-                kaynaklar.setdefault(em["etken_madde"], []).append(
+                icerik_kaynaklari.setdefault(em["etken_madde"], []).append(
                     (u["ad"], None if std is None else std * (carpan or 1))
                 )
         elif eslesen:
@@ -223,20 +232,20 @@ def kisisel_rutin(
             if em_id is None:
                 tanimsiz_icerikler.append(f"{diger.ad}: {ic.etken_madde}")
                 continue
-            kaynaklar.setdefault(em_id, []).append(
+            icerik_kaynaklari.setdefault(em_id, []).append(
                 (diger.ad, veri.standart_miktar(em_id, ic.miktar, ic.birim))
             )
 
     # Toplam etken maddeler (ör. omega-3 = EPA + DHA).
     for toplam_id, parcalar in kurallar["toplamlar"].items():
-        parca_kaynaklari = [k for p in parcalar for k in kaynaklar.get(p, [])]
+        parca_kaynaklari = [k for p in parcalar for k in icerik_kaynaklari.get(p, [])]
         if parca_kaynaklari:
-            kaynaklar.setdefault(toplam_id, []).extend(parca_kaynaklari)
+            icerik_kaynaklari.setdefault(toplam_id, []).extend(parca_kaynaklari)
 
     # Tekrar eden etken maddeler. Toplamı olan parçalar (EPA, DHA) toplam altında sayılır.
     parca_idleri = {p for parcalar in kurallar["toplamlar"].values() for p in parcalar}
     tekrar_edenler = []
-    for em_id, liste in kaynaklar.items():
+    for em_id, liste in icerik_kaynaklari.items():
         if em_id in parca_idleri:
             continue
         urun_adlari = sorted({ad for ad, _ in liste})
@@ -245,8 +254,9 @@ def kisisel_rutin(
 
     # Üst sınır karşılaştırması: yalnızca rakam, yorum yok.
     ust_sinir_kontrolu = []
+    sinir_kaynaklari: list[str] = []
     birim_cevrilemeyen = []
-    for em_id, liste in kaynaklar.items():
+    for em_id, liste in icerik_kaynaklari.items():
         gecerli = [(ad, m) for ad, m in liste if m is not None]
         birim_cevrilemeyen += [f"{ad}: {veri.etken_madde_adi(em_id)}" for ad, m in liste if m is None]
         if not gecerli:
@@ -261,8 +271,8 @@ def kisisel_rutin(
             "efsa_degeri": _sinir_metni(em_id, sinir),
             "asiyor": toplam > sinir["deger"],
             "kapsam": sinir["kapsam"],
-            "kaynak_dogrulandi": sinir["kaynak"]["dogrulandi"],
         })
+        sinir_kaynaklari += sinir["kaynaklar"]
     asimlar = [k for k in ust_sinir_kontrolu if k["asiyor"]]
 
     # Etiketteki kullanım ve yaş sınırı.
@@ -284,12 +294,12 @@ def kisisel_rutin(
     for kural in kurallar["etkilesimler"]:
         kosul = kural["kosul"]
         em_listesi = _liste(kosul["etken_madde"])
-        mevcut_em = [e for e in em_listesi if e in kaynaklar]
+        mevcut_em = [e for e in em_listesi if e in icerik_kaynaklari]
         if not mevcut_em:
             continue
         if "ilac_grubu" in kosul and not ilaclar.intersection(_liste(kosul["ilac_grubu"])):
             continue
-        if "diger_etken_madde" in kosul and kosul["diger_etken_madde"] not in kaynaklar:
+        if "diger_etken_madde" in kosul and kosul["diger_etken_madde"] not in icerik_kaynaklari:
             continue
         etkilesimler.append({
             "konu": " + ".join(
@@ -319,11 +329,11 @@ def kisisel_rutin(
     if evre in ("gebe", "emziriyor", "gebelik_planliyor") and (bulunan_urunler or diger_urun_icerikleri):
         etiket_metni = {"gebe": "gebelikte", "emziriyor": "emzirme döneminde", "gebelik_planliyor": "gebelik planlarken"}[evre]
         sorular.append(f"Kullandığım takviyeler {etiket_metni} uygun mu, hangilerini sürdürmeliyim?")
-    if evre == "gebelik_planliyor" and "folik_asit" not in kaynaklar:
+    if evre == "gebelik_planliyor" and "folik_asit" not in icerik_kaynaklari:
         sorular.append("Gebelik planlıyorum; folik asit kullanımı hakkında ne önerirsiniz?")
-    if cinsiyet == "erkek" and "demir" in kaynaklar:
+    if cinsiyet == "erkek" and "demir" in icerik_kaynaklari:
         sorular.append("Demir içeren bir ürün kullanıyorum; demir düzeyimin ölçülmesi gerekir mi?")
-    if "d3" in kaynaklar:
+    if "d3" in icerik_kaynaklari:
         sorular.append("D vitamini düzeyimin ölçülmesi gerekir mi?")
 
     ozet_parcalari = [
@@ -337,7 +347,7 @@ def kisisel_rutin(
         "ust_sinir_kontrolu": ust_sinir_kontrolu,
         "ust_sinir_notu": (
             "Toplamlar yalnızca girilen takviyelerden, etiketteki en yüksek günlük kullanıma göre hesaplanmıştır; "
-            "besinlerden gelen miktar dahil değildir. EFSA değerleri prototipte henüz kaynaktan doğrulanmamıştır."
+            "besinlerden gelen miktar dahil değildir."
         ),
         "gunluk_miktari_hesaplanamayan_urunler": sorted(carpansiz, key=veri.normalize),
         "kural_tanimli_olmayan_icerikler": kurali_olmayan,
@@ -349,7 +359,7 @@ def kisisel_rutin(
         "taninmayan_icerikler": tanimsiz_icerikler,
         "birimi_cevrilemeyen_icerikler": sorted(set(birim_cevrilemeyen)),
         "gizlilik": "Girilen bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
-    })
+    }, veri.kaynaklar(["efsa_ul_ozet_2025", *sinir_kaynaklari], [veri.urun_kaynagi(u) for u in bulunan_urunler]))
 
 
 def _liste(x) -> list:
@@ -370,10 +380,14 @@ SORULAR = [
 ]
 
 ESIK_NOTU = (
-    "Eşikler yetişkinler için genel halk sağlığı önerilerinden sadeleştirilmiştir "
-    "(haftada en az 150 dakika hareket, 7–9 saat uyku, günde en az 5 porsiyon sebze-meyve, "
-    "haftada 2 kez balık). Prototiptir; medikal kurul onayı bekler."
+    "Eşikler yetişkinler için genel halk sağlığı önerilerinden sadeleştirilmiştir: haftada en az 150 dakika "
+    "orta yoğunlukta hareket (WHO), gecede 7–9 saat uyku (National Sleep Foundation), günde en az 400 g sebze-meyve "
+    "(WHO; karnede 5 porsiyon olarak sadeleştirildi), haftada 1–2 kez deniz ürünü (American Heart Association). "
+    "Prototiptir; medikal kurul onayı bekler."
 )
+KARNE_KAYNAKLARI = [
+    "who_fiziksel_aktivite_2020", "nsf_uyku_suresi_2015", "who_saglikli_beslenme", "aha_deniz_urunleri_2018", "who_tutun",
+]
 
 # Puan: 2 = iyi, 1 = orta, 0 = gelişmeli
 _SEVIYE = {2: "iyi", 1: "orta", 0: "gelişmeli"}
@@ -449,7 +463,7 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
             "kisa_ozet": f"Karne için 6 sorunun hepsi gerekli; {len(eksik)} soru cevaplanmadı. Soruları kullanıcıya sorun.",
             "eksik_sorular": eksik,
             "tum_sorular": SORULAR,
-        })
+        }, veri.kaynaklar(KARNE_KAYNAKLARI))
 
     karne = []
     for s in SORULAR:
@@ -484,4 +498,4 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
         "esik_notu": ESIK_NOTU,
         "notlar": notlar,
         "gizlilik": "Cevaplar yalnızca bu karneyi üretmek için işlendi; saklanmadı ve loglanmadı.",
-    })
+    }, veri.kaynaklar(KARNE_KAYNAKLARI))
