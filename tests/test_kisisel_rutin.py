@@ -29,35 +29,56 @@ def test_tekrar_eden_d3_ve_sinirda_toplam():
     assert kontrol["asiyor"] is False  # sınıra eşit, aşmıyor
 
 
+def test_etiketteki_en_yuksek_gunluk_kullanim_esas_alinir():
+    # Ocean Magnezyum Complex: tablet başına 125 mg, etikette "1 veya 2 tablet".
+    y = kisisel_rutin(35, "erkek", mevcut_urunler=["Ocean Magnezyum Complex"])
+    mg = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "Magnezyum")
+    assert mg["takviyelerden_toplam"] == "250 mg / gün"
+    assert mg["asiyor"] is False
+    assert y["gunluk_miktari_hesaplanamayan_urunler"] == []
+
+
 def test_magnezyum_ust_siniri_asimi():
     y = kisisel_rutin(
         35, "erkek",
-        mevcut_urunler=["Ocean Magnezyum"],
+        mevcut_urunler=["Ocean Magnezyum Complex"],
         diger_urun_icerikleri=[{"ad": "Uyku Destek", "icerikler": [{"etken_madde": "magnezyum", "miktar": 100, "birim": "mg"}]}],
     )
     mg = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "Magnezyum")
-    assert mg["takviyelerden_toplam"] == "300 mg / gün"
+    assert mg["takviyelerden_toplam"] == "350 mg / gün"
     assert mg["asiyor"] is True
     assert _soru_var(y, "EFSA değerinin üzerinde")
 
 
+def test_gunluk_miktari_hesaplanamayan_urun_belirtilir():
+    # Ürün sayfasında porsiyon "Her Kapsülde", kullanım "1 veya 2 tablet" yazıyor; çarpan hesaplanmaz.
+    y = kisisel_rutin(35, "kadin", mevcut_urunler=["Ocean DHA"])
+    assert y["gunluk_miktari_hesaplanamayan_urunler"] == ["Ocean DHA"]
+
+
 def test_cocukta_d3_siniri_yasa_gore_degisir():
-    urunler = ["Ocean Balık Yağı Şurup", "Ocean Vitamin D3 1000 IU Sprey"]
-    diger = [{"ad": "Damla", "icerikler": [{"etken_madde": "D3", "miktar": 25, "birim": "µg"}]}]
+    urunler = ["Ocean Vitamin D3 1000 IU Damla"]
+    diger = [{"ad": "Damla", "icerikler": [{"etken_madde": "D3", "miktar": 30, "birim": "µg"}]}]
     cocuk = kisisel_rutin(8, "kadin", mevcut_urunler=urunler, diger_urun_icerikleri=diger)
     yetiskin = kisisel_rutin(30, "kadin", mevcut_urunler=urunler, diger_urun_icerikleri=diger)
     c = next(k for k in cocuk["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
     a = next(k for k in yetiskin["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
-    assert c["takviyelerden_toplam"] == "60 µg / gün"
+    assert c["takviyelerden_toplam"] == "55 µg / gün"
     assert c["efsa_degeri"].startswith("50 µg") and c["asiyor"] is True
     assert a["efsa_degeri"].startswith("100 µg") and a["asiyor"] is False
 
 
-def test_omega3_toplami_epa_ve_dha_dan_hesaplanir():
-    y = kisisel_rutin(40, "erkek", mevcut_urunler=["Ocean Balık Yağı"])
+def test_omega3_toplami_yalnizca_epa_ve_dha_dan_hesaplanir():
+    # Balık yağı (4506 mg) ve toplam omega-3 (1480 mg) satırları EPA + DHA toplamına katılmaz.
+    y = kisisel_rutin(40, "erkek", mevcut_urunler=["Ocean Limon Aromalı Balık Yağı 150 mL"])
     o3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "Omega-3 (EPA + DHA)")
-    assert o3["takviyelerden_toplam"] == "580 mg / gün"
+    assert o3["takviyelerden_toplam"] == "1.210 mg / gün"
     assert "güvenli alım düzeyi" in o3["efsa_degeri"]
+
+
+def test_kurali_olmayan_icerikler_listelenir():
+    y = kisisel_rutin(40, "erkek", mevcut_urunler=["Ocean Kreatin"])
+    assert y["kural_tanimli_olmayan_icerikler"] == ["Ocean Kreatin: Kreatin Monohidrat (CreHytine™)"]
 
 
 def test_k_vitamini_ve_kan_sulandirici():
@@ -76,7 +97,7 @@ def test_kan_sulandirici_yoksa_etkilesim_notu_yok():
 def test_demir_ve_kalsiyum_arasinda_2_saat():
     y = kisisel_rutin(
         30, "kadin",
-        mevcut_urunler=["Ocean Folik Asit + Demir"],
+        mevcut_urunler=["Ocean Microfer Kapsül"],
         diger_urun_icerikleri=[{"ad": "Kalsiyum Tablet", "icerikler": [{"etken_madde": "Kalsiyum", "miktar": 600, "birim": "mg"}]}],
     )
     notlar = [e for e in y["etkilesim_ve_zamanlama"] if e["konu"] == "Demir + Kalsiyum"]
@@ -84,11 +105,13 @@ def test_demir_ve_kalsiyum_arasinda_2_saat():
 
 
 def test_yas_siniri_ve_gebelik_sorulari():
-    y = kisisel_rutin(30, "kadin", evre="gebelik_planliyor", mevcut_urunler=["Ocean Balık Yağı Şurup"])
-    assert y["etiket_uyarilari"][0]["yas_siniri_disinda"] is True
-    assert _soru_var(y, "yaş aralığının")
+    y = kisisel_rutin(30, "kadin", evre="gebelik_planliyor", mevcut_urunler=["Ocean Limon Aromalı Balık Yağı 150 mL"])
+    assert y["etiket_bilgileri"][0]["yas_siniri_disinda"] is False
     assert _soru_var(y, "gebelik planlarken")
     assert _soru_var(y, "folik asit")
+    cocuk = kisisel_rutin(8, "kadin", mevcut_urunler=["Ocean D3K2 Damla"])
+    assert cocuk["etiket_bilgileri"][0]["yas_siniri_disinda"] is True
+    assert _soru_var(cocuk, "yaş aralığının")
 
 
 def test_ilac_grubu_sorulari():
@@ -100,14 +123,14 @@ def test_ilac_grubu_sorulari():
 def test_taninmayan_ve_belirsiz_girdiler():
     y = kisisel_rutin(
         30, "kadin",
-        mevcut_urunler=["Ocean D3", "Bilinmeyen Ürün"],
+        mevcut_urunler=["Ocean D3K2", "Bilinmeyen Ürün"],
         diger_urun_icerikleri=[{"ad": "X", "icerikler": [
             {"etken_madde": "ashwagandha", "miktar": 300, "birim": "mg"},
             {"etken_madde": "magnezyum", "miktar": 5, "birim": "IU"},
         ]}],
     )
     assert y["taninmayan_urunler"] == ["Bilinmeyen Ürün"]
-    assert "Ocean D3" in y["birden_fazla_eslesen_urunler"]
+    assert "Ocean D3K2" in y["birden_fazla_eslesen_urunler"]
     assert y["taninmayan_icerikler"] == ["X: ashwagandha"]
     assert y["birimi_cevrilemeyen_icerikler"] == ["X: Magnezyum"]
 
@@ -115,7 +138,7 @@ def test_taninmayan_ve_belirsiz_girdiler():
 def test_doz_onermez_ve_urun_tavsiye_etmez():
     y = kisisel_rutin(
         41, "kadin", evre="gebelik_planliyor", ilac_grubu=["kan_sulandirici_varfarin"],
-        mevcut_urunler=["Ocean Magnezyum", "Ocean D3K2 Damla"],
+        mevcut_urunler=["Ocean Magnezyum Complex", "Ocean D3K2 Damla"],
         diger_urun_icerikleri=[{"ad": "Multi", "icerikler": [{"etken_madde": "magnezyum", "miktar": 150, "birim": "mg"}]}],
     )
     metin = json.dumps(y, ensure_ascii=False).casefold()
@@ -125,6 +148,13 @@ def test_doz_onermez_ve_urun_tavsiye_etmez():
 
 def test_kisisel_veri_loglanmaz(caplog):
     caplog.set_level(logging.DEBUG)
-    kisisel_rutin(47, "kadin", evre="gebe", ilac_grubu=["metotreksat"], mevcut_urunler=["Ocean Folik Asit + Demir"])
+    kisisel_rutin(47, "kadin", evre="gebe", ilac_grubu=["metotreksat"], mevcut_urunler=["Ocean Methyl Folat Tablet"])
     assert "metotreksat" not in caplog.text
     assert "gebe" not in caplog.text
+
+
+def test_sitedeki_hatali_birim_toplamlara_katilmaz():
+    # Ürün sayfası D3 vitaminini "25 mg" yazıyor (µg olmalı). Değer tahmin edilmez, toplamlara katılmaz.
+    y = kisisel_rutin(40, "kadin", mevcut_urunler=["Day2Day The Collagen Mag Plus"])
+    assert all(k["etken_madde"] != "D3 vitamini" for k in y["ust_sinir_kontrolu"])
+    assert "Day2Day The Collagen Mag Plus: D3 vitamini" in y["birimi_cevrilemeyen_icerikler"]

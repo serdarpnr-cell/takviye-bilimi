@@ -1,0 +1,22 @@
+{
+  "id": "d3__solunum_yolu_enfeksiyonu__tum_yaslar",
+  "etken_madde": "d3",
+  "sonuc_alani": "Akut solunum yolu enfeksiyonları",
+  "populasyon": "0–95 yaş, farklı sağlık durumlarındaki katılımcılar",
+  "soru": "D vitamini takviyesi akut solunum yolu enfeksiyonu geçirme riskini azaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "fayda",
+  "gerekce": "43 çalışmalık bir meta-analizde küçük ama anlamlı bir azalma bulundu; çalışmalar arasında farklılık vardı ve etki daha çok günlük kullanımda görüldü.",
+  "halk_ozeti": "D vitamini alanlarda soğuk algınlığı gibi akut solunum yolu enfeksiyonu geçirme oranı biraz daha düşüktü. Fark küçüktür: 100 kişiden yaklaşık 1 kişi. Etki en çok her gün düzenli kullanılan çalışmalarda ve çocuklarda görüldü.",
+  "mutlak_fark": {
+    "metin": "100 kişiden 61'i (D vitamini) ve 62'si (plasebo) en az bir enfeksiyon geçirdi.",
+    "hesap": "14.332 / 23.364 = %61,3 (100 kişide yaklaşık 61); 14.217 / 22.802 = %62,3 (100 kişide yaklaşık 62); fark yaklaşık 1/100. OR 0,92 (%95 GA 0,86–0,99)."
+  },
+  "calisilan_dozlar": "Etki en çok günlük 400–1000 IU eşdeğeri kullanılan çalışmalarda görüldü.",
+  "ne_bilmiyoruz": "Başlangıçtaki D vitamini düzeyine göre etki farkı bulunamadı; kimin daha çok yarar gördüğü net değil.",
+  "kaynaklar": ["jolliffe_solunum_2021", "endocrine_d_2024"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-29"
+}

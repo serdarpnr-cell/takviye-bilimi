@@ -1,0 +1,22 @@
+{
+  "id": "d3__kanser_kalp_damar__50_yas_ustu",
+  "etken_madde": "d3",
+  "sonuc_alani": "Kanser ve kalp-damar olayları",
+  "populasyon": "50 yaş ve üstü erkekler, 55 yaş ve üstü kadınlar; eksikliğe göre seçilmemiş",
+  "soru": "D vitamini takviyesi kanser ya da kalp-damar olaylarını azaltır mı?",
+  "kanit_duzeyi": "guclu",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "25.871 kişilik VITAL çalışmasında kanser ve kalp-damar olaylarında azalma bulunmadı; Endocrine Society 2024 kılavuzu da 75 yaş altı sağlıklı yetişkinlerde hastalık riskini azaltmak için referans alımın üzerinde kullanımı önermiyor.",
+  "halk_ozeti": "Sağlıklı orta yaş ve üstü yetişkinlerde günde 2000 IU D vitamini, ortalama 5,3 yılda kanser ya da kalp krizi, inme gibi kalp-damar olaylarını azaltmadı. Kansere bağlı ölümde küçük bir azalma eğilimi vardı ama istatistiksel olarak anlamlı değildi.",
+  "mutlak_fark": {
+    "metin": "Kanser: 100 kişiden yaklaşık 6'sında, iki grupta da. Kalp-damar olayı: 100 kişiden yaklaşık 3'ünde, iki grupta da.",
+    "hesap": "Kanser 793 / 12.927 = %6,1 (D vitamini), 824 / 12.944 = %6,4 (plasebo): ikisi de 100 kişide yaklaşık 6. Kalp-damar olayı 396 / 12.927 = %3,1, 409 / 12.944 = %3,2: ikisi de 100 kişide yaklaşık 3. Grup büyüklükleri VITAL kırık yayınından."
+  },
+  "calisilan_dozlar": "Günde 2000 IU D3 vitamini.",
+  "ne_bilmiyoruz": "Kansere bağlı ölüm için güven aralığı 1'i içeriyor (HR 0,83; %95 GA 0,67–1,02); küçük bir etki dışlanamıyor.",
+  "kaynaklar": ["vital_kanser_kvh_2019", "vital_kirik_2022", "endocrine_d_2024"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-29"
+}

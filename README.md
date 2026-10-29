@@ -1,8 +1,8 @@
 # Takviye Bilimi · MCP sunucusu (prototip)
 
-Takviye edici gıdalar için Türkçe, markadan bağımsız bir MCP sunucusu. ChatGPT ve Claude içinde çalışır. Orzax tarafından geliştirilmiştir.
+Takviye edici gıdalar için Türkçe, markalar arasında ayrım yapmayan bir MCP sunucusu. ChatGPT ve Claude içinde çalışır. Orzax tarafından geliştirilmiştir.
 
-> **Prototip.** Ürün, marka (Marka A, Marka B), beyan ve parti analizi verileri temsilidir. Gerçek etiket, regülasyon onayı veya medikal kurul görüşü yerine geçmez. EFSA üst sınır değerleri henüz kaynaktan doğrulanmadı (`data/kurallar.json` içinde `dogrulandi: false`). Takviye edici gıdalar ilaç değildir.
+> **Prototip.** Ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır (`scripts/orzax_katalog.py`); katalog şu an yalnızca Orzax ürünlerini içerir. Yayımlanmış parti analizi yoktur. EFSA üst sınırları API'den doğrulanmış EFSA belgelerine bağlıdır; etkileşim kuralları, karne eşikleri ve kanıt kartları medikal kurul onayı bekler. Takviye edici gıdalar ilaç değildir.
 
 - Python + resmi MCP Python SDK (`mcp` 1.x, `FastMCP`)
 - Taşıma: Streamable HTTP, adres `http://127.0.0.1:8000/mcp`
@@ -24,20 +24,35 @@ ChatGPT için de aynı adres kullanılır; adımlar aşağıda, "ChatGPT'ye Deve
 Bilmen gerekenler:
 
 - Ücretsiz planda sunucu 15 dakika kullanılmazsa uykuya geçer; ilk soruda uyanması yaklaşık 1 dakika sürer. Claude "bağlanamadı" derse bir dakika sonra tekrar dene.
-- Adresi bilen herkes araçları kullanabilir. Veriler temsilidir ve sunucu kullanıcı bilgisi saklamaz; yine de adresi yalnızca deneyecek kişilerle paylaş. İş bitince Render'da servisi **Settings** → **Delete Web Service** ile silebilirsin.
+- Adresi bilen herkes araçları kullanabilir. Sunucu kullanıcı bilgisi saklamaz; yine de adresi yalnızca deneyecek kişilerle paylaş. İş bitince Render'da servisi **Settings** → **Delete Web Service** ile silebilirsin.
 
 ## Araçlar
 
 | Araç | Girdi | Ne döndürür |
 |---|---|---|
-| `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı ve EFSA değeri, yorum yok), etiketteki kullanım, yaş sınırı, etiket uyarıları, onaylı beyanlar, ne beklememeli, menşe, şeffaflık rozeti. Belirsiz adda adayları, bulunamazsa kataloğu sıralama ölçütüyle döndürür. |
-| `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasından yayımlanmış analiz. |
-| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması, etiket uyarıları ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
-| `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan) ve en fazla 3 hedef. Cevaplar eksikse soruları döndürür. |
+| `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı, beslenme referans değeri ve EFSA değeri, yorum yok), bileşim, etiketteki kullanım, yaş sınırı, ürün sayfasındaki sağlık beyanları, ürün sayfası bağlantısı. Belirsiz adda adayları, bulunamazsa benzer adlı ürünleri alfabetik döndürür. |
+| `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
+| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
+| `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), ürün sayfalarındaki beyanlar, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, alfabetik katalog ürünleri. Kanıt kartı olmayan maddede bunu söyler ve kataloğu gösterir. |
+| `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten) ve `tahlil_onerisi` (D vitamini, B12, ferritin). Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile döndürür. |
 
-Her yanıtta şu alanlar bulunur: `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+
+### Kaynaklar
+
+`kaynaklar[]` her öğede `baslik`, `kurum_veya_dergi`, `yil`, `tur` (`kilavuz` | `meta_analiz` | `rct` | `duzenleyici` | `uretici_icerigi`), `url` ve varsa `pmid` taşır. Kayıtlar `data/kaynaklar.json` dosyasındadır ve `scripts/kaynak_dogrula.py` ile doğrulanır:
+
+```bash
+.venv/bin/python scripts/kaynak_dogrula.py
+```
+
+Betik DOI'yi Crossref'ten, PMID'yi PubMed'den, kurum belgelerini URL'den kontrol eder; kayıttaki `alintilar` kaynağın özetinde, açık erişimli tam metninde ya da sayfasında birebir geçmelidir. Doğrulanamayan kaynak (`dogrulandi: false`) yanıtlarda gösterilmez. EFSA üst sınırları bu şekilde doğrulanmış EFSA belgelerine bağlıdır. Ürün sayfaları `uretici_icerigi` olarak, bağımsız kaynakların yanında verilir.
 
 Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dışarıya istek atmaz.
+
+### Karne formu (MCP Apps)
+
+`yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.
 
 ### Gizlilik
 
@@ -49,18 +64,44 @@ Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dı
 
 ```
 data/
-  urunler.json            # 6 Ocean ürünü + 2 temsili rakip
-  kurallar.json           # EFSA üst sınırları, etkileşim kuralları, ilaç grupları
-  beyanlar/beyanlar.json  # onaylı sağlık beyanları (temsili; regülasyon onayı bekliyor)
+  urunler.json                  # orzax.com.tr'den alınan katalog (etiket bilgisi; fiyat yok)
+  kurallar.json                 # etken maddeler, EFSA üst sınırları, etkileşim kuralları, ilaç grupları
+  kaynaklar.json                # doğrulanmış kaynak kayıtları (DOI, PMID veya URL + erişim tarihi)
+  karne_kurallari.json          # karneden takviye kanıtına, güvenlik uyarısına ve tahlile köprü kuralları
+  beyanlar/urun_beyanlari.json  # ürün sayfalarındaki sağlık ve beslenme beyanları (kelimesi kelimesine)
+  beyanlar/beyanlar.json        # etken madde düzeyindeki beyan metinleri (regülasyon onayı bekliyor)
+  ham/                          # indirilen sayfaların önbelleği (git'e girmez)
+scripts/
+  orzax_katalog.py              # katalog indirme ve ayrıştırma
+  kaynak_dogrula.py             # kaynakları Crossref, PubMed ve URL'den doğrular
+  json_yaz.py                   # veri dosyalarını okunur biçimde yazar
 server/
   veri.py                 # veri yükleme, birim çevirme, arama
   araclar.py              # araçların iş mantığı (saf fonksiyonlar)
-  app.py                  # FastMCP sunucusu ve araç tanımları
+  app.py                  # FastMCP sunucusu, araç tanımları ve ui:// kaynakları
+  arayuz.py, arayuz/      # MCP Apps arayüzleri (karne formu)
 tests/                    # her araç için test + MCP protokol ve HTTP testleri
 docs/KANIT_PROTOKOLU.md
 ```
 
-Ürün düzeyindeki etki ifadeleri yalnızca `data/beyanlar/` altındaki beyanlardan gelir (`urunler.json` beyan kimliklerini tutar).
+Ürün düzeyindeki etki ifadeleri yalnızca `data/beyanlar/urun_beyanlari.json` dosyasındaki, ürün sayfasından alınmış beyanlardan gelir.
+
+### Kanıt tabanı
+
+`data/etken_maddeler/<id>/` altında `monografi.json`, `kartlar/*.json` (etken madde × sonuç alanı × popülasyon) ve `arama_kaydi.md` bulunur. Şema ve süreç `docs/KANIT_PROTOKOLU.md` dosyasındadır. Testler şunları zorunlu kılar: her kartta en az 2 doğrulanmış kaynak ve bunlardan en az biri kılavuz ya da düzenleyici; karttaki her sayının kaynak alıntısında ya da `mutlak_fark.hesap` alanında geçmesi; halk özetinin en fazla 60 kelime olması; yasaklı ifade bulunmaması.
+
+Sunucu yalnızca `durum: "onaylandi"` kayıtları sunar. Deneme sunucusunda `TB_TASLAK_GOSTER=1` verilirse kurul onayı bekleyen taslaklar "taslak" notuyla gösterilir (`render.yaml` bu ayarla gelir; yayın sunucusunda kaldırılır).
+
+İlk set: D vitamini (pilot, taslak). Omega-3, B12, folat, demir, magnezyum, C vitamini, çinko, multivitamin, beta-karoten, E vitamini ve probiyotik için araç EFSA değeri, ürün beyanları ve kataloğu verir; kanıt kartları pilot onaylandıktan sonra eklenecek.
+
+### Kataloğu güncelleme
+
+```bash
+.venv/bin/python scripts/orzax_katalog.py indir
+.venv/bin/python scripts/orzax_katalog.py ayristir
+```
+
+`indir` sitemap'teki Türkçe ürün sayfalarını saniyede bir istekle `data/ham/orzax/` altına indirir (var olan sayfaları yeniden indirmez). `ayristir` içerik tablosu, bileşim, beyanlar ve kullanım şeklini okur. Sitedeki tablo hataları (boş miktar hücresi, birimsiz sayı vb.) tahmin edilmez; `okuma_notlari` alanına yazılır. Reçeteli ürünler ve içerik miktarı yazmayan ürünler atlanır, nedenleri `atlanan_sayfalar` alanında listelenir.
 
 ## Kurulum
 
@@ -195,8 +236,7 @@ Menü adları platformlarda sık değişebilir; adım bulunamazsa ilgili yardım
 
 ## Açık konular
 
-- EFSA değerleri kaynaktan doğrulanıp `url` ve `erisim_tarihi` alanları doldurulmalı (kanıt protokolü, kural 1).
-- Demir için 18 yaş altı EFSA değerleri eklenmedi.
-- Etkileşim kuralları ve yaşam karnesi eşikleri medikal kurul onayı bekliyor.
-- Beyan metinleri regülasyon ekibinin onayını bekliyor.
+- Etkileşim kuralları ve yaşam karnesi eşikleri medikal kurul onayı bekliyor; etkileşim kurallarına henüz kaynak bağlanmadı.
+- Etken madde düzeyindeki beyan metinleri (`data/beyanlar/beyanlar.json`) regülasyon ekibinin onayını bekliyor.
+- `mevzuat.gov.tr` ve `hsgm.saglik.gov.tr` bulut ortamından erişilemiyor; TGK yönetmeliği ve Sağlık Bakanlığı belgelerinin URL'leri elle doğrulanmalı. `ods.od.nih.gov` otomatik istekleri reddediyor.
 - `calismalarda_kullanilan_dozlar` alanı kanıt kartları hazırlanınca dolacak.

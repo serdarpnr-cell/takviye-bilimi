@@ -1,0 +1,22 @@
+{
+  "id": "d3__kirik__eksikligi_secilmemis_yetiskin",
+  "etken_madde": "d3",
+  "sonuc_alani": "Kırık",
+  "populasyon": "Eksiklik, kemik erimesi ya da düşük kemik kütlesi nedeniyle seçilmemiş, toplumda yaşayan orta yaş ve üstü yetişkinler",
+  "soru": "D vitamini takviyesi kırık sıklığını azaltır mı?",
+  "kanit_duzeyi": "guclu",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "İki randomize kontrollü çalışma (VITAL, 25.871 kişi; FIND, 2.495 kişi) ve USPSTF değerlendirmesi aynı yönde: bu grupta kırık azalmadı.",
+  "halk_ozeti": "Eksikliği bilinmeyen sağlıklı yetişkinlerde yapılan büyük çalışmalarda D vitamini alanlarla almayanlar arasında kırık sıklığında fark bulunmadı. Bu sonuç, eksikliği ya da kemik erimesi olan kişiler için geçerli olmayabilir.",
+  "mutlak_fark": {
+    "metin": "VITAL'de 5,3 yılda 100 kişiden yaklaşık 6'sında kırık görüldü; D vitamini ve plasebo gruplarında aynı.",
+    "hesap": "769 / 12.927 = %5,9 (D vitamini); 782 / 12.944 = %6,0 (plasebo); ikisi de 100 kişide yaklaşık 6."
+  },
+  "calisilan_dozlar": "VITAL'de günde 2000 IU; FIND'da günde 1600 IU ya da 3200 IU.",
+  "ne_bilmiyoruz": "Eksikliği olan kişilerde ve kalsiyumla birlikte kullanımda sonuç farklı olabilir. FIND'da 1600 IU/gün alan grupta kırık plaseboya göre daha sık görüldü (HR 1,52); 3200 IU/gün grubunda fark yoktu. Bu sinyalin anlamı belirsizdir.",
+  "kaynaklar": ["vital_kirik_2022", "vital_kanser_kvh_2019", "find_kirik_2026", "uspstf_kirik_2018"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-29"
+}

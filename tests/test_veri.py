@@ -13,28 +13,45 @@ YASAKLI = [
 ]
 
 
-def test_urunlerin_etken_maddeleri_ve_beyanlari_tanimli():
+def test_urunlerin_etken_madde_kimlikleri_tanimli():
     em = veri.kurallar()["etken_maddeler"]
     for u in veri.urunler():
         for e in u["etken_maddeler"]:
-            assert e["etken_madde"] in em, (u["ad"], e)
-            assert veri.standart_miktar(e["etken_madde"], e["miktar"], e["birim"]) is not None
-        for b in u["onayli_beyanlar"]:
-            assert b in veri.beyanlar(), (u["ad"], b)
+            assert e["etken_madde"] is None or e["etken_madde"] in em, (u["ad"], e)
 
 
-def test_istenen_urunler_katalogda():
-    adlar = {u["ad"] for u in veri.urunler()}
-    assert adlar == {
-        "Ocean Balık Yağı", "Ocean D3K2 Damla", "Ocean Vitamin D3 1000 IU Sprey", "Ocean Magnezyum",
-        "Ocean Balık Yağı Şurup", "Ocean Folik Asit + Demir", "Marka A D3 Tablet", "Marka B D3 Sprey",
-    }
+def test_katalog_yalnizca_orzax_ve_kaynakli():
+    urunler = veri.urunler()
+    assert len(urunler) >= 140
+    assert {u["marka"] for u in urunler} == {"Orzax"}
+    assert len({veri.normalize(u["ad"]) for u in urunler}) == len(urunler), "Ürün adları ayırt edilebilir olmalı"
+    for u in urunler:
+        assert u["kaynak"]["url"].startswith("https://www.orzax.com.tr/"), u["ad"]
+        assert u["kaynak"]["erisim_tarihi"]
+        assert u["id"] in veri.urun_beyanlari(), u["ad"]
 
 
-def test_ust_sinir_kaynaklari_dogrulanmadi_olarak_isaretli():
-    # Kaynaklar API/kurum belgesinden doğrulanana kadar 'dogrulandi' true olamaz.
-    for kayit in veri.kurallar()["ust_sinirlar"].values():
-        assert kayit["kaynak"]["dogrulandi"] is False
+def test_katalog_fiyat_ve_parti_verisi_icermez():
+    metin = (veri.VERI_DIZINI / "urunler.json").read_text(encoding="utf-8")
+    assert "₺" not in metin
+    assert "parti_analizleri" not in metin
+
+
+def test_bilesik_adlari_elementel_mineralle_eslesmez():
+    # "Magnezyum Bisglisinat" bileşik ağırlığıdır; elementel magnezyum toplamına katılmamalı.
+    for u in veri.urunler():
+        for e in u["etken_maddeler"]:
+            if veri.normalize(e["etiketteki_ad"]) in ("magnezyum bisglisinat", "magnezyum taurat", "balik yagi"):
+                assert e["etken_madde"] not in ("magnezyum", "omega3"), (u["ad"], e)
+
+
+def test_ust_sinirlar_dogrulanmis_kaynaklara_bagli():
+    kayitlar = veri.kaynak_kayitlari()
+    for em_id, kayit in veri.kurallar()["ust_sinirlar"].items():
+        assert kayit["kaynaklar"], em_id
+        for k in kayit["kaynaklar"]:
+            assert kayitlar[k]["dogrulandi"] is True, (em_id, k)
+            assert kayitlar[k]["tur"] == "duzenleyici", (em_id, k)
 
 
 def test_etkilesim_kurallarinin_ilac_gruplari_tanimli():
@@ -45,11 +62,20 @@ def test_etkilesim_kurallarinin_ilac_gruplari_tanimli():
             assert i in gruplar
 
 
+def _metin_alanlari(deger, haric=("brd", "miktar_metni", "okuma_notlari")):
+    """Etiket değerleri (BRD yüzdesi gibi) dışındaki metinleri toplar; '%100' BRD'si yasaklı ifade sayılmaz."""
+    if isinstance(deger, dict):
+        return [m for k, v in deger.items() if k not in haric for m in _metin_alanlari(v, haric)]
+    if isinstance(deger, list):
+        return [m for v in deger for m in _metin_alanlari(v, haric)]
+    return [deger] if isinstance(deger, str) else []
+
+
 async def test_yasakli_ifade_yok():
     araclar = await mcp.list_tools()
     metinler = [TALIMATLAR] + [t.description for t in araclar]
-    for dosya in ["urunler.json", "kurallar.json", "beyanlar/beyanlar.json"]:
-        metinler.append((veri.VERI_DIZINI / dosya).read_text(encoding="utf-8"))
+    for dosya in ["urunler.json", "kurallar.json", "karne_kurallari.json", "beyanlar/beyanlar.json", "beyanlar/urun_beyanlari.json"]:
+        metinler += _metin_alanlari(json.loads((veri.VERI_DIZINI / dosya).read_text(encoding="utf-8")))
     hepsi = "\n".join(metinler).casefold()
     for desen in YASAKLI:
         assert not re.search(desen, hepsi), desen

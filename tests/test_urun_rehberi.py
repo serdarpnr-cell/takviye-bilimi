@@ -1,3 +1,5 @@
+import json
+
 from server.araclar import urun_rehberi
 from server.veri import urunler
 
@@ -7,49 +9,56 @@ def test_tek_urun_karti(uyari_var):
     uyari_var(y)
     u = y["urun"]
     assert u["ad"] == "Ocean D3K2 Damla"
+    assert u["marka"] == "Orzax"
     d3 = u["etken_maddeler"][0]["bu_urundeki_miktar"]
-    assert d3["etiketteki_miktar"] == "1.000 IU / 2 damla"
+    assert d3["etiketteki_miktar"] == "25 µg (1000 IU) (her damlada)"
     assert d3["standart_birimde"] == "25 µg"
     assert d3["yetiskin_ust_siniri"] == "100 µg / gün (EFSA üst sınır)"
-    assert u["yas_siniri"] == "12 yaş ve üzeri"
-    assert any("Varfarin" in x for x in u["etiket_uyarilari"])
-    assert [b["metin"] for b in u["onayli_beyanlar"]] == [
-        "D vitamini, normal kemiklerin korunmasına katkıda bulunur.",
-        "K vitamini, normal kemiklerin korunmasına katkıda bulunur.",
-    ]
-    assert u["ne_beklememeli"]
-    assert u["seffaflik"]["seffaflik_rozeti"] is True
+    assert d3["beslenme_referans_degeri"] == "%500"
+    k2 = u["etken_maddeler"][1]["bu_urundeki_miktar"]
+    assert k2["standart_birimde"] == "11,25 µg"
+    assert u["yas_siniri"] == "11 yaş ve üzeri"
+    assert "Normal kemiklerin korunmasında katkıda bulunur." in u["saglik_beyanlari"]
+    assert u["urun_sayfasi"].startswith("https://www.orzax.com.tr/")
+    assert "yayımlanmış parti analizi bulunmuyor" in u["parti_analizi"]
+
+
+def test_beyan_kosulu_ayri_alanda():
+    u = urun_rehberi("Ocean Limon Aromalı Balık Yağı 150 mL")["urun"]
+    assert u["beslenme_beyanlari"] == ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."]
+    assert all("alınmalıdır" not in b for b in u["saglik_beyanlari"])
+    assert any("250 mg EPA ve DHA" in k for k in u["beyan_kullanim_kosullari"])
 
 
 def test_turkce_karaktersiz_ve_kucuk_harfle_arama():
-    assert urun_rehberi("ocean balik yagi surup")["urun"]["ad"] == "Ocean Balık Yağı Şurup"
-    assert urun_rehberi("d3k2")["urun"]["ad"] == "Ocean D3K2 Damla"
+    assert urun_rehberi("ocean limon aromali balik yagi 150 ml")["urun"]["ad"] == "Ocean Limon Aromalı Balık Yağı 150 mL"
+    assert urun_rehberi("ocean d3k2 damla")["urun"]["ad"] == "Ocean D3K2 Damla"
 
 
-def test_belirsiz_sorgu_adaylari_dondurur(uyari_var):
-    y = urun_rehberi("Ocean D3")
+def test_belirsiz_sorgu_adaylari_alfabetik_dondurur(uyari_var):
+    y = urun_rehberi("Ocean D3K2")
     uyari_var(y)
-    assert set(y["adaylar"]) == {"Ocean D3K2 Damla", "Ocean Vitamin D3 1000 IU Sprey"}
+    assert y["adaylar"] == ["Ocean D3K2 Damla", "Ocean D3K2 Vitamin D3 1000 IU Sprey", "Ocean Gummies D3K2"]
 
 
-def test_bulunamayan_urun_katalogu_olcutuyle_listeler(uyari_var):
-    y = urun_rehberi("Olmayan Ürün")
+def test_bulunamayan_urun_benzerleri_alfabetik_listeler(uyari_var):
+    y = urun_rehberi("Selenyum Forte")
     uyari_var(y)
-    assert len(y["katalog"]) == len(urunler()) == 8
-    assert "Ücretli sıralama yoktur" in y["siralama_olcutu"]
-    rozetler = [k["seffaflik_rozeti"] for k in y["katalog"]]
-    assert rozetler == sorted(rozetler, reverse=True)
+    assert y["benzer_adli_urunler"] == ["Ocean Selenyum Tablet (100 µg)", "Ocean Selenyum Tablet (200 µg)"]
+    assert y["katalogdaki_urun_sayisi"] == len(urunler())
+    assert "Ücretli veya öncelikli sıralama yoktur" in y["siralama_olcutu"]
+    assert "yalnızca Orzax" in y["katalog_kapsami"]
 
 
-def test_rakip_urun_ayni_sablonla_ve_eksik_bilgi_acikca():
-    ocean = urun_rehberi("Ocean Vitamin D3 1000 IU Sprey")["urun"]
-    rakip = urun_rehberi("Marka A D3 Tablet")["urun"]
-    assert ocean.keys() == rakip.keys()
-    assert rakip["mensei"]["uretim_ulkesi"] == "Belirtilmemiş"
-    assert rakip["seffaflik"]["parti_analizi"] == "Yayımlamıyor"
-    assert rakip["seffaflik"]["seffaflik_rozeti"] is False
+def test_sitede_okunamayan_hucre_tahmin_edilmez():
+    u = urun_rehberi("Day2Day The Collagen Beauty Plus Tüp")["urun"]
+    yesil_cay = next(e for e in u["etken_maddeler"] if e["etken_madde"] == "Yeşil Çay Ekstresi")
+    assert yesil_cay["bu_urundeki_miktar"]["etiketteki_miktar"] == "Ürün sayfasında yazmıyor"
+    assert "boş" in yesil_cay["okuma_notu"]
 
 
-def test_tum_urunler_kart_uretir():
+def test_tum_urunler_kart_uretir_ve_fiyat_icermez():
     for u in urunler():
-        assert urun_rehberi(u["ad"])["urun"]["ad"] == u["ad"]
+        kart = urun_rehberi(u["ad"])["urun"]
+        assert kart["ad"] == u["ad"]
+        assert "₺" not in json.dumps(kart, ensure_ascii=False)

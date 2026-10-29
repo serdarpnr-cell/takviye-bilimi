@@ -8,7 +8,7 @@ Bu protokol, örnek ürünlerdeki etken maddeler için bilimsel kanıtın nasıl
 
 ### Örnek ürünler ve etken maddeler
 
-Miktarlar prototipten alınmıştır ve temsilidir. Regülasyon ekibi gerçek etiketleri verdiğinde `data/urunler.json` güncellenir.
+Aşağıdaki tablo protokolün ilk taslağındaki temsili örneklerdir. Güncel ürün kataloğu orzax.com.tr ürün sayfalarından `scripts/orzax_katalog.py` ile `data/urunler.json` dosyasına alınır; miktarlar oradan okunur.
 
 | Ürün | Etken madde | Form | Günlük miktar (temsili) |
 |---|---|---|---|
@@ -245,6 +245,8 @@ Rakamları protokole yazma; güncel değerleri kaynaktan çek.
 | `urun_bilimi` | `urun` | Etken maddeler, "bu üründeki miktar" bloğu, onaylı beyanlar, ilgili kartlar |
 
 Yanıt yapısı: `kisa_ozet`, `kartlar[]`, `kaynaklar[]` (PubMed veya DOI bağlantısıyla), `uyari`, `guncelleme`.
+
+Uygulamada `bilimsel_temel` aracının işlevini `etken_madde_rehberi`, `urun_bilimi` aracının işlevini `urun_rehberi` üstlenir. Kanıt düzeyi yanıtta dört basamakla (`guclu`, `orta`, `zayif`, `yetersiz`) ve ayrı bir `sonuc_yonu` alanıyla (`fayda`, `etkisiz`, `zarar`, `belirsiz`) verilir; böylece "Etkisiz" ve "Dikkat" sonuçları kaybolmaz: "Etkisiz" = güçlü/orta kanıt + `etkisiz`, "Dikkat" = `zarar`.
 
 `uyari` alanı her yanıtta bulunur: "Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."
 

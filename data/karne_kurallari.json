@@ -1,0 +1,69 @@
+{
+  "_not": "Yaşam karnesinden takviye kanıtına, güvenlik uyarısına ve tahlile köprü kuralları. Dil 'takviye al' değil 'kanıtı incele'dir. Koşullar cevabın aralığı üzerinden değerlendirilir: 'ust_sinir_kucuktur: 2' cevabın tamamı 2'nin altındaysa sağlanır. Medikal kurul onayı bekler.",
+  "kurallar": [
+    {
+      "id": "balik_omega3",
+      "tur": "takviye_baglantisi",
+      "kosul": {"alan": "balik_haftalik", "ust_sinir_kucuktur": 2},
+      "tetikleyici": "Haftada 2 kezden az balık",
+      "etken_madde": "omega3",
+      "mesaj": "Haftada 1–2 kez deniz ürünü yemek önerilir. Balıktan alınamayan omega-3 için takviyelerin kimde işe yaradığına dair kanıtı etken madde rehberinde inceleyebilirsiniz.",
+      "onerilen_sonraki_arac": "etken_madde_rehberi",
+      "kaynaklar": ["aha_deniz_urunleri_2018"]
+    },
+    {
+      "id": "sebze_meyve_folat",
+      "tur": "takviye_baglantisi",
+      "kosul": {"alan": "sebze_meyve_porsiyon", "ust_sinir_kucuktur": 3},
+      "tetikleyici": "Günde 3 porsiyondan az sebze ve meyve",
+      "etken_madde": "folik_asit",
+      "mesaj": "Sebze ve meyve önce besinle karşılanır (WHO, günde en az 400 g). Folat takviyesinin kimde işe yaradığına dair kanıtı etken madde rehberinde inceleyebilirsiniz.",
+      "onerilen_sonraki_arac": "etken_madde_rehberi",
+      "kaynaklar": ["who_saglikli_beslenme"]
+    },
+    {
+      "id": "sebze_meyve_c_vitamini",
+      "tur": "takviye_baglantisi",
+      "kosul": {"alan": "sebze_meyve_porsiyon", "ust_sinir_kucuktur": 3},
+      "tetikleyici": "Günde 3 porsiyondan az sebze ve meyve",
+      "etken_madde": "c_vitamini",
+      "mesaj": "Sebze ve meyve önce besinle karşılanır (WHO, günde en az 400 g). C vitamini takviyesinin kimde işe yaradığına dair kanıtı etken madde rehberinde inceleyebilirsiniz.",
+      "onerilen_sonraki_arac": "etken_madde_rehberi",
+      "kaynaklar": ["who_saglikli_beslenme"]
+    },
+    {
+      "id": "sigara_beta_karoten",
+      "tur": "guvenlik",
+      "kosul": {"alan": "sigara", "icinde": ["ara_sira", "her_gun"]},
+      "tetikleyici": "Sigara ya da tütün kullanımı",
+      "etken_madde": "beta_karoten",
+      "mesaj": "EFSA, sigara içenlerin beta-karoten içeren takviyelerden kaçınması gerektiğini belirtir. Bazı multivitaminler beta-karoten içerir; etiketinde beta-karoten olan bir ürün kullanıyorsanız hekiminize ya da eczacınıza danışın.",
+      "onerilen_sonraki_arac": "etken_madde_rehberi",
+      "kaynaklar": ["efsa_ul_ozet_2025"]
+    },
+    {
+      "id": "tahlil_d_vitamini",
+      "tur": "tahlil",
+      "kosul": {},
+      "etken_madde": "d3",
+      "mesaj": "D vitamini ihtiyacına karneyle karar verilemez. Belirtisi olmayan sağlıklı kişilerde rutin ölçüm önerilmiyor; ölçüm gerekip gerekmediğine hekim karar verir.",
+      "kaynaklar": ["endocrine_d_2024", "uspstf_d_tarama_2021"]
+    },
+    {
+      "id": "tahlil_b12",
+      "tur": "tahlil",
+      "kosul": {},
+      "etken_madde": "b12",
+      "mesaj": "B12 vitamini düzeyi karneyle değil kan tahliliyle değerlendirilir; tahlil gerekip gerekmediğine hekim karar verir.",
+      "kaynaklar": []
+    },
+    {
+      "id": "tahlil_ferritin",
+      "tur": "tahlil",
+      "kosul": {},
+      "etken_madde": "demir",
+      "mesaj": "Demir depoları (ferritin) karneyle değil kan tahliliyle değerlendirilir; tahlil gerekip gerekmediğine hekim karar verir.",
+      "kaynaklar": []
+    }
+  ]
+}
