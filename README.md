@@ -1,8 +1,8 @@
 # Takviye Bilimi · MCP sunucusu (prototip)
 
-Takviye edici gıdalar için Türkçe, markadan bağımsız bir MCP sunucusu. ChatGPT ve Claude içinde çalışır. Orzax tarafından geliştirilmiştir.
+Takviye edici gıdalar için Türkçe, markalar arasında ayrım yapmayan bir MCP sunucusu. ChatGPT ve Claude içinde çalışır. Orzax tarafından geliştirilmiştir.
 
-> **Prototip.** Ürün, marka (Marka A, Marka B), beyan ve parti analizi verileri temsilidir. Gerçek etiket, regülasyon onayı veya medikal kurul görüşü yerine geçmez. EFSA üst sınır değerleri henüz kaynaktan doğrulanmadı (`data/kurallar.json` içinde `dogrulandi: false`). Takviye edici gıdalar ilaç değildir.
+> **Prototip.** Ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır (`scripts/orzax_katalog.py`); katalog şu an yalnızca Orzax ürünlerini içerir. Yayımlanmış parti analizi yoktur. EFSA üst sınır değerleri henüz kaynaktan doğrulanmadı (`data/kurallar.json` içinde `dogrulandi: false`); etkileşim kuralları ve kanıt kartları medikal kurul onayı bekler. Takviye edici gıdalar ilaç değildir.
 
 - Python + resmi MCP Python SDK (`mcp` 1.x, `FastMCP`)
 - Taşıma: Streamable HTTP, adres `http://127.0.0.1:8000/mcp`
@@ -24,15 +24,15 @@ ChatGPT için de aynı adres kullanılır; adımlar aşağıda, "ChatGPT'ye Deve
 Bilmen gerekenler:
 
 - Ücretsiz planda sunucu 15 dakika kullanılmazsa uykuya geçer; ilk soruda uyanması yaklaşık 1 dakika sürer. Claude "bağlanamadı" derse bir dakika sonra tekrar dene.
-- Adresi bilen herkes araçları kullanabilir. Veriler temsilidir ve sunucu kullanıcı bilgisi saklamaz; yine de adresi yalnızca deneyecek kişilerle paylaş. İş bitince Render'da servisi **Settings** → **Delete Web Service** ile silebilirsin.
+- Adresi bilen herkes araçları kullanabilir. Sunucu kullanıcı bilgisi saklamaz; yine de adresi yalnızca deneyecek kişilerle paylaş. İş bitince Render'da servisi **Settings** → **Delete Web Service** ile silebilirsin.
 
 ## Araçlar
 
 | Araç | Girdi | Ne döndürür |
 |---|---|---|
-| `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı ve EFSA değeri, yorum yok), etiketteki kullanım, yaş sınırı, etiket uyarıları, onaylı beyanlar, ne beklememeli, menşe, şeffaflık rozeti. Belirsiz adda adayları, bulunamazsa kataloğu sıralama ölçütüyle döndürür. |
-| `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasından yayımlanmış analiz. |
-| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması, etiket uyarıları ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
+| `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı, beslenme referans değeri ve EFSA değeri, yorum yok), bileşim, etiketteki kullanım, yaş sınırı, ürün sayfasındaki sağlık beyanları, ürün sayfası bağlantısı. Belirsiz adda adayları, bulunamazsa benzer adlı ürünleri alfabetik döndürür. |
+| `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
+| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
 | `yasam_karnesi` | `cevaplar` (6 alan), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan) ve en fazla 3 hedef. Cevaplar eksikse soruları döndürür. |
 
 Her yanıtta şu alanlar bulunur: `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
@@ -49,9 +49,14 @@ Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dı
 
 ```
 data/
-  urunler.json            # 6 Ocean ürünü + 2 temsili rakip
-  kurallar.json           # EFSA üst sınırları, etkileşim kuralları, ilaç grupları
-  beyanlar/beyanlar.json  # onaylı sağlık beyanları (temsili; regülasyon onayı bekliyor)
+  urunler.json                  # orzax.com.tr'den alınan katalog (etiket bilgisi; fiyat yok)
+  kurallar.json                 # etken maddeler, EFSA üst sınırları, etkileşim kuralları, ilaç grupları
+  beyanlar/urun_beyanlari.json  # ürün sayfalarındaki sağlık ve beslenme beyanları (kelimesi kelimesine)
+  beyanlar/beyanlar.json        # etken madde düzeyindeki beyan metinleri (regülasyon onayı bekliyor)
+  ham/                          # indirilen sayfaların önbelleği (git'e girmez)
+scripts/
+  orzax_katalog.py              # katalog indirme ve ayrıştırma
+  json_yaz.py                   # veri dosyalarını okunur biçimde yazar
 server/
   veri.py                 # veri yükleme, birim çevirme, arama
   araclar.py              # araçların iş mantığı (saf fonksiyonlar)
@@ -60,7 +65,16 @@ tests/                    # her araç için test + MCP protokol ve HTTP testleri
 docs/KANIT_PROTOKOLU.md
 ```
 
-Ürün düzeyindeki etki ifadeleri yalnızca `data/beyanlar/` altındaki beyanlardan gelir (`urunler.json` beyan kimliklerini tutar).
+Ürün düzeyindeki etki ifadeleri yalnızca `data/beyanlar/urun_beyanlari.json` dosyasındaki, ürün sayfasından alınmış beyanlardan gelir.
+
+### Kataloğu güncelleme
+
+```bash
+.venv/bin/python scripts/orzax_katalog.py indir
+.venv/bin/python scripts/orzax_katalog.py ayristir
+```
+
+`indir` sitemap'teki Türkçe ürün sayfalarını saniyede bir istekle `data/ham/orzax/` altına indirir (var olan sayfaları yeniden indirmez). `ayristir` içerik tablosu, bileşim, beyanlar ve kullanım şeklini okur. Sitedeki tablo hataları (boş miktar hücresi, birimsiz sayı vb.) tahmin edilmez; `okuma_notlari` alanına yazılır. Reçeteli ürünler ve içerik miktarı yazmayan ürünler atlanır, nedenleri `atlanan_sayfalar` alanında listelenir.
 
 ## Kurulum
 

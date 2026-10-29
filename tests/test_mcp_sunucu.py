@@ -20,8 +20,8 @@ from server.veri import UYARI
 KOK = Path(__file__).resolve().parent.parent
 
 CAGRILAR = {
-    "urun_rehberi": {"urun": "Ocean Magnezyum"},
-    "parti_analizi": {"karekod_veya_parti_no": "https://takviyebilimi.example/k/MG-24D210"},
+    "urun_rehberi": {"urun": "Ocean Magnezyum Complex"},
+    "parti_analizi": {"karekod_veya_parti_no": "https://ornek.example/k/MG-24D210"},
     "kisisel_rutin": {
         "yas": 41, "cinsiyet": "kadin", "evre": "yok", "ilac_grubu": ["kan_sulandirici_varfarin"],
         "mevcut_urunler": ["Ocean D3K2 Damla"],

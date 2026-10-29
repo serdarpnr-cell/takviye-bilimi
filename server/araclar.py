@@ -14,43 +14,52 @@ from . import veri
 # --------------------------------------------------------------------------- #
 
 
+ETIKET_UYARISI_NOTU = "Etiket uyarıları ürün sayfasında yayımlanmıyor; ambalajdaki uyarıları okuyun."
+PARTI_ANALIZI_NOTU = "Katalogdaki ürünler için yayımlanmış parti analizi bulunmuyor."
+
+
+def _etiket_miktari(em: dict, u: dict) -> str:
+    if not em.get("miktar_metni"):
+        return "Ürün sayfasında yazmıyor"
+    porsiyon = em.get("porsiyon") or u.get("porsiyon")
+    return f"{em['miktar_metni']} ({porsiyon.casefold()})" if porsiyon else em["miktar_metni"]
+
+
 def _urun_karti(u: dict) -> dict:
     etkenler = []
     for em in u["etken_maddeler"]:
-        std = veri.standart_miktar(em["etken_madde"], em["miktar"], em["birim"])
-        sinir = veri.ust_sinir(em["etken_madde"], 18)
+        em_id = em["etken_madde"]
+        std = veri.standart_miktar(em_id, em["miktar"], em["birim"]) if em_id else None
+        sinir = veri.ust_sinir(em_id, 18) if em_id else None
         etkenler.append({
-            "etken_madde": veri.etken_madde_adi(em["etken_madde"]),
-            "kaynak_form": em["kaynak_form"],
+            "etken_madde": em["etiketteki_ad"],
             # "Bu üründeki miktar" bloğu: yalnızca rakam, yorum yok.
             "bu_urundeki_miktar": {
-                "etiketteki_miktar": f"{_sayi(em['miktar'])} {em['birim']} / {u['gunluk_porsiyon']}",
-                "standart_birimde": None if std is None else f"{_sayi(std)} {veri.kurallar()['etken_maddeler'][em['etken_madde']]['birim']}",
-                "calismalarda_kullanilan_dozlar": "Kanıt kartı hazırlanıyor.",
-                "yetiskin_ust_siniri": _sinir_metni(em["etken_madde"], sinir),
+                "etiketteki_miktar": _etiket_miktari(em, u),
+                "beslenme_referans_degeri": em["brd"],
+                "standart_birimde": None if std is None else f"{_sayi(std)} {veri.kurallar()['etken_maddeler'][em_id]['birim']}",
+                "yetiskin_ust_siniri": _sinir_metni(em_id, sinir) if em_id else None,
             },
+            **({"okuma_notu": " ".join(em["okuma_notlari"])} if em["okuma_notlari"] else {}),
         })
-    beyan_tablosu = veri.beyanlar()
+    beyan = veri.urun_beyanlari().get(u["id"], {})
     return {
         "ad": u["ad"],
         "marka": u["marka"],
-        "form": u["form"],
-        "gunluk_porsiyon": u["gunluk_porsiyon"],
+        "seri": u["seri"],
+        "porsiyon": u["porsiyon"],
         "etken_maddeler": etkenler,
+        "bilesim": u["bilesim"],
         "etiketteki_kullanim": u["etiketteki_kullanim"],
         "yas_siniri": _yas_metni(u["yas_siniri"]),
-        "etiket_uyarilari": u["etiket_uyarilari"],
-        "onayli_beyanlar": [
-            {"metin": beyan_tablosu[b]["metin"], "kosul": beyan_tablosu[b]["kosul"], "durum": beyan_tablosu[b]["durum"]}
-            for b in u["onayli_beyanlar"]
-        ],
-        "ne_beklememeli": u["ne_beklememeli"],
-        "mensei": {
-            "uretim_ulkesi": u["mensei"].get("uretim_ulkesi") or "Belirtilmemiş",
-            "hammadde_kaynagi": u["mensei"].get("hammadde_kaynagi") or "Belirtilmemiş",
-        },
-        "seffaflik": veri.seffaflik(u),
-        "parti_analizi_sayisi": len(u["parti_analizleri"]),
+        "saglik_beyanlari": beyan.get("saglik", []),
+        "beslenme_beyanlari": beyan.get("beslenme", []),
+        "beyan_kullanim_kosullari": beyan.get("kullanim_kosullari", []),
+        "beyan_notu": "Beyanlar ürün sayfasındaki metinlerdir; ürüne ait etki ifadesi yalnızca bunlardır.",
+        "etiket_uyarilari": ETIKET_UYARISI_NOTU,
+        "parti_analizi": PARTI_ANALIZI_NOTU,
+        "urun_sayfasi": u["kaynak"]["url"],
+        "erisim_tarihi": u["kaynak"]["erisim_tarihi"],
     }
 
 
@@ -59,26 +68,27 @@ def urun_rehberi(urun: str) -> dict:
     if len(adaylar) == 1:
         u = adaylar[0]
         return veri.zarf({
-            "kisa_ozet": f"{u['ad']} ({u['marka']}) için etiket bilgileri. Ürün düzeyindeki etki ifadeleri yalnızca onaylı beyanlardan gelir.",
+            "kisa_ozet": f"{u['ad']} ({u['marka']}) için etiket bilgileri. Ürün düzeyindeki etki ifadeleri yalnızca ürün sayfasındaki beyanlardan gelir.",
             "urun": _urun_karti(u),
         })
     if len(adaylar) > 1:
         return veri.zarf({
             "kisa_ozet": f"'{urun}' birden fazla ürünle eşleşti. Hangisini kastettiğinizi belirtin.",
-            "adaylar": [a["ad"] for a in adaylar],
+            "adaylar": sorted((a["ad"] for a in adaylar), key=veri.normalize),
+            "siralama_olcutu": "Alfabetik.",
         })
-    # Eşleşme yoksa kataloğu, ölçütü yazarak listeler.
-    katalog = sorted(
-        veri.urunler(),
-        key=lambda x: (not veri.seffaflik(x)["seffaflik_rozeti"], veri.normalize(x["ad"])),
+    # Eşleşme yoksa sorgudaki kelimelerden en az birini içeren ürünleri listeler.
+    kelimeler = set(veri.normalize(urun).split())
+    benzer = sorted(
+        (x["ad"] for x in veri.urunler() if kelimeler & set(veri.normalize(x["ad"]).split())),
+        key=veri.normalize,
     )
     return veri.zarf({
-        "kisa_ozet": f"'{urun}' katalogda bulunamadı. Katalogdaki ürünler aşağıda.",
-        "siralama_olcutu": "Önce şeffaflık rozeti olanlar, sonra alfabetik. Ücretli sıralama yoktur.",
-        "katalog": [
-            {"ad": x["ad"], "marka": x["marka"], "form": x["form"], "seffaflik_rozeti": veri.seffaflik(x)["seffaflik_rozeti"]}
-            for x in katalog
-        ],
+        "kisa_ozet": f"'{urun}' katalogda bulunamadı. Ürün adını kutudaki gibi yazmayı deneyin.",
+        "benzer_adli_urunler": benzer[:20],
+        "katalogdaki_urun_sayisi": len(veri.urunler()),
+        "katalog_kapsami": "Katalog şu an yalnızca Orzax ürünlerini içerir.",
+        "siralama_olcutu": "Alfabetik. Ücretli veya öncelikli sıralama yoktur.",
     })
 
 
@@ -104,27 +114,11 @@ def _parti_no_coz(girdi: str) -> str:
 
 def parti_analizi(karekod_veya_parti_no: str) -> dict:
     parti_no = _parti_no_coz(karekod_veya_parti_no)
-    aranan = veri.normalize(parti_no).replace(" ", "")
-    for u in veri.urunler():
-        for p in u["parti_analizleri"]:
-            if veri.normalize(p["parti_no"]).replace(" ", "") == aranan:
-                uygun_degil = [t["parametre"] for t in p["testler"] if t["sonuc"] != "uygun"]
-                return veri.zarf({
-                    "kisa_ozet": (
-                        f"{u['ad']}, parti {p['parti_no']}: {len(p['testler'])} test, "
-                        + ("tümü limit veya beyan içinde." if not uygun_degil else f"uygun olmayan: {', '.join(uygun_degil)}.")
-                    ),
-                    "urun": u["ad"],
-                    "marka": u["marka"],
-                    "parti": {k: v for k, v in p.items() if k != "karekod"},
-                    "seffaflik": veri.seffaflik(u),
-                })
-    yayimlamayanlar = [u["ad"] for u in veri.urunler() if not u["parti_analizi_yayimliyor"]]
     return veri.zarf({
-        "kisa_ozet": f"'{parti_no}' parti numarası için yayımlanmış analiz bulunamadı.",
+        "kisa_ozet": f"'{parti_no}' parti numarası için yayımlanmış analiz bulunamadı. {PARTI_ANALIZI_NOTU}",
         "aranan_parti_no": parti_no,
-        "not": "Parti numarası kutunun alt ya da yan yüzünde, son kullanma tarihinin yanında yazar. Bazı markalar parti analizi yayımlamaz.",
-        "parti_analizi_yayimlamayan_urunler": yayimlamayanlar,
+        "not": "Parti numarası kutunun alt ya da yan yüzünde, son kullanma tarihinin yanında yazar. "
+               "Ürünün etiket bilgileri için ürün rehberine bakılabilir.",
     })
 
 
@@ -160,7 +154,7 @@ class DigerUrun(BaseModel):
 
 
 def _sayi(x: float) -> str:
-    return f"{x:,.1f}".rstrip("0").rstrip(".").replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"{x:,.2f}".rstrip("0").rstrip(".").replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 def _sinir_metni(em_id: str, sinir: dict | None) -> str | None:
@@ -172,6 +166,8 @@ def _sinir_metni(em_id: str, sinir: dict | None) -> str | None:
 
 
 def _yas_metni(ys: dict) -> str:
+    if ys["min"] is None:
+        return "Ürün sayfasında belirtilmemiş"
     if ys["max"] is None:
         return f"{ys['min']} yaş ve üzeri"
     return f"{ys['min']}–{ys['max']} yaş"
@@ -193,6 +189,8 @@ def kisisel_rutin(
     tanimsiz_urunler: list[str] = []
     tanimsiz_icerikler: list[str] = []
     bulunan_urunler: list[dict] = []
+    kurali_olmayan: list[str] = []
+    carpansiz: set[str] = set()
     belirsiz_urunler: dict[str, list[str]] = {}
 
     for ad in mevcut_urunler or []:
@@ -201,8 +199,16 @@ def kisisel_rutin(
             u = eslesen[0]
             bulunan_urunler.append(u)
             for em in u["etken_maddeler"]:
+                if em["etken_madde"] is None:
+                    kurali_olmayan.append(f"{u['ad']}: {em['etiketteki_ad']}")
+                    continue
+                std = veri.standart_miktar(em["etken_madde"], em["miktar"], em["birim"])
+                # Etiketteki en yüksek günlük kullanım esas alınır; hesaplanamazsa porsiyon başına miktar kullanılır.
+                carpan = em.get("gunluk_carpan")
+                if carpan is None:
+                    carpansiz.add(u["ad"])
                 kaynaklar.setdefault(em["etken_madde"], []).append(
-                    (u["ad"], veri.standart_miktar(em["etken_madde"], em["miktar"], em["birim"]))
+                    (u["ad"], None if std is None else std * (carpan or 1))
                 )
         elif eslesen:
             belirsiz_urunler[ad] = [e["ad"] for e in eslesen]
@@ -259,17 +265,17 @@ def kisisel_rutin(
         })
     asimlar = [k for k in ust_sinir_kontrolu if k["asiyor"]]
 
-    # Etiket uyarıları ve yaş sınırı.
-    etiket_uyarilari = []
+    # Etiketteki kullanım ve yaş sınırı.
+    etiket_bilgileri = []
     for u in bulunan_urunler:
         ys = u["yas_siniri"]
-        yas_disi = yas < ys["min"] or (ys["max"] is not None and yas > ys["max"])
-        etiket_uyarilari.append({
+        yas_disi = ys["min"] is not None and (yas < ys["min"] or (ys["max"] is not None and yas > ys["max"]))
+        etiket_bilgileri.append({
             "urun": u["ad"],
-            "uyarilar": u["etiket_uyarilari"],
             "etiketteki_kullanim": u["etiketteki_kullanim"],
             "yas_siniri": _yas_metni(ys),
             "yas_siniri_disinda": yas_disi,
+            "uyarilar": ETIKET_UYARISI_NOTU,
         })
 
     # Etkileşim kuralları.
@@ -307,7 +313,7 @@ def kisisel_rutin(
         )
     for t in tekrar_edenler:
         sorular.append(f"{t['etken_madde']} birden fazla üründe var ({', '.join(t['urunler'])}). Bunları birlikte kullanmam gerekli mi?")
-    for e in etiket_uyarilari:
+    for e in etiket_bilgileri:
         if e["yas_siniri_disinda"]:
             sorular.append(f"{e['urun']} etiketteki yaş aralığının ({e['yas_siniri']}) dışında. Bu yaşta kullanımı uygun mu?")
     if evre in ("gebe", "emziriyor", "gebelik_planliyor") and (bulunan_urunler or diger_urun_icerikleri):
@@ -329,8 +335,13 @@ def kisisel_rutin(
         "kisa_ozet": "Rutin kontrolü: " + ", ".join(ozet_parcalari) + ". Bu bir değerlendirme değildir; sonuçları hekiminiz veya eczacınızla konuşun.",
         "tekrar_eden_etken_maddeler": tekrar_edenler,
         "ust_sinir_kontrolu": ust_sinir_kontrolu,
-        "ust_sinir_notu": "Toplamlar yalnızca girilen takviyelerden hesaplanmıştır; besinlerden gelen miktar dahil değildir. EFSA değerleri prototipte henüz kaynaktan doğrulanmamıştır.",
-        "etiket_uyarilari": etiket_uyarilari,
+        "ust_sinir_notu": (
+            "Toplamlar yalnızca girilen takviyelerden, etiketteki en yüksek günlük kullanıma göre hesaplanmıştır; "
+            "besinlerden gelen miktar dahil değildir. EFSA değerleri prototipte henüz kaynaktan doğrulanmamıştır."
+        ),
+        "gunluk_miktari_hesaplanamayan_urunler": sorted(carpansiz, key=veri.normalize),
+        "kural_tanimli_olmayan_icerikler": kurali_olmayan,
+        "etiket_bilgileri": etiket_bilgileri,
         "etkilesim_ve_zamanlama": etkilesimler,
         "hekime_sorulacak_sorular": list(dict.fromkeys(sorular)),
         "taninmayan_urunler": tanimsiz_urunler,

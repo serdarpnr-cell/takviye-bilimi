@@ -15,8 +15,8 @@ UYARI = (
 )
 GELISTIRICI = "Orzax tarafından geliştirilmiştir."
 VERI_NOTU = (
-    "Prototip: ürün, marka, beyan ve analiz verileri temsilidir; gerçek etiket, "
-    "regülasyon onayı veya medikal kurul görüşü yerine geçmez."
+    "Prototip: ürün bilgileri orzax.com.tr ürün sayfalarından alınmıştır ve katalog yalnızca Orzax ürünlerini içerir. "
+    "EFSA değerleri, etkileşim kuralları ve kanıt kartları medikal kurul onayı bekler."
 )
 
 _TR_HARF = str.maketrans("çğıöşüâîûÇĞİÖŞÜ", "cgiosuaiucgiosu")
@@ -44,8 +44,19 @@ def kurallar() -> dict:
 
 
 @lru_cache(maxsize=1)
+def katalog_tarihi() -> str:
+    return _yukle("urunler.json")["erisim_tarihi"]
+
+
+@lru_cache(maxsize=1)
 def beyanlar() -> dict:
     return _yukle("beyanlar/beyanlar.json")["beyanlar"]
+
+
+@lru_cache(maxsize=1)
+def urun_beyanlari() -> dict:
+    """Ürün id'si → ürün sayfasındaki sağlık ve beslenme beyanları."""
+    return _yukle("beyanlar/urun_beyanlari.json")["urunler"]
 
 
 def zarf(govde: dict) -> dict:
@@ -66,8 +77,10 @@ def etken_madde_adi(em_id: str) -> str:
     return kurallar()["etken_maddeler"].get(em_id, {}).get("ad", em_id)
 
 
-def standart_miktar(em_id: str, miktar: float, birim: str) -> float | None:
+def standart_miktar(em_id: str, miktar: float | None, birim: str | None) -> float | None:
     """Miktarı etken maddenin standart birimine çevirir. Çevrilemezse None döner."""
+    if miktar is None or birim is None:
+        return None
     hedef = _birim_kodu(kurallar()["etken_maddeler"][em_id]["birim"])
     kaynak = _birim_kodu(birim)
     carpan = {"g": 1_000_000, "mg": 1_000, "ug": 1}
@@ -76,7 +89,7 @@ def standart_miktar(em_id: str, miktar: float, birim: str) -> float | None:
         if em_id != "d3":
             return None
         return (miktar / 40) / carpan[hedef]
-    if kaynak not in carpan:
+    if kaynak not in carpan or hedef not in carpan:
         return None
     return miktar * carpan[kaynak] / carpan[hedef]
 
@@ -102,22 +115,6 @@ def ust_sinir(em_id: str, yas: float | None) -> dict | None:
                 "kaynak": kayit["kaynak"],
             }
     return None
-
-
-def seffaflik(urun: dict) -> dict:
-    mensei = urun.get("mensei") or {}
-    rozet = bool(
-        urun.get("parti_analizi_yayimliyor")
-        and mensei.get("uretim_ulkesi")
-        and mensei.get("hammadde_kaynagi")
-    )
-    return {
-        "parti_analizi": "Yayımlıyor" if urun.get("parti_analizi_yayimliyor") else "Yayımlamıyor",
-        "mensei": "Açık" if mensei.get("uretim_ulkesi") else "Belirtilmemiş",
-        "hammadde_kaynagi": "Açık" if mensei.get("hammadde_kaynagi") else "Belirtilmemiş",
-        "seffaflik_rozeti": rozet,
-        "rozet_olcutu": "Parti analizi, hammadde kaynağı ve menşe birlikte yayımlanıyorsa verilir.",
-    }
 
 
 def urun_ara(sorgu: str) -> list[dict]:

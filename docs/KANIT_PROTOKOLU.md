@@ -8,7 +8,7 @@ Bu protokol, örnek ürünlerdeki etken maddeler için bilimsel kanıtın nasıl
 
 ### Örnek ürünler ve etken maddeler
 
-Miktarlar prototipten alınmıştır ve temsilidir. Regülasyon ekibi gerçek etiketleri verdiğinde `data/urunler.json` güncellenir.
+Aşağıdaki tablo protokolün ilk taslağındaki temsili örneklerdir. Güncel ürün kataloğu orzax.com.tr ürün sayfalarından `scripts/orzax_katalog.py` ile `data/urunler.json` dosyasına alınır; miktarlar oradan okunur.
 
 | Ürün | Etken madde | Form | Günlük miktar (temsili) |
 |---|---|---|---|

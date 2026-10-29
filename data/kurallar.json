@@ -3,25 +3,122 @@
   "etken_maddeler": {
     "epa": {"ad": "EPA (omega-3)", "birim": "mg", "esanlamlar": ["epa", "eikozapentaenoik asit", "eikosapentaenoik asit"]},
     "dha": {"ad": "DHA (omega-3)", "birim": "mg", "esanlamlar": ["dha", "dokozaheksaenoik asit"]},
-    "omega3": {"ad": "Omega-3 (EPA + DHA)", "birim": "mg", "esanlamlar": ["omega 3", "omega-3", "omega3", "balik yagi", "epa+dha", "epa dha"]},
-    "d3": {"ad": "D3 vitamini", "birim": "µg", "esanlamlar": ["d3", "d vitamini", "vitamin d", "vitamin d3", "d3 vitamini", "kolekalsiferol", "d2", "ergokalsiferol"]},
-    "k2": {"ad": "K vitamini", "birim": "µg", "esanlamlar": ["k2", "k vitamini", "vitamin k", "vitamin k2", "k2 vitamini", "mk-7", "mk7", "menakinon", "k1", "fitomenadion"]},
+    "omega3": {"ad": "Omega-3 (EPA + DHA)", "birim": "mg", "esanlamlar": ["omega 3", "omega-3", "omega3", "epa+dha", "epa dha", "epa ve dha"]},
+    "d3": {
+      "ad": "D3 vitamini",
+      "birim": "µg",
+      "esanlamlar": ["d3", "d vitamini", "vitamin d", "vitamin d3", "d3 vitamini", "kolekalsiferol", "d2", "ergokalsiferol", "d3 vitamini kolekalsiferol"]
+    },
+    "k2": {
+      "ad": "K vitamini",
+      "birim": "µg",
+      "esanlamlar": [
+        "k2",
+        "k vitamini",
+        "vitamin k",
+        "vitamin k2",
+        "k2 vitamini",
+        "mk-7",
+        "mk7",
+        "menakinon",
+        "k1",
+        "fitomenadion",
+        "k2 vitamini menaquinone 7",
+        "menaquinone 7",
+        "menakinon 7"
+      ]
+    },
     "magnezyum": {"ad": "Magnezyum", "birim": "mg", "esanlamlar": ["magnezyum", "magnesium", "mg"]},
-    "demir": {"ad": "Demir", "birim": "mg", "esanlamlar": ["demir", "iron", "fe"]},
-    "folik_asit": {"ad": "Folik asit", "birim": "µg", "esanlamlar": ["folik asit", "folat", "folic acid", "b9", "metilfolat"]},
-    "b12": {"ad": "B12 vitamini", "birim": "µg", "esanlamlar": ["b12", "b12 vitamini", "vitamin b12", "kobalamin", "metilkobalamin", "siyanokobalamin"]},
-    "kalsiyum": {"ad": "Kalsiyum", "birim": "mg", "esanlamlar": ["kalsiyum", "calcium", "ca"]},
-    "cinko": {"ad": "Çinko", "birim": "mg", "esanlamlar": ["cinko", "zinc", "zn"]}
+    "demir": {"ad": "Demir", "birim": "mg", "esanlamlar": ["demir", "iron", "fe", "demir mikroenkapsule"]},
+    "folik_asit": {
+      "ad": "Folik asit",
+      "birim": "µg",
+      "esanlamlar": [
+        "folik asit",
+        "folat",
+        "folic acid",
+        "b9",
+        "metilfolat",
+        "folik asit folat",
+        "methyl folat",
+        "metil folat",
+        "folik asit methyl folat",
+        "folik asit metil folat",
+        "quatrefolic"
+      ]
+    },
+    "b12": {
+      "ad": "B12 vitamini",
+      "birim": "µg",
+      "esanlamlar": [
+        "b12",
+        "b12 vitamini",
+        "vitamin b12",
+        "kobalamin",
+        "metilkobalamin",
+        "siyanokobalamin",
+        "aktif b12 vitamini",
+        "b12 vitamini de",
+        "b12 vitamini methyl b12",
+        "b12 vitamini metil b12",
+        "methyl b12",
+        "metil b12"
+      ]
+    },
+    "kalsiyum": {"ad": "Kalsiyum", "birim": "mg", "esanlamlar": ["kalsiyum", "calcium", "ca", "kalsiyum eggshell"]},
+    "cinko": {"ad": "Çinko", "birim": "mg", "esanlamlar": ["cinko", "zinc", "zn", "cinko bisglisinat"]},
+    "toplam_omega3": {
+      "ad": "Toplam omega-3 yağ asitleri",
+      "birim": "mg",
+      "esanlamlar": ["toplam omega 3", "toplam omega 3 epa dha diger omega 3 yag asitleri"],
+      "not": "EPA ve DHA dışındaki omega-3 yağ asitlerini de kapsar; EFSA değerleri EPA + DHA içindir."
+    },
+    "balik_yagi": {"ad": "Balık yağı", "birim": "mg", "esanlamlar": ["balik yagi", "fish oil"], "not": "Yağın toplam miktarıdır; içindeki EPA ve DHA ayrıca yazılır."},
+    "krill_yagi": {"ad": "Kril yağı", "birim": "mg", "esanlamlar": ["krill yagi", "kril yagi"]},
+    "c_vitamini": {"ad": "C vitamini", "birim": "mg", "esanlamlar": ["c vitamini", "vitamin c", "askorbik asit", "l askorbik asit"]},
+    "e_vitamini": {
+      "ad": "E vitamini",
+      "birim": "mg",
+      "esanlamlar": ["e vitamini", "vitamin e", "alfa tokoferol", "e vitamini alfa tokoferol esdegeri", "e vitamini a te", "e vitamini te"]
+    },
+    "beta_karoten": {"ad": "Beta-karoten", "birim": "mg", "esanlamlar": ["beta karoten", "beta-karoten", "β karoten"]},
+    "a_vitamini": {"ad": "A vitamini", "birim": "µg", "esanlamlar": ["a vitamini", "vitamin a", "retinol", "a vitamini retinol esdegeri"]},
+    "b1": {"ad": "B1 vitamini (tiamin)", "birim": "mg", "esanlamlar": ["b1", "b1 vitamini", "tiamin", "vitamin b1"]},
+    "b2": {"ad": "B2 vitamini (riboflavin)", "birim": "mg", "esanlamlar": ["b2", "b2 vitamini", "riboflavin", "b2 vitamini r5p", "vitamin b2"]},
+    "b3": {"ad": "B3 vitamini (niasin)", "birim": "mg", "esanlamlar": ["b3", "b3 vitamini", "niasin", "niasin b3 vitamini", "nikotinamid", "vitamin b3"]},
+    "b5": {"ad": "B5 vitamini (pantotenik asit)", "birim": "mg", "esanlamlar": ["b5", "b5 vitamini", "pantotenik asit", "vitamin b5"]},
+    "b6": {"ad": "B6 vitamini", "birim": "mg", "esanlamlar": ["b6", "b6 vitamini", "b6 vitamini p5p", "b6 vitamini p 5 p", "piridoksin", "vitamin b6"]},
+    "biotin": {"ad": "Biotin", "birim": "µg", "esanlamlar": ["biotin", "biyotin", "b7", "b7 vitamini"]},
+    "selenyum": {"ad": "Selenyum", "birim": "µg", "esanlamlar": ["selenyum", "selenium", "se"]},
+    "iyot": {"ad": "İyot", "birim": "µg", "esanlamlar": ["iyot", "iodine", "iyodin"]},
+    "bakir": {"ad": "Bakır", "birim": "µg", "esanlamlar": ["bakir", "copper", "cu"]},
+    "manganez": {"ad": "Manganez", "birim": "mg", "esanlamlar": ["manganez", "manganese", "mn"]},
+    "krom": {"ad": "Krom", "birim": "µg", "esanlamlar": ["krom", "chromium", "cr"]},
+    "molibden": {"ad": "Molibden", "birim": "µg", "esanlamlar": ["molibden", "molybdenum", "mo"]},
+    "probiyotik": {
+      "ad": "Probiyotik",
+      "birim": "KOB",
+      "esanlamlar": ["probiyotik", "probiyotik karisimi", "saccharomyces boulardii", "lactobacillus", "bifidobacterium"],
+      "not": "Miktar koloni oluşturan birim (KOB) ile verilir; suşa özgü değerlendirilir."
+    },
+    "koenzim_q10": {
+      "ad": "Koenzim Q10",
+      "birim": "mg",
+      "esanlamlar": ["koenzim q10", "coq10", "koenzim q10 ubikinol", "koenzim q10 ubikinon", "koenzim qh ubiquinol", "ubikinol", "ubikinon"]
+    }
   },
   "ust_sinirlar": {
     "d3": {
       "tur": "ust_sinir",
       "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam D vitamini.",
-      "degerler": [
-        {"yas_min": 1, "yas_max": 10, "deger": 50},
-        {"yas_min": 11, "yas_max": null, "deger": 100}
-      ],
-      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for vitamin D (2023)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "degerler": [{"yas_min": 1, "yas_max": 10, "deger": 50}, {"yas_min": 11, "yas_max": null, "deger": 100}],
+      "kaynak": {
+        "kurum": "EFSA",
+        "belge": "Scientific opinion on the tolerable upper intake level for vitamin D (2023)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
     "folik_asit": {
       "tur": "ust_sinir",
@@ -34,49 +131,79 @@
         {"yas_min": 15, "yas_max": 17, "deger": 800},
         {"yas_min": 18, "yas_max": null, "deger": 1000}
       ],
-      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for folate (2023)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "kaynak": {
+        "kurum": "EFSA",
+        "belge": "Scientific opinion on the tolerable upper intake level for folate (2023)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
     "magnezyum": {
       "tur": "ust_sinir",
       "kapsam": "Yalnızca takviye, su ve gıdaya eklenen kolay çözünen magnezyum tuzları. Besinlerdeki magnezyum dahil değildir.",
-      "degerler": [
-        {"yas_min": 4, "yas_max": null, "deger": 250}
-      ],
-      "kaynak": {"kurum": "EFSA (SCF)", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "degerler": [{"yas_min": 4, "yas_max": null, "deger": 250}],
+      "kaynak": {
+        "kurum": "EFSA (SCF)",
+        "belge": "Tolerable upper intake levels for vitamins and minerals (2006)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
     "demir": {
       "tur": "guvenli_alim_duzeyi",
       "kapsam": "EFSA demir için üst sınır yerine 'güvenli alım düzeyi' belirlemiştir; tüm kaynaklardan toplam alım içindir.",
-      "degerler": [
-        {"yas_min": 18, "yas_max": null, "deger": 40}
-      ],
+      "degerler": [{"yas_min": 18, "yas_max": null, "deger": 40}],
       "eksik_veri_notu": "18 yaş altı değerler kaynaktan doğrulanarak eklenecek.",
-      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level for iron (2024)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "kaynak": {
+        "kurum": "EFSA",
+        "belge": "Scientific opinion on the tolerable upper intake level for iron (2024)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
     "omega3": {
       "tur": "guvenli_alim_duzeyi",
       "kapsam": "EFSA, yetişkinlerde takviyeden günde 5 g'a kadar EPA + DHA alımının güvenlik kaygısı oluşturmadığını belirtmiştir; bu bir üst sınır değildir.",
-      "degerler": [
-        {"yas_min": 18, "yas_max": null, "deger": 5000}
-      ],
+      "degerler": [{"yas_min": 18, "yas_max": null, "deger": 5000}],
       "eksik_veri_notu": "Çocuklar için değer belirlenmemiştir.",
-      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level of EPA, DHA and DPA (2012)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "kaynak": {
+        "kurum": "EFSA",
+        "belge": "Scientific opinion on the tolerable upper intake level of EPA, DHA and DPA (2012)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
     "kalsiyum": {
       "tur": "ust_sinir",
       "kapsam": "Besin ve takviye dahil tüm kaynaklardan toplam kalsiyum.",
-      "degerler": [
-        {"yas_min": 18, "yas_max": null, "deger": 2500}
-      ],
+      "degerler": [{"yas_min": 18, "yas_max": null, "deger": 2500}],
       "eksik_veri_notu": "18 yaş altı için değer belirlenmemiştir.",
-      "kaynak": {"kurum": "EFSA", "belge": "Scientific opinion on the tolerable upper intake level of calcium (2012)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+      "kaynak": {
+        "kurum": "EFSA",
+        "belge": "Scientific opinion on the tolerable upper intake level of calcium (2012)",
+        "url": null,
+        "erisim_tarihi": null,
+        "dogrulandi": false
+      }
     },
-    "k2": {"tur": "belirlenmedi", "kapsam": "EFSA, K vitamini için üst sınır belirlememiştir.", "degerler": [], "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}},
-    "b12": {"tur": "belirlenmedi", "kapsam": "EFSA, B12 vitamini için üst sınır belirlememiştir.", "degerler": [], "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}}
+    "k2": {
+      "tur": "belirlenmedi",
+      "kapsam": "EFSA, K vitamini için üst sınır belirlememiştir.",
+      "degerler": [],
+      "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    },
+    "b12": {
+      "tur": "belirlenmedi",
+      "kapsam": "EFSA, B12 vitamini için üst sınır belirlememiştir.",
+      "degerler": [],
+      "kaynak": {"kurum": "EFSA", "belge": "Tolerable upper intake levels for vitamins and minerals (2006)", "url": null, "erisim_tarihi": null, "dogrulandi": false}
+    }
   },
-  "toplamlar": {
-    "omega3": ["epa", "dha"]
-  },
+  "toplamlar": {"omega3": ["epa", "dha"]},
   "ilac_gruplari": {
     "kan_sulandirici_varfarin": "Varfarin gibi K vitamini antagonisti kan sulandırıcılar",
     "kan_sulandirici_diger": "Diğer kan sulandırıcılar ve pıhtılaşma önleyiciler",

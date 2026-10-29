@@ -55,9 +55,9 @@ mcp = FastMCP(
 @mcp.tool(
     title="Ürün rehberi",
     description=(
-        "Katalogdaki bir takviye ürününün etiket bilgisini verir: etken madde miktarları, etiketteki kullanım, "
-        "yaş sınırı, etiket uyarıları, onaylı beyanlar, ne beklenmemeli, menşe ve şeffaflık. "
-        "Kullanıcı belirli bir ürünü sorduğunda kullan."
+        "Katalogdaki bir takviye ürününün etiket bilgisini verir: etken madde miktarları, beslenme referans değeri, "
+        "bileşim, etiketteki kullanım, yaş sınırı ve ürün sayfasındaki sağlık beyanları. Katalog şu an yalnızca Orzax "
+        "ürünlerini içerir. Kullanıcı belirli bir ürünü sorduğunda kullan."
     ),
     annotations=SALT_OKUMA,
 )
@@ -70,8 +70,8 @@ def urun_rehberi(
 @mcp.tool(
     title="Parti analizi",
     description=(
-        "Kutudaki karekod içeriğine ya da parti numarasına göre yayımlanmış parti analizini getirir. "
-        "Kullanıcı karekod okuttuğunda veya bir partinin analizini sorduğunda kullan."
+        "Kutudaki karekod içeriğinden ya da parti numarasından yayımlanmış parti analizini arar. Katalogda şu an "
+        "yayımlanmış analiz yoktur; araç bunu bildirir. Kullanıcı karekod okuttuğunda veya bir partinin analizini sorduğunda kullan."
     ),
     annotations=SALT_OKUMA,
 )

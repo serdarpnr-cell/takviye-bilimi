@@ -1,0 +1,1236 @@
+{
+  "_not": "Ürün sağlık ve beslenme beyanları, ürün sayfalarındaki metinlerle kelimesi kelimesine saklanır. Sayfalar TGK Beslenme ve Sağlık Beyanları Yönetmeliği'ne atıf yapar. 'kullanim_kosullari' beyanın yönetmelikteki koşuludur; kişiye doz önerisi değildir.",
+  "erisim_tarihi": "2026-10-29",
+  "urunler": {
+    "bigflor-kapsul": {
+      "saglik": [
+        "Bu ürün probiyotik mikroorganizma içerir. Probiyotik mikroorganizmalar sindirim sistemini düzenlemeye ve bağışıklık sistemini desteklemeye yardımcı olur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/bigflor-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "bigflor-probiyotik-sase": {
+      "saglik": [
+        "Bu ürün probiyotik mikroorganizma içerir. Probiyotik mikroorganizmalar sindirim sistemini düzenlemeye ve bağışıklık sistemini desteklemeye yardımcı olur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/bigflor-probiyotik-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "cosakondrin-msm": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/cosakondrin-msm/", "erisim_tarihi": "2026-10-29"}},
+    "cosakondrin-nem": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/cosakondrin-nem/", "erisim_tarihi": "2026-10-29"}},
+    "cosakondrin-op": {
+      "saglik": [
+        "Kalsiyum, magnezyum, çinko, K vitamini ve D vitamini; normal kemiklerin korunmasına katkıda bulunur.",
+        "Kalsiyum, magnezyum ve D vitamini; normal kas fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": ["Faydalı etki tüm kaynaklardan günlük 20 mg D vitamini alındığında sağlanabilir."],
+      "kaynak": {"url": "https://www.orzax.com.tr/cosakondrin-op/", "erisim_tarihi": "2026-10-29"}
+    },
+    "cosakondrin-plus": {
+      "saglik": [
+        "C vitamini kemiklerin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Mangan normal kemiklerin korunmasına ve bağ dokunun normal oluşumuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/cosakondrin-plus/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-all-body": {
+      "saglik": [
+        "C vitamini cildin normal fonksiyonu için gerekli olan normal kolajen oluşumuna katkıda bulunur.",
+        "Çinko; normal cildin, saçın ve tırnakların korunmasına katkıda bulunur.",
+        "D vitamini, normal kemiklerin ve kas fonksiyonunun korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-all-body/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-core": {
+      "saglik": [
+        "C vitamini cildin, kemiklerin, kıkırdağın normal fonksiyonu için gerekli olan normal kolajen oluşumuna katkıda bulunur.",
+        "Çinko normal saçın, tırnakların ve cildin korunmasına katkıda bulunur.",
+        "Biotin normal saçın ve cildin korunmasına katkıda bulunur.",
+        "C vitamini ve Çinko, hücrelerin oksidatif stresten korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-core/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-fish": {
+      "saglik": [
+        "C vitamini, normal kolajen oluşumuna katkıda bulunur.",
+        "Biotin ve Çinko, normal saçın ve cildin korunmasına katkıda bulunur.",
+        "Çinko, normal tırnakların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-fish/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-gummies": {
+      "saglik": ["C vitamini, normal kolajen oluşumuna katkıda bulunur.", "Çinko, normal cildin, saçın ve tırnakların korunmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-gummies/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-intense": {
+      "saglik": [
+        "C Vitamini; cildin, kıkırdağın, ve kemiklerin normal fonksiyonları için gerekli normal kolajen oluşumunu destekler.",
+        "C vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Çinko ve Biotin, normal cildin ve saçın korunmasına katkıda bulunur.",
+        "Çinko, normal tırnakların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-intense/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-intense-seramid": {
+      "saglik": [
+        "C Vitamini; cildin, kıkırdağın, ve kemiklerin normal fonksiyonları için gerekli normal kolajen oluşumunu destekler.",
+        "C vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Çinko ve Biotin, normal cildin ve saçın korunmasına katkıda bulunur.",
+        "Çinko, normal tırnakların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-intense-seramid/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-beauty-plus-tup": {
+      "saglik": [
+        "C vitamini, normal kolajen oluşumuna katkıda bulunur.",
+        "Biotin, normal saçın ve cildin korunmasına katkıda bulunur.",
+        "E vitamini ve C vitamini, oksidatif strese karşı hücrelerin korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-beauty-plus-tup/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-green-up-booster": {
+      "saglik": [
+        "C Vitamini; cildin, kıkırdağın, ve kemiklerin normal fonksiyonları için gerekli normal kolajen oluşumunu destekler.",
+        "C vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Çinko, normal cildin, saçın ve tırnakların korunmasına katkıda bulunur.",
+        "Çinko, D vitamini ve B12 vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "B12 vitamini, yorgunluk ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-green-up-booster/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-mag-plus": {
+      "saglik": [
+        "C vitamini, normal kolajen oluşumuna katkıda bulunur.",
+        "Magnezyum, normal kas fonksiyonuna ve elektrolit dengesine katkıda bulunur.",
+        "D vitamini, normal kemiklerin ve kas fonksiyonunun korunmasına katkıda bulunur.",
+        "B6 ve B12 vitaminleri, yorgunluk ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-mag-plus/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-multibalance": {
+      "saglik": [
+        "C Vitamini; cildin, kıkırdağın, ve kemiklerin normal fonksiyonları için gerekli normal kolajen oluşumunu destekler.",
+        "C vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-multibalance/", "erisim_tarihi": "2026-10-29"}
+    },
+    "day2day-the-collagen-mushroom-glow": {
+      "saglik": [
+        "C Vitamini; cildin, kıkırdağın, ve kemiklerin normal fonksiyonları için gerekli normal kolajen oluşumunu destekler.",
+        "C vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Çinko ve Biotin, normal cildin ve saçın korunmasına katkıda bulunur.",
+        "Çinko, normal tırnakların korunmasına katkıda bulunur.",
+        "B5 ve B6 vitaminleri, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/day2day-the-collagen-mushroom-glow/", "erisim_tarihi": "2026-10-29"}
+    },
+    "efervit-defence-20-efervesan-tablet": {
+      "saglik": [
+        "C vitamini, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Çinko, D vitamini, C vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/efervit-defence-20-efervesan-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "efervit-multivitamin-mineral-20-efervesan-tablet": {
+      "saglik": [
+        "C vitamini, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Çinko, D vitamini, C vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/efervit-multivitamin-mineral-20-efervesan-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "efervit-sambucus-nigra": {
+      "saglik": [
+        "C vitamini, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Çinko, D vitamini, C vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/efervit-sambucus-nigra/", "erisim_tarihi": "2026-10-29"}
+    },
+    "efervit-vitamin-c-1000-mg-20-efervesan-tablet": {
+      "saglik": ["C vitamini, yorgunluk ve bitkinliğin azalmasına katkıda bulunur.", "C vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/efervit-vitamin-c-1000-mg-20-efervesan-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "feminex-30-tablet": {
+      "saglik": [
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal kemiklerin ve dişlerin korunmasına katkıda bulunur.",
+        "B6 vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Kalsiyum normal kas fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/feminex-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "imunol-complex": {
+      "saglik": ["C vitamini, Çinko, Selenyum ve D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/imunol-complex/", "erisim_tarihi": "2026-10-29"}
+    },
+    "imunol-kapsul": {
+      "saglik": ["C Vitamini, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/imunol-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "imunol-sambucus-surup": {
+      "saglik": ["C vitamini ve Çinko, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/imunol-sambucus-surup/", "erisim_tarihi": "2026-10-29"}
+    },
+    "imunol-surup": {
+      "saglik": ["C vitamini ve Çinko, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/imunol-surup/", "erisim_tarihi": "2026-10-29"}
+    },
+    "minomin-60-tablet": {
+      "saglik": [
+        "Kalsiyum, normal kas fonksiyonuna katkıda bulunur.",
+        "Kalsiyum, normal kemiklerin korunması için gereklidir.",
+        "B12 vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "D vitamini normal kemiklerin ve kas fonksiyonunun korunmasında katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/minomin-60-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-5-htp-kapsul": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-5-htp-kapsul/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-500-mg-balik-yagi": {
+      "saglik": ["DHA normal görme yetisinin korunmasına katkıda bulunur.", "DHA normal beyin fonksiyonlarının korunmasına katkıda bulunur."],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Tüketiciye, faydalı etkinin günde 250 mg DHA alındığında sağlanacağı bilgisi verilir."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-500-mg-balik-yagi/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-a-vitamini": {
+      "saglik": [
+        "A vitamini normal görme yetisinin korunmasına katkıda bulunur.",
+        "A vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "A vitamini normal cildin korunmasına katkıda bulunur.",
+        "A vitamini normal mukozanın korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-a-vitamini/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-alfa-lipoik-asit-200mg": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-alfa-lipoik-asit-200mg/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-alfa-lipoik-asit-600mg-bitkisel-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-alfa-lipoik-asit-600mg-bitkisel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-astaksantin": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-astaksantin/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-b-complex-kapsul": {
+      "saglik": [
+        "Folat, B12, B6 vitamini, Niasin, Riboflavin (B2 Vitamini), ​yorgunluk ve bitkinliğin azalmasına katkıda bulunur.​",
+        "B12, B6 vitamini, Biotin,​ normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "B12, Biotin, Niasin, Tiamin (B1 Vitamini), Riboflavin (B2 Vitamini), B6 vitamini ​sinir sisteminin normal işleyişine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-b-complex-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-betain-hclpepsin-tablet": {
+      "saglik": ["Betain normal homosistein metabolizmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-betain-hclpepsin-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-bewity-likit": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-bewity-likit/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-biotin-complex": {
+      "saglik": [
+        "Biotin ve Çinko normal cildin ve normal saçın korunmasına katkıda bulunur.",
+        "Çinko normal tırnakların korunmasına katkıda bulunur.",
+        "Dengeli ve çeşitli beslenme sağlıklı yaşam için önemlidir."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-biotin-complex/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-biotin-kapsul": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan biotin;",
+        "Normal saçın korunmasına katkıda bulunur.",
+        "Normal cildin korunmasına katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-biotin-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-bromelain-complex": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-bromelain-complex/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-bromelain-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-bromelain-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-capillus-men": {
+      "saglik": [
+        "Çinko normal kemiklerin, normal tırnakların ve normal saçın korunmasına katkıda bulunur.",
+        "Biotin, normal saçın ve normal cildin korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-capillus-men/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-capillus-women-tablet": {
+      "saglik": [
+        "Çinko normal kemiklerin, normal tırnakların ve normal saçın korunmasına katkıda bulunur.",
+        "B5 ve B6 vitamini normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Biotin, normal saçın ve normal cildin korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-capillus-women-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-cinko-bisglisinat-10-mg": {
+      "saglik": [
+        "Çinko;",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kemiklerin korunmasına katkıda bulunur.",
+        "Normal görme yetisinin korunmasına katkıda bulunur.",
+        "Normal saçın, normal tırnakların korunmasına katkıda bulunur.",
+        "Normal DNA sentezine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-cinko-bisglisinat-10-mg/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-cogniven-kapsul": {
+      "saglik": ["B12, B6, Tiamin (B1 vitamini) sinir sisteminin normal işleyişine, yorgunluk ve bitkinliğin azalmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-cogniven-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-cogniven-likit": {
+      "saglik": ["B12, B6, Tiamin (B1 vitamini) sinir sisteminin normal işleyişine, yorgunluk ve bitkinliğin azalmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-cogniven-likit/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-colflex-sase": {
+      "saglik": [
+        "D Vitamini normal kas fonksiyonunun ve normal kemiklerin korunmasına katkıda bulunur.",
+        "Bakır normal bağ dokuların korunmasına katkıda bulunur.",
+        "C Vitamini kemiklerin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-colflex-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-corek-otu-yagi-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-corek-otu-yagi-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-corek-otu-yagi-sivi": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-corek-otu-yagi-sivi/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-cranberry-30-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-cranberry-30-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-curcumin-licaps-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-curcumin-licaps-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-d-riboz-sase": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-d-riboz-sase/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-d3k2-vitamin-d3-1000-iu-sprey": {
+      "saglik": [
+        "D vitamini normal kemiklerin korunmasına ve bağışıklık sisteminin normal fonksiyonuna katkıda bulunur. Dengeli ve çeşitli beslenme sağlıklı yaşam için önemlidir."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-d3k2-vitamin-d3-1000-iu-sprey/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-daily-one-energy-30-tablet": {
+      "saglik": [
+        "B1, B2, B6, B12 vitaminleri, C vitamini, kalsiyum, magnezyum, demir, bakır, iyot ve biotin normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "B2, B3, B5, B6, B12 vitaminleri, C vitamini, magnezyum, demir yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "C vitamini, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur; yoğun fiziksel egzersiz dönemlerinde ise bu fonksiyonun korunmasına destek sağlar.",
+        "Bakır, demir, selenyum, folat, D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini, K vitamini, magnezyum ve mangan normal kemiklerin korunmasına katkıda bulunurken; kalsiyum, magnezyum ve D vitamini ayrıca normal kas fonksiyonunun korunmasını destekler."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-daily-one-energy-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-dha": {
+      "saglik": ["DHA normal beyin fonksiyonlarının korunmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": ["*Faydalı etkinin günde 250 mg DHA alındığında sağlanır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-dha/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-dim-ultra": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-dim-ultra/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-e-vitamini-kapsul": {
+      "saglik": ["E vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-e-vitamini-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-enzymes-lactase-damla-20-ml": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-enzymes-lactase-damla-20-ml/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-enzymes-pancron-60-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-enzymes-pancron-60-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-30-60-tablet": {
+      "saglik": [
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Magnezyum normal kas fonksiyonuna katkıda bulunur.",
+        "B6 vitamini normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-30-60-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-fibra": {
+      "saglik": [
+        "Magnezyum, B12 vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "B6 vitamini sinir sisteminin normal işleyişine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-fibra/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-magnezyum-bisglisinat-p5p": {
+      "saglik": [
+        "Magnezyum normal kas fonksiyonuna katkıda bulunur.",
+        "Magnezyum sinir sisteminin normal işleyişine katkıda bulunur.",
+        "Magnezyum elektrolit dengesine katkıda bulunur.",
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-magnezyum-bisglisinat-p5p/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-magnezyum-malat-p5p": {
+      "saglik": [
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-magnezyum-malat-p5p/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-magnezyum-sitrat-sase": {
+      "saglik": [
+        "Magnezyum yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal kas fonksiyonuna katkıda bulunur.",
+        "Magnezyum normal protein sentezine katkıda bulunur.",
+        "B6 vitamini normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-magnezyum-sitrat-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-magnezyum-taurat-p5p": {
+      "saglik": [
+        "Magnezyum sinir sisteminin normal işleyişine katkıda bulunur.",
+        "Magnezyum normal kas fonksiyonuna katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-magnezyum-taurat-p5p/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-migra": {
+      "saglik": [
+        "Magnezyum, B12 vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "B2 ve B12 vitaminleri, sinir sisteminin normal işleyişine ve normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-migra/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-extramag-threog": {
+      "saglik": [
+        "Magnezyum yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Magnezyum normal kas fonksiyonuna katkıda bulunur.",
+        "B6 vitamini sinir sisteminin normal işleyişine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-extramag-threog/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-formera": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-formera/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-ginkgo-biloba-bitkisel-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-ginkgo-biloba-bitkisel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-glucosamine-complex": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-glucosamine-complex/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-apple-cider-vinegar": {
+      "saglik": [
+        "Krom normal makro besin ögeleri metabolizmasına katkıda bulunur.",
+        "Krom normal kan glukoz düzeyinin korunmasına katkıda bulunur.",
+        "B12 vitamini normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-apple-cider-vinegar/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-d3k2": {
+      "saglik": [
+        "D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini kalsiyumun ve fosforun normal emilimine/kullanımına katkıda bulunur.",
+        "D vitamini Normal kemiklerin korunmasında katkıda bulunur.",
+        "K vitamini normal kemiklerin korunmasında katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-d3k2/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-defence-kids": {
+      "saglik": [
+        "C vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "D vitamini, çocuklarda bağışıklık sisteminin normal işlevine katkıda bulunur.",
+        "Çinko normal normal kemiklerin korunmasına katkıda bulunur.",
+        "Çinkonun hücre bölünmesinde görevi vardır."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-defence-kids/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-hsn": {
+      "saglik": [
+        "C vitamini cildin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Çinko, iyot, biotin, niasin ve A vitamini normal cildin korunmasına katkıda bulunur.",
+        "Çinko ve selenyum normal tırnakların korunmasına katkıda bulunur.",
+        "Çinko, biotin ve selenyum normal saçın korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-hsn/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-iron": {
+      "saglik": [
+        "Demir normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Demir kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Demir vücutta normal oksijen taşınmasına katkıda bulunur.",
+        "Demir yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-iron/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-iron-extra": {
+      "saglik": [
+        "Demir normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Demir kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Demir vücutta normal oksijen taşınmasına katkıda bulunur.",
+        "Demir yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-iron-extra/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-multivitamin-adult": {
+      "saglik": [
+        "Folat yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "B1, B12,B6, B5, C vitamini normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-multivitamin-adult/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-multivitamin-kids": {
+      "saglik": [
+        "İyot çocukların normal büyümesine katkıda bulunur.",
+        "D vitamini çocuklarda normal büyüme ve kemik gelişimi için gereklidir.",
+        "C vitamini normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Çinko bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-multivitamin-kids/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-omega-3-kids": {
+      "saglik": [
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasına katkıda bulunur",
+        "D vitamini çocuklarda normal büyüme ve kemik gelişimi için gereklidir.",
+        "D vitamini, çocuklarda bağışıklık sisteminin normal işlevine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-omega-3-kids/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-sambucus-kids": {
+      "saglik": [
+        "C vitamini normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "C vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Çinko bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "C vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-sambucus-kids/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-gummies-vitamin-d3": {
+      "saglik": [
+        "D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini kalsiyumun ve fosforun normal emilimine/kullanımına katkıda bulunur.",
+        "D vitamini normal kemiklerin korunmasında katkıda bulunur.",
+        "D vitamini normal kan kalsiyum düzeyine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-vitamin-d3/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-hepalex-softjel-kapsul": {
+      "saglik": [
+        "Kolin normal karaciğer fonksiyonunun korunmasına katkıda bulunur. Kolin normal homosistein metabolizmasına katkıda bulunur. Kolin normal lipid metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-hepalex-softjel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-hyaluronik-asit-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-hyaluronik-asit-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-iodine-damla-30ml": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan iyot;",
+        "Normal tiroid hormon üretimine ve normal tiroid fonksiyonuna katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Sinir sisteminin normal işleyişine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-iodine-damla-30ml/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-karisik-meyve-aromali-balik-yagi-150-ml-likit": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "​DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır. ​", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır.​"],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-karisik-meyve-aromali-balik-yagi-150-ml-likit/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-koenzim-q10-100mg-30-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-koenzim-q10-100mg-30-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-koenzim-q10-200mg-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-koenzim-q10-200mg-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-koenzim-qh-100-mg-30-softjel-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-koenzim-qh-100-mg-30-softjel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-kreatin": {
+      "saglik": ["Kreatin kısa süreli, yüksek yoğunluklu egzersizlerin ardı ardına yapılmasında fiziksel performansı arttırır."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-kreatin/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-krill-oil-500-mg-30-kapsul": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-krill-oil-500-mg-30-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-krom-pikolinat": {
+      "saglik": ["Krom normal makro besin ögeleri metabolizmasına katkıda bulunur.", "Krom normal kan glukoz düzeyinin korunmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-krom-pikolinat/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-l-arjinin-sase": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-l-arjinin-sase/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-l-glutamin-sase": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-l-glutamin-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-l-glutatyon-30-tablet": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-l-glutatyon-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-l-teanin-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-l-teanin-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-limon-aromali-balik-yagi-150-ml": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-limon-aromali-balik-yagi-150-ml/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-magnezyum-complex": {
+      "saglik": [
+        "Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Magnezyum normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Magnezyum sinir sisteminin normal işleyişine katkıda bulunur.",
+        "Magnezyum elektrolit dengesine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-magnezyum-complex/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-menaquinone-7": {
+      "saglik": ["K vitamini normal kemiklerin korunmasında katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-menaquinone-7/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-methyl-b12": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-b12/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-methyl-b12-1000-%C2%B5g-10-ml-sprey": {
+      "saglik": [
+        "B12 vitamini",
+        "Normal enerji oluşum metabolizmasına,",
+        "Bağışıklık sisteminin normal fonksiyonuna,",
+        "Sinir sisteminin normal işleyişine,",
+        "Normal kırmızı kan hücresi oluşumuna,",
+        "Normal homosistein metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-b12-1000-%C2%B5g-10-ml-sprey/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-methyl-b12-1000-%C2%B5g-5-ml-sprey": {
+      "saglik": [
+        "B12 vitamini",
+        "Normal enerji oluşum metabolizmasına,",
+        "Bağışıklık sisteminin normal fonksiyonuna,",
+        "Sinir sisteminin normal işleyişine,",
+        "Normal kırmızı kan hücresi oluşumuna,",
+        "Normal homosistein metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-b12-1000-%C2%B5g-5-ml-sprey/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-methyl-b12-500-%C2%B5g-5-ml-sprey": {
+      "saglik": [
+        "B12 vitamini,",
+        "Normal enerji oluşum metabolizmasına,",
+        "Bağışıklık sisteminin normal fonksiyonuna,",
+        "Sinir sisteminin normal işleyişine,",
+        "Normal kırmızı kan hücresi oluşumuna,",
+        "Normal homosistein metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-b12-500-%C2%B5g-5-ml-sprey/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-methyl-balance-30-60-kapsul": {
+      "saglik": ["Folat ve Betain normal homosistein metabolizmasına katkıda bulunur.", "B6 ve B12 vitamini normal enerji oluşum metabolizmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-balance-30-60-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-methyl-folat-30-tablet": {
+      "saglik": [
+        "Folat hamilelik sırasında maternal dokuların gelişmesine katkıda bulunur.",
+        "Folatın hücre bölünmesinde görevi vardır.",
+        "Folat yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Takviye folik asit alımı, anne adayının folat düzeyini artırır.",
+        "Düşük folat düzeyi, fetüsün gelişiminde nöral tüp kusurları için bir risk faktörüdür. **(Bu beyan sadece günlük tüketim miktarında en az 400 µg folik asit içeren takviye edici gıdalarda kullanılır.)"
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [
+        "(**Hamilelik dönemindeki tüketiciye faydalı etkinin, gebelikten en az 1 ay öncesi ve 3 ay sonrasına kadar takviye olarak günlük 400 µg folik asit alındığında sağlanacağı bilgisi verilir.)"
+      ],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-methyl-folat-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-microfer-30-ml-oral-damla": {
+      "saglik": [
+        "Ürün içeriğinde bulunan Demir:",
+        "Kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-microfer-30-ml-oral-damla/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-microfer-30-tablet": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan Demir;",
+        "Kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-microfer-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-microfer-kapsul": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan Demir;",
+        "Kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Yorgunluğun ve bitkinliğin azalmasına katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-microfer-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-microfer-sivi": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan Demir;",
+        "Kırmızı kan hücrelerinin ve hemoglobinin normal oluşumuna katkıda bulunur.",
+        "Normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Yorgunluğun ve bitkinliğin azalmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-microfer-sivi/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-milk-thistle-30-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-milk-thistle-30-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-mood": {
+      "saglik": ["B6 Vitamini sinir sisteminin normal işleyişine, yorgunluk ve bitkinliğin azalmasına katkıda bulunur."],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-mood/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-multi-likit": {
+      "saglik": [
+        "B2 vitamini:",
+        "Görme yetisinin korunmasına katkıda bulunur.",
+        "Selenyum; normal saç ve tırnakların korunmasına, bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "B6, B12 ve C vitamini; bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini; normal kemiklerin ve dişlerin korunmasında katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-multi-likit/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-mummy-30-softgel-kapsul": {
+      "saglik": [
+        "Folat, ​yorgunluk ve bitkinliğin azalmasına katkıda bulunur.​",
+        "Folat hamilelik sırasında maternal dokuların gelişmesine katkıda bulunur.",
+        "Folatın hücre bölünmesinde görevi vardır.",
+        "Takviye folik asit alımı, anne adayının folat düzeyini artırır.",
+        "Düşük folat düzeyi, fetüsün gelişiminde nöral tüp kusurları için bir risk faktörüdür. **(Bu beyan sadece günlük tüketim miktarında en az 400 µg folik asit içeren takviye edici gıdalarda kullanılır.)",
+        "DHA normal beyin fonksiyonlarının korunmasına katkıda bulunur.",
+        "İyot tiroid hormonlarının normal üretimine ve normal tiroid fonksiyonuna katkıda bulunur.",
+        "D vitamini normal kemiklerin korunmasına katkıda bulunur.",
+        "*Gıda ve Takviye Edici Gıdalarda Sağlık Beyanı Kullanımı Hakkında Yönetmelik"
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [
+        "*Faydalı etki, günde 250 mg DHA alındığında sağlanır.",
+        "(**Hamilelik dönemindeki tüketiciye faydalı etkinin, gebelikten en az 1 ay öncesi ve 3 ay sonrasına kadar takviye olarak günlük 400 µg folik asit alındığında sağlanacağı bilgisi verilir.)"
+      ],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-mummy-30-softgel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-nem-complex": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-nem-complex/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-neurobexol": {
+      "saglik": [
+        "B1, B6, B12 Vitamini sinir sisteminin normal işleyişine katkıda bulunur. B6 Vitamini glukojen metabolizmasına ve hormonal aktivitenin düzenlenmesine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-neurobexol/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-omega-3-qh-30-softjel-kapsul": {
+      "saglik": [
+        "EPA ve DHA kalbin normal fonksiyonuna katkıda bulunur.",
+        "DHA normal görme yetisinin korunmasına katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının korunmasına katkıda bulunur."
+      ],
+      "beslenme": ["Bu gıda trigliserid formda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-omega-3-qh-30-softjel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-osteofine-tablet": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-osteofine-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-panax-ginseng-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-panax-ginseng-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-passiflora-incarnata-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-passiflora-incarnata-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-passiflora-incarnata-likit": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-passiflora-incarnata-likit/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-picozinc-30-tablet": {
+      "saglik": [
+        "Çinko;",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kemiklerin korunmasına katkıda bulunur.",
+        "Normal görme yetisinin korunmasına katkıda bulunur.",
+        "Normal saçın, normal tırnakların ve normal cildin korunmasına katkıda bulunur.",
+        "Hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Normal DNA sentezine katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-picozinc-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-plus": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-plus/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-polysitol-sase": {
+      "saglik": [
+        "Folat, ​yorgunluk ve bitkinliğin azalmasına katkıda bulunur.​",
+        "Folat hamilelik sırasında maternal dokuların gelişmesine katkıda bulunur.",
+        "Folatın hücre bölünmesinde görevi vardır.",
+        "Folat normal homosistein metabolizmasına katkıda bulunur.",
+        "E vitamini hücrelerin oksidatif stresten korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-polysitol-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-portakal-aromali-balik-yagi-150-ml": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-portakal-aromali-balik-yagi-150-ml/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-propolis-sprey": {"saglik": [], "beslenme": [], "kullanim_kosullari": [], "kaynak": {"url": "https://www.orzax.com.tr/ocean-propolis-sprey/", "erisim_tarihi": "2026-10-29"}},
+    "ocean-pulse-30-softjel-kapsul": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar.",
+        "D vitamini; kalsiyum ve fosforun emilimi ile kullanımını destekler, kemik ve kas sağlığının korunmasına katkı sağlar ve bağışıklık sisteminin düzgün çalışmasını destekler.",
+        "K vitamini normal kemiklerin korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": ["Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.", "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır."],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-pulse-30-softjel-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-quercetin-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-quercetin-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-resveratrol-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-resveratrol-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-rhodiola-tablet": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-rhodiola-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-saw-palmetto-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-saw-palmetto-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-selenyum-100-mcg-30-tablet": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan Selenyum;",
+        "Normal tiroid fonksiyonuna katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Hücreleri oksidatif strese karşı korur.",
+        "Normal saç ve tırnakların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-selenyum-100-mcg-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-selenyum-200-mcg-60-tablet": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan Selenyum;",
+        "Normal tiroid fonksiyonuna katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Hücreleri oksidatif strese karşı korur.",
+        "Normal saç ve tırnakların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-selenyum-200-mcg-60-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-tribulus-terrestris-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-tribulus-terrestris-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-ultimate": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA normal beyin fonksiyonlarının ve normal görme yetisinin korunmasında rol oynar.",
+        "DHA ve EPA, normal kan basıncının ve normal kan trigliserit seviyesinin korunmasına ve katkıda bulunur."
+      ],
+      "beslenme": ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."],
+      "kullanim_kosullari": [
+        "Faydalı etkinin sağlanabilmesi için günde 250 mg EPA ve DHA alınmalıdır.",
+        "Faydalı etkinin sağlanabilmesi için günde 250 mg DHA alınmalıdır.",
+        "Faydalı etkinin sağlanabilmesi için günde 3 g EPA ve DHA alınmalıdır.",
+        "Faydalı etkinin sağlanabilmesi için günde 2 g EPA ve DHA alınmalıdır."
+      ],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-ultimate/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vision": {
+      "saglik": [
+        "EPA ve DHA, kalbin normal fonksiyonunun sürdürülmesine katkıda bulunur.",
+        "DHA ve EPA, normal kan basıncının ve normal kan trigliserit seviyesinin korunmasına ve katkıda bulunur",
+        "İçeriğindeki DHA; normal beyin fonksiyonlarının ve görme yetisinin korunmasına katkıda bulunur.",
+        "İçeriğindeki C vitamini; normal enerji oluşum metabolizmasına katkıda bulunur.",
+        "İçeriğindeki E vitamini; hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "İçeriğinde bulunan çinko; normal görme yetisininkorunmasına katkıda bulunur.",
+        "İçeriğinde bulunan bakır; normal bağ dokuların korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vision/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-c-1000mg-30-tablet": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan C vitamini;",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Yorgunluk ve bitkinliğin azalmasına yardımcı olur, normal enerji oluşum metabolizmasını destekler ve hücreleri oksidatif strese karşı korur.",
+        "Cildin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Kemiklerin, kıkırdakların, dişlerin ve diş etlerinin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Demir emilimini artırır."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-c-1000mg-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-c-sr-30-tablet": {
+      "saglik": [
+        "Ürünün içeriğinde bulunan C vitamini;",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Yorgunluk ve bitkinliğin azalmasına yardımcı olur, normal enerji oluşum metabolizmasını destekler ve hücreleri oksidatif strese karşı korur.",
+        "Cildin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Kemiklerin, kıkırdakların, dişlerin ve diş etlerinin normal fonksiyonu için gerekli olan normal kollajen oluşumuna katkıda bulunur.",
+        "Demir emilimini artırır."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-c-sr-30-tablet/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-d3-1000-iu-damla": {
+      "saglik": [
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kemiklerin korunmasında katkıda bulunur.",
+        "Normal kan kalsiyum düzeyine katkıda bulunur.",
+        "Normal kas fonksiyonunun korunmasına katkıda bulunur.",
+        "Kalsiyum ve fosforun emilimine/kullanımına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3-1000-iu-damla/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-d3-1000-iu-sprey": {
+      "saglik": [
+        "Normal kemiklerin korunmasında katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kan kalsiyum düzeyine katkıda bulunur.",
+        "Normal kas fonksiyonunun korunmasına katkıda bulunur.",
+        "Kalsiyum ve fosforun emilimine/kullanımına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3-1000-iu-sprey/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-d3-400-iu": {
+      "saglik": [
+        "Normal kemiklerin korunmasında katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kan kalsiyum düzeyine katkıda bulunur.",
+        "Normal kas fonksiyonunun korunmasına katkıda bulunur.",
+        "Kalsiyum ve fosforun emilimine/kullanımına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3-400-iu/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-d3-600-iu": {
+      "saglik": [
+        "Normal kemiklerin korunmasında katkıda bulunur.",
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kan kalsiyum düzeyine katkıda bulunur.",
+        "Normal kas fonksiyonunun korunmasına katkıda bulunur.",
+        "Kalsiyum ve fosforun emilimine/kullanımına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3-600-iu/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vitamin-d3k2-damla": {
+      "saglik": [
+        "Bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "Normal kemiklerin korunmasında katkıda bulunur.",
+        "Normal kan kalsiyum düzeyine katkıda bulunur.",
+        "Normal kas fonksiyonunun korunmasına katkıda bulunur.",
+        "Kalsiyum ve fosforun emilimine/kullanımına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3k2-damla/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vm-arginin-ps-likit": {
+      "saglik": [
+        "C vitamini, B12 vitamini, B6 vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "D vitamini, K vitamini ve Çinko normal kemiklerin korunmasına katkıda bulunur.",
+        "Çinko, D vitamini, C vitamini, B12 vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vm-arginin-ps-likit/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-vm-vitamin-mineral": {
+      "saglik": [
+        "C vitamini yorgunluk ve bitkinliğin azalmasına katkıda bulunur.",
+        "Çinko bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini bağışıklık sisteminin normal fonksiyonuna katkıda bulunur.",
+        "D vitamini normal kemiklerin korunmasına, normal dişlerin korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-vm-vitamin-mineral/", "erisim_tarihi": "2026-10-29"}
+    },
+    "ocean-yesil-cay-kapsul": {
+      "saglik": [],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/ocean-yesil-cay-kapsul/", "erisim_tarihi": "2026-10-29"}
+    },
+    "proceive-f-sase": {
+      "saglik": [
+        "Folik asit normal homosistein metabolizmasına katkıda bulunur. Folat hamilelik sırasında maternal dokuların gelişmesine katkıda bulunur. Çinko normal DNA sentezine katkıda bulunur. E vitamini, çinko hücrelerin oksidatif stresten korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/proceive-f-sase/", "erisim_tarihi": "2026-10-29"}
+    },
+    "proceive-m": {
+      "saglik": [
+        "E vitamini, çinko hücrelerin oksidatif stresten korunmasına katkıda bulunur.",
+        "Folik asit normal homosistein metabolizmasına katkıda bulunur. B6 ve B12 vitamini, Magnezyum yorgunluğun ve bitkinliğin azalmasına katkıda bulunur. C vitamini yoğun fiziksel egzersiz sırasında ve sonrasında bağışıklık sisteminin normal fonksiyonunun korunmasına katkıda bulunur."
+      ],
+      "beslenme": [],
+      "kullanim_kosullari": [],
+      "kaynak": {"url": "https://www.orzax.com.tr/proceive-m/", "erisim_tarihi": "2026-10-29"}
+    }
+  }
+}
