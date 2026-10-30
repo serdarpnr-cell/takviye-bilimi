@@ -813,6 +813,151 @@
       ],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_k_vitamini_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin K (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
+      "alintilar": [
+        "Vitamin K can have a serious and potentially dangerous interaction with anticoagulants such as warfarin (Coumadin)",
+        "People who are taking warfarin and similar anticoagulants need to maintain a consistent intake of vitamin K from food and supplements because sudden changes in vitamin K intakes can increase or decrease the anticoagulant effect"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_omega3_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Omega-3 Fatty Acids (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+      "alintilar": [
+        "Fish oil might prolong clotting times, as indicated by an elevated international normalized ratio (INR), when it is taken with warfarin",
+        "Fish oil can have antiplatelet effects at high doses, although it appears to be less potent than aspirin",
+        "patients taking these products with anticoagulants should be monitored periodically for changes in INR"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_demir_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Iron (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
+      "alintilar": [
+        "Unlike other inhibitors of iron absorption, calcium might reduce the bioavailability of both nonheme and heme iron.",
+        "experts suggest that people take individual calcium and iron supplements at different times of the day",
+        "The simultaneous ingestion of iron and levothyroxine can result in clinically significant reductions in levothyroxine efficacy in some patients"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_magnezyum_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Magnesium (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
+      "alintilar": [
+        "Magnesium can form insoluble complexes with tetracyclines, such as demeclocycline (Declomycin) and doxycycline (Vibramycin), and with quinolone antibiotics, such as ciprofloxacin (Cipro) and levofloxacin (Levaquin)."
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_cinko_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Zinc (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
+      "alintilar": [
+        "Both quinolone antibiotics (such as Cipro) and tetracycline antibiotics (such as Achromycin and Sumycin) might interact with zinc in the gastrointestinal tract, which could inhibit the absorption of both zinc and the antibiotic if they are taken at the same time"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_kalsiyum_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Calcium (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+      "alintilar": [
+        "Simultaneous use of calcium supplements and quinolone antibiotics—such as ciprofloxacin (Cipro), gemifloxacin (Factive), and moxifloxacin (Avelox)—can reduce the absorption of quinolones"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_folat_hp": {
+      "tur": "kurum_bilgi",
+      "baslik": "Folate (Fact Sheet for Health Professionals)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/",
+      "alintilar": [
+        "Patients taking methotrexate for cancer should consult their oncologist before taking folate supplements because the supplements could interfere with methotrexate’s anticancer effects",
+        "folate supplements might reduce the gastrointestinal side effects of low-dose methotrexate taken for rheumatoid arthritis or psoriasis",
+        "folate supplements might reduce serum levels of these medications, so patients taking antiepileptic drugs should check with their health care provider before taking folate supplements"
+      ],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "thyromag_magnezyum_levotiroksin_2025": {
+      "tur": "farmakokinetik",
+      "pmid": "41221788",
+      "baslik": "Single Center, Open-Label, Randomized Crossover Trial on Drug-Drug Interactions of Levothyroxine/Magnesium-Citrate and Levothyroxine/Magnesium-Aspartate in Healthy Subjects-The ThyroMag Trial",
+      "kurum_veya_dergi": "Clin Transl Sci",
+      "yil": 2025,
+      "alintilar": [
+        "In conclusion, magnesium reduces the absorption of levothyroxine.",
+        "Hypothyroid patients should nonetheless take levothyroxine separated from magnesium-containing formulations"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "skelin_levotiroksin_emilim_2017": {
+      "tur": "derleme",
+      "pmid": "28153426",
+      "baslik": "Factors Affecting Gastrointestinal Absorption of Levothyroxine: A Review",
+      "kurum_veya_dergi": "Clin Ther",
+      "yil": 2017,
+      "alintilar": [
+        "A decrease in the absorption of LT4 is established and clinically significant when administered concomitantly with cholestyramine, colesevelam, lanthanum, calcium carbonate, calcium citrate, calcium acetate, iron sulfate, ciprofloxacin"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "tetrasiklin_demir_emilim_1985": {
+      "tur": "farmakokinetik",
+      "pmid": "3838321",
+      "baslik": "Absorption of minocycline hydrochloride and tetracycline hydrochloride. Effect of food, milk, and iron",
+      "kurum_veya_dergi": "J Am Acad Dermatol",
+      "yil": 1985,
+      "alintilar": ["Absorption of both antibiotics was significantly decreased by administration with iron (77% inhibition with minocycline and 81% with tetracycline)"],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "siprofloksasin_fk_2024": {
+      "tur": "sistematik_derleme",
+      "pmid": "37850318",
+      "baslik": "Pharmacokinetics of oral ciprofloxacin in adult patients: A scoping review",
+      "kurum_veya_dergi": "Br J Clin Pharmacol",
+      "yil": 2024,
+      "alintilar": [
+        "Oral ciprofloxacin's pharmacokinetics were influenced by covariates such as drug interactions (ferrous ions, calcium carbonate, diclofenac and itraconazole)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }

@@ -54,6 +54,15 @@ def test_ust_sinirlar_dogrulanmis_kaynaklara_bagli():
             assert kayitlar[k]["tur"] == "duzenleyici", (em_id, k)
 
 
+def test_her_etkilesim_kuralinin_dogrulanmis_kaynagi_var():
+    # CLAUDE.md kural 1: kaynaksız kural yayına giremez.
+    kayitlar = veri.kaynak_kayitlari()
+    for k in veri.kurallar()["etkilesimler"]:
+        assert k.get("kaynaklar"), k["id"]
+        for kid in k["kaynaklar"]:
+            assert kayitlar[kid]["dogrulandi"] is True, (k["id"], kid)
+
+
 def test_etkilesim_kurallarinin_ilac_gruplari_tanimli():
     gruplar = veri.kurallar()["ilac_gruplari"]
     for k in veri.kurallar()["etkilesimler"]:

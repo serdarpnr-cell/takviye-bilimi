@@ -937,6 +937,7 @@ def etken_madde_rehberi(
             karsi.append(veri.etken_madde_adi(kosul["diger_etken_madde"]))
         karsi += [_EVRE_ADLARI[e] for e in kosul.get("evre", [])]
         etkilesimler.append({"ile": karsi, "seviye": kural["seviye"], "mesaj": kural["mesaj"]})
+        kaynak_idleri += kural.get("kaynaklar", [])
         if (set(_liste(kosul.get("ilac_grubu", []))) & set(profil["ilac_grubu"])) or profil["evre"] in kosul.get("evre", []):
             dikkat.append(kural["mesaj"])
             sorular.append(kural["soru"])
