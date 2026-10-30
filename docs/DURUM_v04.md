@@ -37,7 +37,7 @@ v0.4 talimatı v0.3'ün bittiğini varsayıyordu; repoda v0.3 uygulanmamıştı 
 
 | Madde | Durum | Sahibi | Not / sonraki adım |
 |---|---|---|---|
-| B1 Render yayını | **engellendi, onay bekliyor** | Serdar | Testler yeşil. Render'a erişim doğrulanamadı; talimattaki "erişim yoksa dur ve sor" gereği main'e push yapılmadı. Karar: dalı main'e birleştirmek (PR) ya da doğrudan push için onay |
+| B1 Render yayını | **onay bekliyor** | Serdar | Testler yeşil. Render erişimi bu oturumdan doğrulanamadığı için main.e push yapılmadı. Değişiklikler PR serdarpnr-cell/takviye-bilimi#7 içinde; birleştirince Render ana daldan yayınlar, ardından duman testi |
 | B2 duman testi | yapıldı (yerel) | geliştirme → Serdar | `scripts/duman_testi.py`; yerel sonuç GEÇTİ (`docs/olcumler/2026-10-30_duman_yerel.md`). Yayından sonra Render adresiyle tekrar |
 | B2 bulgu: kart sayısı | rapor | Serdar | 7 kart: kanit, urun, kiyas, rutin, karne, parti, tahlil. v0.3'e göre kartlı derinlik aracı 5; fark `parti_analizi` (kapı) ve `tahlil_goster` (v0.3 listesinde yok) |
 | B2 bulgu: kapı aracında _meta.ui | **rapor, değiştirilmedi** | Serdar | `parti_analizi` kapı aracı ama parti kartına bağlı: v0.3 Bölüm 1 ile çelişki. Karar: kartı kaldırmak mı, derinlik aracı saymak mı |
