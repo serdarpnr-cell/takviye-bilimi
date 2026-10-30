@@ -285,9 +285,14 @@ def kanit_arayuzu() -> str:
     return arayuz.kart_html("kanit")
 
 
+# v0.4 C6: cdn prototipinde kartın görsel yükleyebileceği tek alan adı (MCP Apps CSP resourceDomains).
+_URUN_META = {"ui": {"csp": {"resourceDomains": [veri.ambalaj_cdn()]}}} if veri.ambalaj_modu() == "cdn" else None
+
+
 @mcp.resource(
     URUN_ARAYUZU,
     name="urun",
+    meta=_URUN_META,
     title="Ürün kartı",
     description="Ürünün etiket bilgisini, EFSA sınır göstergesini ve ürün sayfası beyanlarını kart olarak gösterir.",
     mime_type=MCP_APP_MIME,

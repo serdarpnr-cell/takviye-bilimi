@@ -443,3 +443,42 @@ def yuzde(n: int) -> str:
     else:
         ek = "i"
     return f"%{n}'{ek}"
+
+
+def etiket_uyarilari(urun_id: str) -> dict | None:
+    """Orzax'tan gelen ambalaj uyarıları (TB-24, v0.4 C5). Veri gelene kadar dosya yoktur ve None döner."""
+    yol = VERI_DIZINI / "etiket_uyarilari" / "uyarilar.json"
+    if not yol.exists():
+        return None
+    return json.loads(yol.read_text(encoding="utf-8"))["urunler"].get(urun_id)
+
+
+# --------------------------------------------------------------------------- #
+# Ambalaj görseli prototipi (v0.4 C6). Varsayılan kapalı. TB_AMBALAJ_GORSELI=base64 → görsel araç sonucuna gömülür;
+# TB_AMBALAJ_GORSELI=cdn → kart görseli TB_AMBALAJ_CDN alanından yükler (CSP resourceDomains). Prototip görseller
+# yer tutucudur, gerçek ambalaj değildir.
+# --------------------------------------------------------------------------- #
+
+AMBALAJ_DIZINI = VERI_DIZINI / "ambalaj_gorselleri"
+
+
+def ambalaj_modu() -> str | None:
+    m = os.environ.get("TB_AMBALAJ_GORSELI")
+    return m if m in ("base64", "cdn") else None
+
+
+def ambalaj_cdn() -> str:
+    return os.environ.get("TB_AMBALAJ_CDN", "https://cdn.orzax.com.tr").rstrip("/")
+
+
+def ambalaj_gorseli(urun_id: str) -> dict | None:
+    mod = ambalaj_modu()
+    yol = AMBALAJ_DIZINI / f"{urun_id}.jpg"
+    if mod is None or not yol.exists():
+        return None
+    if mod == "base64":
+        import base64
+
+        return {"src": "data:image/jpeg;base64," + base64.b64encode(yol.read_bytes()).decode("ascii"),
+                "not": "Prototip: yer tutucu görsel, gerçek ambalaj değil."}
+    return {"src": f"{ambalaj_cdn()}/ambalaj/{urun_id}.jpg", "not": "Prototip: görsel izinli alan adından yüklenir."}

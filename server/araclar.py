@@ -128,6 +128,7 @@ def _urun_karti(u: dict, yas: int | None = None) -> dict:
         "etken_maddeler": etkenler,
         "bilesim": u["bilesim"],
         "bilesim_ozeti": bilesim_ozeti(u),
+        **({"ambalaj_gorseli": g} if (g := veri.ambalaj_gorseli(u["id"])) else {}),
         "etiketteki_kullanim": u["etiketteki_kullanim"],
         "yas_siniri": _yas_metni(u["yas_siniri"]),
         "etkilesim_bayraklari": etkilesim_bayraklari(u),
@@ -140,7 +141,9 @@ def _urun_karti(u: dict, yas: int | None = None) -> dict:
         "beyan_kullanim_kosullari": beyan.get("kullanim_kosullari", []),
         "beyan_notu": "Ürüne ait etki ifadesi yalnızca ürün sayfasındaki bu beyanlardır; regülasyon onayı ayrıca doğrulanmadı.",
         "beyan_aciklamasi": BEYAN_ACIKLAMASI,
-        "etiket_uyarilari": ETIKET_UYARISI_NOTU,
+        # TB-24: Orzax ambalaj uyarıları gelene kadar "ambalajı okuyun" notu kalır (v0.4 C5).
+        "etiket_uyarilari": (" ".join(e["uyarilar"]) + f" (Ambalaj revizyonu {e['ambalaj_revizyon_no']}, {e['tarih']}.)"
+                             if (e := veri.etiket_uyarilari(u["id"])) else ETIKET_UYARISI_NOTU),
         "parti_analizi": "Bu ürün için yayımlanmış parti analizi var." if veri.gercek_parti_analizi_var(u["id"]) else PARTI_ANALIZI_NOTU,
         "urun_sayfasi": u["kaynak"]["url"],
         "erisim_tarihi": u["kaynak"]["erisim_tarihi"],

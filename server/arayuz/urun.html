@@ -9,6 +9,7 @@ __ORTAK_CSS__
   .icerik-satiri { padding: 8px 0; border-bottom: 1px solid var(--cizgi); }
   .icerik-satiri:last-child { border-bottom: 0; }
   .ust-satir { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .ambalaj { margin: 0 0 8px; } .ambalaj img { border-radius: 8px; object-fit: cover; }
 </style>
 </head>
 <body>
@@ -68,6 +69,9 @@ function ciz(sonuc) {
   }
   const u = v.urun;
   TB.doldur(b, 
+    // v0.4 C6 prototipi: görsel yalnızca bayrak açıkken gelir; alt metin ürün adıdır.
+    u.ambalaj_gorseli ? el("figure", { className: "ambalaj" }, el("img", { src: u.ambalaj_gorseli.src, alt: `${u.ad} ambalajı`, width: 160, height: 160 }),
+      el("figcaption", { className: "ikincil", textContent: u.ambalaj_gorseli.not })) : null,
     el("h1", { textContent: u.ad }),
     el("div", { className: "rozetler" }, rozet(u.marka), rozet(u.seri), rozet(`Yaş: ${u.yas_siniri}`),
       rozet(u.parti_analizi.includes("bulunmuyor") ? "Yayımlanmış parti analizi yok" : "Parti analizi var")),
