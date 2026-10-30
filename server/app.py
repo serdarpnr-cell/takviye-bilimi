@@ -66,8 +66,9 @@ mcp = FastMCP(
 )
 def urun_rehberi(
     urun: Annotated[str, Field(description="Ürün adı, ör. 'Ocean D3K2 Damla'")],
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı: ürünü kullanacak kişinin yaşı")] = None,
 ) -> dict[str, Any]:
-    return araclar.urun_rehberi(urun)
+    return araclar.urun_rehberi(urun, yas)
 
 
 @mcp.tool(

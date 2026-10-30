@@ -7,7 +7,7 @@ from server import veri
 from server.araclar import REHBER_KAPSAMI, _VITAMIN_MINERAL, _katalog_eslesmesi, etken_madde_rehberi
 
 ALANLAR = {
-    "kisa_ozet", "kimde_kanit_var", "kanit_duzeyi", "onayli_saglik_beyanlari", "besinle_karsilama", "efsa_ust_sinir",
+    "kisa_ozet", "kimde_kanit_var", "kanit_duzeyi", "urun_sayfasi_beyanlari", "besinle_karsilama", "efsa_ust_sinir",
     "etkilesimler", "dikkat_edecekler", "hekime_sorulacaklar", "kaynaklar", "katalogdaki_urunler", "uyari",
 }
 # Kişiye doz ya da ürün öneren kalıplar.
@@ -52,22 +52,60 @@ def test_kaynaklar_bagimsizlar_once_uretici_icerigi_sonra(taslak):
     assert all(t == "uretici_icerigi" for t in turler[ilk_uretici:])
 
 
-def test_onayli_beyanlar_tekillestirilir(taslak):
-    metinler = etken_madde_rehberi("D vitamini")["onayli_saglik_beyanlari"]["metinler"]
+def test_urun_sayfasi_beyanlari_tekillestirilir(taslak):
+    # TB-16: alan adı "onaylı" demez; ürün sayfası metnidir.
+    y = etken_madde_rehberi("D vitamini")
+    assert "onayli_saglik_beyanlari" not in y
+    metinler = y["urun_sayfasi_beyanlari"]["metinler"]
     assert metinler
     sade = [re.sub(r"^d vitamini ", "", veri.normalize(m)) for m in metinler]
     assert len(sade) == len(set(sade))
 
 
-def test_katalog_alfabetik_ve_tarafsiz(taslak):
+def test_katalog_en_fazla_bes_urun_tek_icerikliler_once(taslak):
+    # TB-14: en fazla 5 ürün; yalnızca bu maddeyi içerenler önce, kendi içinde alfabetik; kalanı sayıyla.
     y = etken_madde_rehberi("D vitamini")
-    adlar = [u["ad"] for u in y["katalogdaki_urunler"]]
-    assert adlar == sorted(adlar, key=veri.normalize)
-    assert "Ocean D3K2 Damla" in adlar
+    k = y["katalogdaki_urunler"]
+    assert 0 < len(k) <= 5
+    tekler = [u["tek_icerikli"] for u in k]
+    assert tekler == sorted(tekler, reverse=True)
+    for grup in (True, False):
+        adlar = [u["ad"] for u in k if u["tek_icerikli"] is grup]
+        assert adlar == sorted(adlar, key=veri.normalize)
+    assert y["katalog_ozeti"]["kalan_urun_sayisi"] > 0
+    assert "Sponsorlu veya öncelikli sıralama yoktur" in y["katalog_ozeti"]["siralama_olcutu"]
+    for u in k:
+        assert u["parti_analizi_var"] is False and u["porsiyondaki_miktar"]
+
+
+def test_katalog_yas_sinirina_gore_suzulur(taslak):
+    # TB-14: 42 yaş girilince çocuk ürünleri gelmez.
+    y = etken_madde_rehberi("D vitamini", yas=42)
+    urunler = {u["ad"]: u for u in veri.urunler()}
     for u in y["katalogdaki_urunler"]:
-        assert u["parti_analizi_var"] is False
-        assert u["porsiyondaki_miktar"]
-    assert "Sponsorlu veya öncelikli sıralama yoktur" in y["siralama_olcutu"]
+        ys = urunler[u["ad"]]["yas_siniri"]
+        assert ys["max"] is None or ys["max"] >= 42, u["ad"]
+    assert y["katalog_ozeti"]["yas_siniri_disinda_kalan"] > 0
+
+
+def test_beyan_baska_maddeye_sizmaz(taslak):
+    # TB-15: bir maddenin rehberinde başka maddeyi adıyla anan beyan görünmez.
+    from server.araclar import _katalog_eslesmesi
+    for u in veri.urunler():
+        if not _katalog_eslesmesi("d3", u):
+            continue
+        for b in veri.urun_saglik_beyanlari(u):
+            if b["etken_maddeler"] and "d3" not in b["etken_maddeler"]:
+                assert b["metin"] not in etken_madde_rehberi("D vitamini")["urun_sayfasi_beyanlari"]["metinler"]
+
+
+def test_senin_grubun_ilk_satirda(taslak):
+    # TB-18
+    y = etken_madde_rehberi("D vitamini", yas=42, cinsiyet="erkek")
+    assert y["kisa_ozet"].startswith("Senin grubun: 75 yaş altı sağlıklı yetişkinler.")
+    assert etken_madde_rehberi("D vitamini", yas=80)["senin_grubun"]["grup"] == "75 yaş ve üstü"
+    assert etken_madde_rehberi("D vitamini", yas=30, evre="gebe")["senin_grubun"]["grup"] == "Gebeler"
+    assert "senin_grubun" not in etken_madde_rehberi("D vitamini")
 
 
 def test_profile_gore_dikkat_edilecekler(taslak):

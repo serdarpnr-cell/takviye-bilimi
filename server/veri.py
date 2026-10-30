@@ -135,6 +135,65 @@ def urun_beyanlari() -> dict:
     return _yukle("beyanlar/urun_beyanlari.json")["urunler"]
 
 
+# --------------------------------------------------------------------------- #
+# Ürün sayfası beyanları: parça satırlar birleştirilir, her beyan etken maddeye eşlenir (TB-15).
+# urun_rehberi ve etken_madde_rehberi aynı fonksiyonu kullanır.
+# --------------------------------------------------------------------------- #
+
+# Beyan metninde eşleşme için kullanılmayan kısa eşanlamlılar (element simgeleri vb.): yanlış eşleşme üretir.
+_BEYAN_DISI_ADLAR = {"mg", "fe", "ca", "se", "cu", "mn", "mo", "cr", "zn", "d2", "k1"}
+# Omega-3 parçaları tek madde sayılır.
+KATALOG_GRUBU = {"epa": "omega3", "dha": "omega3", "toplam_omega3": "omega3"}
+
+
+def _parca_mi(satir: str) -> bool:
+    """Sitede bir beyan bazen birkaç satıra bölünür: 'B12 vitamini' / 'Normal enerji …,' / '… katkıda bulunur.'"""
+    t = satir.replace("\u200b", "").strip()
+    return t.endswith((",", ";", ":")) or (not t.endswith(".") and len(t.split()) <= 3)
+
+
+def beyan_satirlarini_birlestir(satirlar: list[str]) -> list[str]:
+    """Parça satırları izleyen satırla birleştirir; metin kelimesi kelimesine korunur, yalnızca satırlar birleşir."""
+    sonuc, birikim = [], []
+    for satir in satirlar:
+        birikim.append(satir.replace("\u200b", "").strip())
+        if not _parca_mi(satir):
+            sonuc.append(" ".join(birikim))
+            birikim = []
+    if birikim:
+        sonuc.append(" ".join(birikim))
+    return sonuc
+
+
+@lru_cache(maxsize=1)
+def _beyan_adlari() -> list[tuple[str, str]]:
+    """(normalize ad, etken madde kimliği) çiftleri; uzun adlar önce denenir."""
+    ciftler = set()
+    for em_id, bilgi in kurallar()["etken_maddeler"].items():
+        for ad in [bilgi["ad"].split("(")[0], *bilgi["esanlamlar"]]:
+            n = normalize(ad)
+            if n and n not in _BEYAN_DISI_ADLAR:
+                ciftler.add((n, KATALOG_GRUBU.get(em_id, em_id)))
+    return sorted(ciftler, key=lambda c: -len(c[0]))
+
+
+def urun_saglik_beyanlari(u: dict) -> list[dict]:
+    """Ürün sayfasındaki sağlık beyanları: her biri {metin, etken_maddeler}.
+
+    Beyan bir maddeyi adıyla anıyorsa o maddeye eşlenir. Adı geçmiyorsa ve ürün tek bir madde içeriyorsa o maddeye,
+    birden fazla madde içeriyorsa hiçbirine eşlenmez (hangi maddeye ait olduğu sayfadan anlaşılmaz).
+    """
+    kimlikler = {KATALOG_GRUBU.get(e["etken_madde"], e["etken_madde"]) for e in u["etken_maddeler"] if e["etken_madde"]}
+    sonuc = []
+    for metin in beyan_satirlarini_birlestir(urun_beyanlari().get(u["id"], {}).get("saglik", [])):
+        n = f" {normalize(metin)} "
+        adlar = {em for ad, em in _beyan_adlari() if f" {ad} " in n and em in kimlikler}
+        if not adlar and len(kimlikler) == 1:
+            adlar = set(kimlikler)
+        sonuc.append({"metin": metin, "etken_maddeler": sorted(adlar)})
+    return sonuc
+
+
 @lru_cache(maxsize=1)
 def _zorunlu_uyarilar() -> dict:
     return _yukle("zorunlu_uyarilar.json")["uyarilar"]

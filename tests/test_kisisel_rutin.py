@@ -191,3 +191,24 @@ def test_tum_icerikler_dogrulandiysa_ozet_temizdir():
     assert "doğrulanamadı" not in y["kisa_ozet"]
     assert y["dogrulanamayan_icerikler"] == []
     assert all(k["kontrol"] == "tam" for k in y["ust_sinir_kontrolu"])
+
+
+def test_ust_sinira_yakinlik_notu():
+    # TB-27: D3 toplamı 75 µg = sınırın %75'i → bilgi notu; doz önerisi değil.
+    y = kisisel_rutin(58, "kadin", ilac_grubu=["kan_sulandirici_varfarin"], mevcut_urunler=["Ocean D3K2 Damla"],
+                      diger_urun_icerikleri=[{"ad": "Multivitamin", "icerikler": [
+                          {"etken_madde": "D vitamini", "miktar": 2000, "birim": "IU"}]}])
+    d3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+    assert d3["asiyor"] is False
+    assert "%75" in d3["sinira_yakinlik"] and "doz önerisi değildir" in d3["sinira_yakinlik"]
+    dusuk = kisisel_rutin(58, "kadin", mevcut_urunler=["Ocean D3K2 Damla"])
+    assert "sinira_yakinlik" not in next(k for k in dusuk["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+
+
+def test_gebelikte_a_vitamini_uyarisi():
+    # Kabul ölçütü: "Gebeyim, A vitamini içeren multivitamin kullanıyorum" → gebelik uyarısı.
+    urun = [{"ad": "Multivitamin", "icerikler": [{"etken_madde": "A vitamini", "miktar": 800, "birim": "µg"}]}]
+    gebe = kisisel_rutin(30, "kadin", evre="gebe", diger_urun_icerikleri=urun)
+    assert any("A vitamini" in e["konu"] and "gebe" in e["mesaj"] for e in gebe["etkilesim_ve_zamanlama"])
+    assert any("teratogenicity" not in k["baslik"].casefold() and "vitamin A" in k["baslik"] for k in gebe["kaynaklar"])
+    assert not kisisel_rutin(30, "kadin", evre="yok", diger_urun_icerikleri=urun)["etkilesim_ve_zamanlama"]

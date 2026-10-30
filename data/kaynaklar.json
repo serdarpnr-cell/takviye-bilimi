@@ -121,12 +121,16 @@
       "tur": "duzenleyici",
       "doi": "10.2903/j.efsa.2024.8814",
       "pmid": "38846679",
-      "alintilar": ["The Panel proposes to retain the UL for preformed vitamin A of 3000 μg RE/day for adults."],
+      "alintilar": [
+        "The Panel proposes to retain the UL for preformed vitamin A of 3000 μg RE/day for adults.",
+        "Teratogenicity was selected as the critical effect on which to base the UL for preformed vitamin A.",
+        "This UL applies to men and women, including women of child-bearing age, pregnant and lactating women and post-menopausal women."
+      ],
       "baslik": "Scientific opinion on the tolerable upper intake level for preformed vitamin A and β-carotene",
       "kurum_veya_dergi": "EFSA J",
       "yil": 2024,
       "dogrulandi": true,
-      "dogrulama_tarihi": "2026-10-29"
+      "dogrulama_tarihi": "2026-10-30"
     },
     "efsa_beta_karoten_sigara_2012": {
       "tur": "duzenleyici",

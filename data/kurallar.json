@@ -1,5 +1,5 @@
 {
-  "_not": "Üst sınır değerleri data/kaynaklar.json'daki, API'den doğrulanmış EFSA belgelerinden alınmıştır; her değer kaynağın alıntısında geçer. Yaş bantları EFSA tablolarındaki gruplardır (1–3, 4–6, 7–10, 11–14, 15–17, yetişkin). Etkileşim kuralları medikal kurul onayı bekler.",
+  "_not": "Üst sınır değerleri data/kaynaklar.json'daki, API'den doğrulanmış EFSA belgelerinden alınmıştır; her değer kaynağın alıntısında geçer. Yaş bantları EFSA tablolarındaki gruplardır (1–3, 4–6, 7–10, 11–14, 15–17, yetişkin). Etkileşim kuralları medikal kurul onayı bekler. Etkileşim kuralının koşulu 'evre' (gebelik/emzirme durumu) da içerebilir.",
   "etken_maddeler": {
     "epa": {"ad": "EPA (omega-3)", "birim": "mg", "esanlamlar": ["epa", "eikozapentaenoik asit", "eikosapentaenoik asit"]},
     "dha": {"ad": "DHA (omega-3)", "birim": "mg", "esanlamlar": ["dha", "dokozaheksaenoik asit"]},
@@ -345,6 +345,14 @@
       "seviye": "hekime_danis",
       "mesaj": "Folik asit, bazı sara ilaçları ve metotreksat ile etkileşebilir. Kullanmadan önce hekiminize danışın.",
       "soru": "Kullandığım ilaçla birlikte folik asit içeren bir ürün kullanabilir miyim?"
+    },
+    {
+      "id": "a_vitamini_gebelik",
+      "kosul": {"etken_madde": "a_vitamini", "evre": ["gebe", "gebelik_planliyor"]},
+      "seviye": "hekime_danis",
+      "mesaj": "EFSA, hazır A vitamini (retinol) üst sınırını gebelikte bebeğin gelişimine zarar riskine göre belirlemiştir; bu sınır gebe ve gebelik planlayan kadınlar için de geçerlidir. A vitamini içeren bir ürünü gebelikte kullanmadan önce hekiminize danışın.",
+      "soru": "Kullandığım üründe A vitamini var; gebelikte ya da gebelik planlarken bu ürünü kullanmam uygun mu?",
+      "kaynaklar": ["efsa_ul_a_vitamini_beta_karoten_2024"]
     }
   ],
   "ilac_sorulari": [
