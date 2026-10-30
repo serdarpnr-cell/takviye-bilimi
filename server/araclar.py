@@ -407,17 +407,17 @@ _SECENEKLER: dict[str, list[tuple]] = {
     "hareket_gun": [
         ("Hiç", "0_gun", 0, 0), ("1–2 gün", "1_2_gun", 1, 2), ("3–4 gün", "3_4_gun", 3, 4), ("5–7 gün", "5_7_gun", 5, 7),
     ],
+    # Tıklanabilir soru kartı en fazla 4 seçenek alır (TB-08): 9 saatin üstü tek seçenektir.
     "uyku_saat": [
         ("6 saatten az", "6_saatten_az", 0, 5.99), ("6 ile 7 saat arası", "6_7_saat", 6, 6.99),
-        ("7–9 saat", "7_9_saat", 7, 9), ("9 saatten fazla, en çok 10", "9_10_saat", 9.01, 10),
-        ("10 saatten fazla", "10_saatten_fazla", 10.01, 24),
+        ("7–9 saat", "7_9_saat", 7, 9), ("9 saatten fazla", "9_saatten_fazla", 9.01, 24),
     ],
     "sebze_meyve_porsiyon": [
         ("0–2 porsiyon", "0_2_porsiyon", 0, 2.99), ("3–4 porsiyon", "3_4_porsiyon", 3, 4.99),
         ("5 porsiyon ya da daha fazla", "5_ve_uzeri", 5, 30),
     ],
     "balik_haftalik": [
-        ("Hiç", "hic", 0, 0), ("Ayda 1–3 kez", "ayda_1_3", 0.25, 0.75), ("Haftada 1 kez", "haftada_1", 1, 1.99),
+        ("Hiç", "hic", 0, 0), ("Ayda 1–3 kez", "ayda_1_3", 0.25, 0.99), ("Haftada 1 kez", "haftada_1", 1, 1.99),
         ("Haftada 2 kez ya da daha sık", "haftada_2_ve_uzeri", 2, 21),
     ],
     "sigara": [("Hayır", "hayir"), ("Ara sıra", "ara_sira"), ("Her gün", "her_gun")],
@@ -438,14 +438,16 @@ for _s in SORULAR:
     _s["secenekler"] = [{"etiket": x[0], "deger": x[1]} for x in _SECENEKLER[_s["anahtar"]]]
 
 SORU_YONERGESI = (
-    "Altı soruyu tek mesajda, seçenekleriyle birlikte sorun. Kullanıcı bir seçenek ya da aralık seçerse seçenek "
-    "kodunu (ör. '1_2_gun'), tam sayı verirse sayıyı iletin."
+    "Soruları iki adımda, seçenekleriyle sorun: önce ilk dört soru (hareket, uyku, sebze-meyve, balık), sonra kalan "
+    "iki soru (tütün, stres). Her soruda en fazla 4 seçenek vardır. Kullanıcı bir seçenek seçerse seçenek kodunu "
+    "(ör. '1_2_gun'), sayı verirse sayıyı iletin."
 )
 
 ESIK_NOTU = (
     "Eşikler yetişkinler için genel halk sağlığı önerilerinden sadeleştirilmiştir: haftada en az 150 dakika "
     "orta yoğunlukta hareket (WHO), gecede 7–9 saat uyku (National Sleep Foundation), günde en az 400 g sebze-meyve "
-    "(WHO; karnede 5 porsiyon olarak sadeleştirildi), haftada 1–2 kez deniz ürünü (American Heart Association). "
+    "(WHO; karnede 5 porsiyon olarak sadeleştirildi), haftada 1–2 kez deniz ürünü (American Heart Association; "
+    "karnede haftada 1 kez ve üzeri iyi sayılır). Gecede 9 saatten uzun uyku 'orta' sayılır. "
     "Prototiptir; medikal kurul onayı bekler."
 )
 KARNE_KAYNAKLARI = [
@@ -455,36 +457,55 @@ KARNE_KAYNAKLARI = [
 # Puan: 2 = iyi, 1 = orta, 0 = gelişmeli
 _SEVIYE = {2: "iyi", 1: "orta", 0: "gelişmeli"}
 
+# ilk_adim mevcut seviyeye göre bir basamak yukarıyı hedefler (TB-09): anahtar cevabın puanıdır (0 ya da 1).
 _HEDEFLER = {
     "sigara": {
         "alan": "Tütün",
         "hedef": "Bırakmak için bir tarih belirle.",
-        "ilk_adim": "ALO 171 Sigara Bırakma Danışma Hattı'nı ara ya da aile hekiminden sigara bırakma desteği iste.",
+        "ilk_adim": {
+            0: "ALO 171 Sigara Bırakma Danışma Hattı'nı ara ya da aile hekiminden sigara bırakma desteği iste.",
+            1: "Ara sıra içtiğin durumları not et; ALO 171 ya da aile hekiminden bırakma desteği iste.",
+        },
     },
     "hareket_gun": {
         "alan": "Hareket",
         "hedef": "Haftada 5 gün 30 dakika tempolu hareket.",
-        "ilk_adim": "Bu hafta 2 güne birer 20 dakikalık yürüyüş koy; günü ve saati takvime yaz.",
+        "ilk_adim": {
+            0: "Bu hafta 2 güne birer 20 dakikalık yürüyüş koy; günü ve saati takvime yaz.",
+            1: "Hareket ettiğin günlere bu hafta bir gün daha ekle; günü ve saati takvime yaz.",
+        },
     },
     "uyku_saat": {
         "alan": "Uyku",
         "hedef": "Gecede 7–9 saat uyku.",
-        "ilk_adim": "Bu hafta yatış saatini 30 dakika öne al ve her gün aynı saatte kalk.",
+        "ilk_adim": {
+            0: "Bu hafta yatış saatini 30 dakika öne al ve her gün aynı saatte kalk.",
+            1: "Her gün aynı saatte yat ve kalk; hafta sonu da bu saatleri koru.",
+        },
     },
     "sebze_meyve_porsiyon": {
         "alan": "Sebze ve meyve",
         "hedef": "Günde en az 5 porsiyon sebze ve meyve.",
-        "ilk_adim": "Her ana öğüne bir porsiyon sebze ya da salata ekle.",
+        "ilk_adim": {
+            0: "Her ana öğüne bir porsiyon sebze ya da salata ekle.",
+            1: "Bir ara öğünü bir porsiyon meyve ya da çiğ sebzeyle değiştir.",
+        },
     },
     "balik_haftalik": {
         "alan": "Balık",
-        "hedef": "Haftada 2 kez balık.",
-        "ilk_adim": "Haftalık menüye bir balık günü koy; balık yemiyorsan bunu hekiminle ya da diyetisyenle konuş.",
+        "hedef": "Haftada 1–2 kez balık.",
+        "ilk_adim": {
+            0: "Bu ay menüye iki balık günü koy; balık yemiyorsan bunu hekiminle ya da diyetisyenle konuş.",
+            1: "Haftalık menüye sabit bir balık günü koy.",
+        },
     },
     "stres": {
-        "alan": "Dinlenme",
+        "alan": "Stres",
         "hedef": "Her gün kendine ayrılmış kısa bir dinlenme zamanı.",
-        "ilk_adim": "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla.",
+        "ilk_adim": {
+            0: "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla; bu his sürüyorsa hekimle konuş.",
+            1: "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla.",
+        },
     },
 }
 _ONCELIK = ["sigara", "hareket_gun", "uyku_saat", "sebze_meyve_porsiyon", "balik_haftalik", "stres"]
@@ -513,11 +534,12 @@ def _puanla(anahtar: str, deger) -> int:
     if anahtar == "hareket_gun":
         return 2 if deger >= 5 else 1 if deger >= 3 else 0
     if anahtar == "uyku_saat":
-        return 2 if 7 <= deger <= 9 else 1 if 6 <= deger < 7 or 9 < deger <= 10 else 0
+        return 2 if 7 <= deger <= 9 else 1 if 6 <= deger < 7 or deger > 9 else 0
     if anahtar == "sebze_meyve_porsiyon":
         return 2 if deger >= 5 else 1 if deger >= 3 else 0
     if anahtar == "balik_haftalik":
-        return 2 if deger >= 2 else 1 if deger >= 1 else 0
+        # AHA haftada 1–2 kez deniz ürünü önerir (TB-10): haftada 1 kez iyi, ayda birkaç kez orta.
+        return 2 if deger >= 1 else 1 if deger > 0 else 0
     if anahtar == "sigara":
         return {"hayir": 2, "ara_sira": 1, "her_gun": 0}[deger]
     if anahtar == "stres":
@@ -551,29 +573,26 @@ def _kural_saglanir(kosul: dict, cevaplar: dict) -> bool:
 
 
 def _kopruler(girilen: dict) -> tuple[dict, list[str]]:
-    """Karne cevaplarından takviye bağlantıları, güvenlik uyarıları ve tahlil önerisi üretir."""
-    baglantilar, uyarilar, tahliller, kaynak_idleri = [], [], [], []
+    """Karne cevaplarından takviye bağlantıları ve güvenlik uyarıları üretir.
+
+    Takviye bağlantısı yalnızca hedef maddenin sunulabilir kanıt kartı varsa kurulur (TB-12): boş karta köprü yok.
+    Tahlil önerisi karneden çıkarıldı (TB-11): cevaplara bağlı değildi; tahliller şikâyet yolunda ele alınır.
+    """
+    baglantilar, uyarilar, kaynak_idleri = [], [], []
     for k in veri.karne_kurallari():
         if not _kural_saglanir(k["kosul"], girilen):
             continue
+        if k["tur"] == "takviye_baglantisi" and veri.monografi(k["etken_madde"]) is None:
+            continue
         kaynak_idleri += k["kaynaklar"]
-        if k["tur"] == "takviye_baglantisi":
-            baglantilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
-                                "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
-        elif k["tur"] == "guvenlik":
-            uyarilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
-                             "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
-        else:
-            tahliller.append({"etken_madde": _rehber_adi(k["etken_madde"]), "mesaj": k["mesaj"]})
+        kayit = {"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
+                 "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]}
+        (baglantilar if k["tur"] == "takviye_baglantisi" else uyarilar).append(kayit)
     return {
         "takviye_baglantilari": baglantilar,
         "guvenlik_uyarilari": uyarilar,
-        "tahlil_onerisi": {
-            "maddeler": tahliller,
-            "not": "Bu maddelerde ihtiyaç karneyle değil, hekimin gerekli gördüğü kan tahliliyle değerlendirilir.",
-        },
         "kopru_notu": ("Bağlantılar takviye önerisi değildir; ilgili kanıtı incelemek için yönlendirmedir. "
-                       "Kurallar medikal kurul onayı bekler."),
+                       "Yalnızca kanıt kartı hazır olan maddelere bağlantı verilir. Kurallar medikal kurul onayı bekler."),
     }, kaynak_idleri
 
 
@@ -588,7 +607,6 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
             "kisa_ozet": f"Karne için 6 sorunun hepsi gerekli; {len(eksik)} soru cevaplanmadı.",
             "soru_yonergesi": SORU_YONERGESI,
             "eksik_sorular": eksik,
-            "tum_sorular": SORULAR,
         }, veri.kaynaklar(KARNE_KAYNAKLARI))
 
     karne = []
@@ -606,11 +624,13 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
         (s["anahtar"] for s, k in zip(SORULAR, karne) if k["puan"] < 2),
         key=lambda a: (_puan(a, girilen[a]), _ONCELIK.index(a)),
     )
-    hedefler = [{**_HEDEFLER[a]} for a in gelismeli[:3]]
+    hedefler = [{**_HEDEFLER[a], "ilk_adim": _HEDEFLER[a]["ilk_adim"][_puan(a, girilen[a])]} for a in gelismeli[:3]]
 
     notlar = []
     if girilen["stres"] == "neredeyse_her_gun":
         notlar.append("Neredeyse her gün gergin ya da tükenmiş hissetmek bir hekim veya ruh sağlığı uzmanıyla konuşmaya değer.")
+    if isinstance(girilen["uyku_saat"], (int, float)) and girilen["uyku_saat"] > 10:
+        notlar.append("Düzenli olarak gecede 10 saatten uzun uyumak, nedeni hekimle konuşulmaya değer bir durumdur.")
     if yas is not None and yas < 18:
         notlar.append("Bu karnenin eşikleri yetişkinler içindir; çocuk ve gençlerde uyku ve hareket ihtiyacı farklıdır.")
 
