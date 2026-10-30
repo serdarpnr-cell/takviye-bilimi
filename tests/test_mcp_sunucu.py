@@ -30,6 +30,8 @@ CAGRILAR = {
     },
     "etken_madde_rehberi": {"etken_madde": "D vitamini", "yas": 41},
     "sikayet_yolu": {"sikayet": "Kendimi yorgun hissediyorum", "yas": 41, "cinsiyet": "kadin"},
+    "urun_karsilastir": {"urunler": ["Ocean D3K2 Damla", "Ocean Magnezyum Complex"], "yas": 41},
+    "tahlil_goster": {"tahlil": "B12"},
     "yasam_karnesi": {"cevaplar": {"hareket_gun": 2, "uyku_saat": 7, "sebze_meyve_porsiyon": 3,
                                    "balik_haftalik": 1, "sigara": "hayir", "stres": "bazen"}},
 }

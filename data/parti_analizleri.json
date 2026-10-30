@@ -1,0 +1,17 @@
+{
+  "_not": "Yayımlanmış parti analizleri. Gerçek analizler Orzax kalite ekibinden gelir ve 'demo: false' olur. 'demo: true' kayıtlar yalnızca parti kartını göstermek içindir: gerçek bir partiye ait değildir, ürünün 'parti analizi var' bilgisini değiştirmez ve her yanıtta DEMO olarak etiketlenir.",
+  "partiler": [
+    {
+      "parti_no": "DEMO-0001",
+      "demo": true,
+      "urun_id": "ocean-vitamin-d3k2-damla",
+      "laboratuvar": "Gösterim amaçlı örnek kayıt (gerçek laboratuvar değil)",
+      "analiz_tarihi": "2026-10-30",
+      "sonuclar": [
+        {"etken_madde": "d3", "etiketteki": 25, "olculen": 26, "birim": "µg"},
+        {"etken_madde": "k2", "etiketteki": 11.25, "olculen": 11, "birim": "µg"}
+      ],
+      "not": "DEMO: Bu kayıt parti kartının nasıl görüneceğini göstermek için hazırlanmış örnek veridir; gerçek bir parti analizi değildir."
+    }
+  ]
+}

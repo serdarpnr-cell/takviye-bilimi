@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parti kartı</title>
+<style>
+__ORTAK_CSS__
+  .demo { border: 2px dashed var(--uyari); }
+  .sonuc-satiri { padding: 8px 0; border-bottom: 1px solid var(--cizgi); }
+  .sonuc-satiri:last-child { border-bottom: 0; }
+  .ust-satir { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main>
+  <section id="icerik"><p class="ikincil">Parti kartı yükleniyor…</p></section>
+</main>
+<script>
+__ORTAK_JS__
+const { el, rozet } = TB;
+const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+
+// Etiketteki ve ölçülen miktar aynı eksende iki çubuk; kırmızı çizgi etiketteki miktar.
+function satir(r) {
+  const eksen = Math.max(r.etiketteki, r.olculen) * 1.15;
+  return el("div", { className: "sonuc-satiri" },
+    el("div", { className: "ust-satir" }, el("strong", { textContent: r.etken_madde }), rozet(`Etiketin %${r.etikete_orani}'i`)),
+    el("div", { className: "ikincil", textContent: `Etikette ${sayi(r.etiketteki)} ${r.birim}` }),
+    el("div", { className: "cubuk" }, el("div", { className: "cubuk-dolgu" }, el("span", { style: `width:${(r.etiketteki / eksen) * 100}%;background:var(--ikincil)` }))),
+    el("div", { className: "ikincil", textContent: `Ölçülen ${sayi(r.olculen)} ${r.birim}` }),
+    el("div", { className: "cubuk" },
+      el("div", { className: "cubuk-dolgu" }, el("span", { style: `width:${(r.olculen / eksen) * 100}%` })),
+      el("div", { className: "cubuk-sinir", style: `left:${(r.etiketteki / eksen) * 100}%` })));
+}
+
+function ciz(sonuc) {
+  const v = sonuc?.structuredContent;
+  if (!v || !v.kisa_ozet) return;
+  const b = document.getElementById("icerik");
+  if (!v.sonuclar) {
+    TB.doldur(b, el("h1", { textContent: "Parti analizi" }), el("p", { textContent: v.kisa_ozet }),
+      el("p", { className: "ikincil", textContent: v.not }), TB.kaynaklar(v.kaynaklar), el("p", { className: "ikincil", textContent: v.uyari }));
+    return;
+  }
+  TB.doldur(b,
+    el("h1", { textContent: v.urun }),
+    el("div", { className: "rozetler" }, v.demo ? rozet("DEMO · gerçek analiz değil", "uyari") : rozet("Yayımlanmış analiz", "iyi"),
+      rozet(`Parti ${v.aranan_parti_no}`)),
+    v.demo ? el("div", { className: "kart guvenlik demo" }, el("strong", { textContent: "Gösterim kaydı" }), el("p", { textContent: v.demo_notu })) : null,
+    el("p", { className: "ikincil", textContent: `Laboratuvar: ${v.laboratuvar} · Analiz tarihi: ${v.analiz_tarihi}` }),
+    el("section", {}, el("h2", { textContent: "Etiketteki ve ölçülen miktar" }), el("div", { className: `kart${v.demo ? " demo" : ""}` }, ...v.sonuclar.map(satir))),
+    el("p", { className: "ikincil", textContent: v.okuma_notu }),
+    TB.kaynaklar(v.kaynaklar),
+    el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+TB.baslat("takviye-bilimi-parti", { sonuc: ciz });
+</script>
+</body>
+</html>

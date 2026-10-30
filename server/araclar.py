@@ -21,6 +21,7 @@ BEYAN_ACIKLAMASI = (
     "kalıplardır. Eksikliği olmayan birinde yorgunluğu gidereceğini ya da ek fayda sağlayacağını göstermez."
 )
 PARTI_ANALIZI_NOTU = "Katalogdaki ürünler için yayımlanmış parti analizi bulunmuyor."
+DEMO_NOTU = "DEMO: gerçek bir parti analizi değildir; kartın nasıl görüneceğini gösterir."
 
 
 def _etiket_miktari(em: dict, u: dict) -> str:
@@ -74,7 +75,7 @@ def _urun_karti(u: dict) -> dict:
         "beyan_notu": "Ürüne ait etki ifadesi yalnızca ürün sayfasındaki bu beyanlardır; regülasyon onayı ayrıca doğrulanmadı.",
         "beyan_aciklamasi": BEYAN_ACIKLAMASI,
         "etiket_uyarilari": ETIKET_UYARISI_NOTU,
-        "parti_analizi": PARTI_ANALIZI_NOTU,
+        "parti_analizi": "Bu ürün için yayımlanmış parti analizi var." if veri.gercek_parti_analizi_var(u["id"]) else PARTI_ANALIZI_NOTU,
         "urun_sayfasi": u["kaynak"]["url"],
         "erisim_tarihi": u["kaynak"]["erisim_tarihi"],
     }
@@ -156,12 +157,32 @@ def _parti_no_coz(girdi: str) -> str:
 
 def parti_analizi(karekod_veya_parti_no: str) -> dict:
     parti_no = _parti_no_coz(karekod_veya_parti_no)
+    p = veri.parti_bul(parti_no)
+    if p is None:
+        return veri.zarf({
+            "kisa_ozet": f"'{parti_no}' parti numarası için yayımlanmış analiz bulunamadı. {PARTI_ANALIZI_NOTU}",
+            "aranan_parti_no": parti_no,
+            "not": "Parti numarası kutunun alt ya da yan yüzünde, son kullanma tarihinin yanında yazar. "
+                   "Ürünün etiket bilgileri için ürün rehberine bakılabilir.",
+        }, veri.kaynaklar(["orzax_urunler"]))
+    u = next(x for x in veri.urunler() if x["id"] == p["urun_id"])
+    sonuclar = [{
+        "etken_madde": veri.etken_madde_adi(r["etken_madde"]),
+        "etiketteki": r["etiketteki"], "olculen": r["olculen"], "birim": r["birim"],
+        # Ölçülenin etiketteki miktara oranı; yorum yok.
+        "etikete_orani": round(r["olculen"] / r["etiketteki"] * 100),
+    } for r in p["sonuclar"]]
+    ozet = f"{u['ad']} · parti {p['parti_no']}: {len(sonuclar)} etken madde için etiketteki ve ölçülen miktar."
     return veri.zarf({
-        "kisa_ozet": f"'{parti_no}' parti numarası için yayımlanmış analiz bulunamadı. {PARTI_ANALIZI_NOTU}",
-        "aranan_parti_no": parti_no,
-        "not": "Parti numarası kutunun alt ya da yan yüzünde, son kullanma tarihinin yanında yazar. "
-               "Ürünün etiket bilgileri için ürün rehberine bakılabilir.",
-    }, veri.kaynaklar(["orzax_urunler"]))
+        "kisa_ozet": (DEMO_NOTU + " " if p["demo"] else "") + ozet,
+        **({"demo": True, "demo_notu": p["not"]} if p["demo"] else {}),
+        "aranan_parti_no": p["parti_no"],
+        "urun": u["ad"],
+        "laboratuvar": p["laboratuvar"],
+        "analiz_tarihi": p["analiz_tarihi"],
+        "sonuclar": sonuclar,
+        "okuma_notu": "Oran, ölçülen miktarın etiketteki miktara yüzdesidir; ürün etkisi ya da güvenliği hakkında yorum değildir.",
+    }, [veri.urun_kaynagi(u)])
 
 
 # --------------------------------------------------------------------------- #
@@ -786,7 +807,7 @@ def _katalog_ogesi(u: dict, em_id: str, beyanlar: list[str]) -> dict:
         "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in _katalog_eslesmesi(em_id, u)],
         "yas_siniri": _yas_metni(u["yas_siniri"]),
         "urun_sayfasi_beyanlari": beyanlar,
-        "parti_analizi_var": False,
+        "parti_analizi_var": veri.gercek_parti_analizi_var(u["id"]),
     }
 
 
@@ -1132,3 +1153,138 @@ def katalog_sayfasi(etken_madde: str, sayfa: int = 1, yas: int | None = None) ->
         "siralama_olcutu": ("Yalnızca bu maddeyi içeren ürünler önce, sonra alfabetik. "
                             "Sponsorlu veya öncelikli sıralama yoktur; sıra bir öneri değildir."),
     }, [veri.urun_kaynagi(u) for u in secilen] or veri.kaynaklar(["orzax_urunler"]))
+
+
+# --------------------------------------------------------------------------- #
+# 7. urun_karsilastir (TB-20)
+# --------------------------------------------------------------------------- #
+
+_SUNUM_BICIMLERI = ["damla", "sprey", "sase", "tablet", "kapsul", "softjel", "gummies", "surup", "likit", "tup", "toz", "jel"]
+
+
+def _sunum_bicimi(u: dict) -> str:
+    n = f" {veri.normalize(u['ad'] + ' ' + (u.get('porsiyon') or ''))} "
+    return next((b for b in _SUNUM_BICIMLERI if f" {b}" in n), "belirtilmemiş")
+
+
+def urun_karsilastir(urunler: list[str], yas: int | None = None) -> dict:
+    """2–5 ürünü aynı ölçütlerle yan yana koyar. Sıralama ya da öneri yoktur; sıra kullanıcının yazdığı sıradır."""
+    bulunan, taninmayan, belirsiz = [], [], {}
+    for ad in urunler[:5]:
+        eslesen = veri.urun_ara(ad)
+        if len(eslesen) == 1:
+            if eslesen[0] not in bulunan:
+                bulunan.append(eslesen[0])
+        elif eslesen:
+            belirsiz[ad] = [e["ad"] for e in eslesen][:10]
+        else:
+            taninmayan.append(ad)
+    if len(bulunan) < 2:
+        return veri.zarf({
+            "kisa_ozet": "Karşılaştırma için katalogda tek eşleşen en az iki ürün gerekli. Ürün adlarını kutudaki gibi yazmayı deneyin.",
+            "taninmayan_urunler": taninmayan,
+            "birden_fazla_eslesen_urunler": belirsiz,
+        }, veri.kaynaklar(["orzax_urunler"]))
+
+    def kimlik(e):
+        return veri.KATALOG_GRUBU.get(e["etken_madde"], e["etken_madde"])
+
+    maddeler = list(dict.fromkeys(kimlik(e) for u in bulunan for e in u["etken_maddeler"] if e["etken_madde"]))
+    matris = []
+    for em_id in maddeler:
+        hucreler = []
+        for u in bulunan:
+            satirlar = [e for e in u["etken_maddeler"] if e["etken_madde"] and kimlik(e) == em_id]
+            hucreler.append(None if not satirlar else {
+                "etiketteki": "; ".join(f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in satirlar),
+                "dogrulanamadi": any(e.get("karantina") for e in satirlar),
+            })
+        matris.append({"etken_madde": _rehber_adi(em_id), "urunler": hucreler})
+    # Birden fazla üründe ortak maddeler önce; sonra ilk görünen sıra.
+    matris.sort(key=lambda r: -sum(h is not None for h in r["urunler"]))
+
+    kartlar = []
+    for u in bulunan:
+        kimlikler = {kimlik(e) for e in u["etken_maddeler"] if e["etken_madde"]}
+        kartlar.append({
+            "ad": u["ad"],
+            "marka": u["marka"],
+            "sunum_bicimi": _sunum_bicimi(u),
+            "tek_ya_da_kombine": "tek etken madde" if len(kimlikler) == 1 else f"kombine ({len(kimlikler)} etken madde)",
+            "etiketteki_kullanim": u["etiketteki_kullanim"],
+            "yas_siniri": _yas_metni(u["yas_siniri"]),
+            **({"yas_siniri_disinda": _yas_disinda(u["yas_siniri"], yas)} if yas is not None else {}),
+            "parti_analizi": "var" if veri.gercek_parti_analizi_var(u["id"]) else "yayımlanmış analiz yok",
+            "dogrulanamayan_satir": sum(1 for e in u["etken_maddeler"] if e.get("karantina")),
+            "bilesim": u["bilesim"],
+            "urun_sayfasi": u["kaynak"]["url"],
+        })
+    return veri.zarf({
+        "kisa_ozet": (f"{len(bulunan)} ürün aynı ölçütlerle yan yana: sunum biçimi, miktar, tek ya da kombine, parti analizi "
+                      "ve yaş sınırı. Sıralama ya da öneri yoktur; hangisinin uygun olduğu kişiye göre değişir ve hekimle konuşulur."),
+        "urunler": kartlar,
+        "etken_madde_karsilastirmasi": matris,
+        "siralama_olcutu": "Ürünler sizin yazdığınız sırayla gösterilir. Sıralama, puan ya da öneri yoktur.",
+        "taninmayan_urunler": taninmayan,
+        "birden_fazla_eslesen_urunler": belirsiz,
+    }, [veri.urun_kaynagi(u) for u in bulunan])
+
+
+# --------------------------------------------------------------------------- #
+# 8. tahlil_goster (istemci tarafında tahlil görünümü)
+# --------------------------------------------------------------------------- #
+
+# Tahlil değeri bu araca hiç gelmez: aracın değer parametresi yoktur. Kullanıcı değerini ve kendi laboratuvarının
+# referans aralığını görsel kartın içine yazar; kart değeri sunucuya göndermez, saklamaz (KVKK: sağlık verisi).
+TAHLILLER = {
+    "b12": {"ad": "B12 vitamini", "etken_madde": "b12", "esanlamlar": ["b12", "b12 vitamini", "kobalamin"],
+            "ne_olcer": "Kandaki B12 vitamini düzeyi.", "birimler": ["pg/mL", "pmol/L"],
+            "kaynaklar": ["bsh_b12_folat_2014"]},
+    "ferritin": {"ad": "Ferritin", "etken_madde": "demir", "esanlamlar": ["ferritin", "demir", "demir deposu"],
+                 "ne_olcer": "Vücuttaki demir depolarının göstergesi; demir eksikliğinde en yararlı tek göstergedir.",
+                 "birimler": ["ng/mL", "µg/L"], "kaynaklar": ["bsg_demir_eksikligi_2021"]},
+    "d_vitamini": {"ad": "D vitamini (25(OH)D)", "etken_madde": "d3",
+                   "esanlamlar": ["d vitamini", "25 oh d", "25 hidroksi d vitamini", "d3"],
+                   "ne_olcer": "Kandaki 25(OH)D düzeyi; D vitamini durumunun göstergesidir.", "birimler": ["ng/mL", "nmol/L"],
+                   "kaynaklar": ["zittermann_d_doz_yanit_2014"]},
+}
+TAHLIL_GIZLILIK = ("Değerin sunucuya gönderilmez: yalnızca bu kartta, kendi cihazında işlenir ve saklanmaz. "
+                   "Kart sabit bir 'normal' aralık kullanmaz; raporundaki referans aralığını yazarsın.")
+
+
+def _tahlil_id(metin: str) -> str | None:
+    n = f" {veri.normalize(metin)} "
+    return next((tid for tid, t in TAHLILLER.items() if any(f" {veri.normalize(e)} " in n for e in [tid, *t["esanlamlar"]])), None)
+
+
+def tahlil_goster(tahlil: str) -> dict:
+    tid = _tahlil_id(tahlil)
+    if tid is None:
+        return veri.zarf({
+            "kisa_ozet": f"'{tahlil}' için tahlil görünümü henüz yok. Hazır olanlar: " + ", ".join(t["ad"] for t in TAHLILLER.values()) + ".",
+            "hazir_tahliller": [t["ad"] for t in TAHLILLER.values()],
+            "gizlilik": TAHLIL_GIZLILIK,
+        }, veri.kaynaklar(["orzax_urunler"]))
+    t = TAHLILLER[tid]
+    kaynak_idleri: list[str] = list(t["kaynaklar"])
+    oncesi = [u for u in veri.zorunlu_uyarilar(t["etken_madde"]) if u["tur"] == "tahlil_oncesi"]
+    for u in oncesi:
+        kaynak_idleri += u["kaynaklar"]
+    # Monografi taslak olsa da tahlil notu yalnızca sunulabilirse gösterilir.
+    m = veri.monografi(t["etken_madde"])
+    notu = (m or {}).get("tahlil_notu")
+    if notu:
+        kaynak_idleri += notu["kaynaklar"]
+    return veri.zarf({
+        "kisa_ozet": (f"{t['ad']} tahlili: {t['ne_olcer']} Değerini kendi laboratuvarının referans aralığıyla kartta görebilirsin; "
+                      "değer sunucuya gönderilmez. Sonucu hekiminle değerlendir."),
+        "tahlil": t["ad"],
+        "ne_olcer": t["ne_olcer"],
+        "yaygin_birimler": t["birimler"],
+        "birim_notu": "Değer ile referans aralığı aynı birimde olmalıdır; raporundaki birimi kullan.",
+        "tahlil_oncesi": [u["mesaj"] for u in oncesi],
+        **({"tahlil_notu": notu["metin"]} if notu else {}),
+        "yorum_notu": ("Kart yalnızca değerin raporundaki aralığa göre konumunu gösterir. Takviyeyle değerin nasıl değişeceğine "
+                       "dair tahmin yapmaz; tanı ve tedavi kararı hekimindir."),
+        "gizlilik": TAHLIL_GIZLILIK,
+    }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
