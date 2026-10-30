@@ -155,8 +155,10 @@ def test_multivitamin_katalogu_esige_gore():
 
 
 @pytest.mark.parametrize("ad", ["omega-3", "B12", "magnezyum", "demir", "multivitamin"])
-def test_kanit_karti_yoksa_urun_listesi_donmez(ad):
+def test_kanit_karti_yoksa_urun_listesi_donmez(ad, monkeypatch):
     # TB-05: genel soruya yalnızca ürün listesi dönmez; kanıt kartı hazırlanıyor notu ve kurum sayfası döner.
+    # Yayın ayarı (taslak kartlar kapalı): bu maddelerin kartları taslak olduğu için sunulmaz.
+    monkeypatch.delenv("TB_TASLAK_GOSTER", raising=False)
     y = etken_madde_rehberi(ad, yas=42, cinsiyet="erkek")
     assert "katalogdaki_urunler" not in y
     assert "onayli_saglik_beyanlari" not in y
