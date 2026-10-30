@@ -2158,7 +2158,7 @@
       "bilesim": "Patates nişastası, beta glukan (maya kaynaklı), hidroksipropil metil selüloz (bitkisel kapsül), L-askorbik asit (C vitamini), turunç meyve ekstresi (turunçgil bioflavonoidleri), çinko sülfat monohidrat, topaklanmayı önleyici: yağ asitlerinin magnezyum tuzları, kolekalsiferol (D3 vitamini), topaklanmayı önleyici: silikon dioksit, bakır sülfat, sodyum selenit.",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı 11 yaş üstü bireyler ve yetişkinler için günde 1 veya 2 kapsüldür.",
       "gunluk_kullanim": null,
-      "yas_siniri": {"min": 18, "max": null},
+      "yas_siniri": {"min": 11, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/imunol-complex/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -2835,7 +2835,7 @@
       "bilesim": "Deiyonize su, bal, nikotinamid (B3 vitamini), kavun aroması, kıvam arttırıcı: ksantam gum, tiamin hidroklorür (B1 vitamini), koruyucular: (sodyum benzoat, potasyum sorbat), D-pantotenat, kalsiyum (B5 vitamini), riboflavin 5’-fosfat, sodyum (B2 vitamini), piridoksin hidroklorür (B6 vitamini), (6S)-5-metiltetrahidrofolik asit, glukozamin tuzu (Quatrefolic®)++, metilkobalamin (B12 vitamini, MecobalActive®)+++. ++Quatrefolic®: Gnosis firmasına ait patentli bir folik asit kaynağıdır. +++MecobalActive®, HealthTech Bio Actives SLU firmasına ait patentli bir aktif B12 vitamini kaynağıdır.",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı, 4-10 yaş grubu çocuklar ve 11 yaş ve üzeri bireyler için sabah ve akşam 5 mL olmak üzere günde 10 mL tüketilmesi şeklindedir. Kullanmadan önce iyice çalkalayınız",
       "gunluk_kullanim": {"birim": "ml", "en_az": 5.0, "en_cok": 5.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 11, "max": null},
+      "yas_siniri": {"min": 4, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-bewity-likit/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -3853,7 +3853,7 @@
       "bilesim": "Turna yemişi ekstresi, topaklanmayı önleyici: kalsiyum fosfatlar, bitkisel kapsül bileşeni [hidroksipropil metil selüloz, renklendirici: demir oksitler ve hidroksitler (demir oksit, kırmızı)], topaklanmayı önleyiciler: (yağ asitlerinin magnezyum tuzları, silikon dioksit).",
       "etiketteki_kullanim": "11 yaş üstü bireyler ve yetişkinler için günde 2 kapsül kullanılması şeklindedir.",
       "gunluk_kullanim": {"birim": "kapsul", "en_az": 2.0, "en_cok": 2.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 18, "max": null},
+      "yas_siniri": {"min": 11, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-cranberry-30-kapsul/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -4452,7 +4452,7 @@
       "bilesim": "Kıvam arttırıcı: gliserol, laktaz enzimi, su.",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı, 4-10 yaş grubu çocuklar ile 11 yaş ve üzeri yetişkinler için gün içerisinde süte 28 damla damlatılarak tüketilmesi şeklindedir. Kapak açıldıktan sonra 28 gün içerisinde tüketilmesi tavsiye edilir.",
       "gunluk_kullanim": {"birim": "damla", "en_az": 28.0, "en_cok": 28.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 11, "max": null},
+      "yas_siniri": {"min": 4, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-enzymes-lactase-damla-20-ml/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -5449,7 +5449,7 @@
       "bilesim": "Kıvam arttırıcı: maltitol şurubu, deiyonize su, kıvam arttırıcı: sorbitol, +lipofer [mısır nişastası, ferrik pirofosfat, hacim arttırıcı: hidroksipropil metil selüloz, emülgatör: lesitin (ayçiçek)], jelleştirici: pektin, elma suyu konsantresi, asitlik düzenleyiciler: (sitrik asit, trisodyum sitrat), siyah havuç suyu konsantresi, çilek aroma verici (%0,3), hindistan cevizi yağı, tatlandırıcı: steviadan steviol glikozitler, parlatıcılar: (karnauba mumu, balmumu-beyaz).",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı, 4-10 yaş grubu çocuklar için 1 çiğnenebilir jel form, 11 yaş ve üzeri yetişkinler için 2 çiğnenebilir jel formdur.",
       "gunluk_kullanim": {"birim": "jel form", "en_az": 1.0, "en_cok": 1.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 11, "max": null},
+      "yas_siniri": {"min": 4, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-gummies-iron/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -6970,7 +6970,7 @@
       "bilesim": "Deve dikeni ekstresi, hidroksipropil metil selüloz (bitkisel kapsül), hacim arttırıcı: mikrokristalin selüloz, topaklanmayı önleyiciler: (yağ asitlerinin magnezyum tuzları, silikon dioksit.)",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı 11 yaş üstü bireyler ve yetişkinler için 1 kapsüldür.",
       "gunluk_kullanim": null,
-      "yas_siniri": {"min": 18, "max": null},
+      "yas_siniri": {"min": 11, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-milk-thistle-30-kapsul/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -8767,7 +8767,7 @@
       "bilesim": "Zeytinyağı, kolekalsiferol (D3 vitamini).",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı, 2-10 yaş grubu çocuklar için 1 puf, 11 yaş ve üzeri bireyler için 2 puf ağza püskürtme şeklindedir. Ocean Vitamin D3’ün her pufu 3 damlaya denk gelmektedir.",
       "gunluk_kullanim": {"birim": "sprey", "en_az": 1.0, "en_cok": 1.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 11, "max": null},
+      "yas_siniri": {"min": 2, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-vitamin-d3-400-iu/", "erisim_tarihi": "2026-10-29"}
     },
     {
@@ -9037,7 +9037,7 @@
       "bilesim": "Deiyonize su, bal (%35,18), L-arjinin, asitlik düzenleyici: sitrik asit, L-askorbik asit (C vitamini), doğal portakal aroma verici (%1,2), DL-alfa tokoferil asetat (E vitamini), stabilizör: polioksietilen sorbitan monooleat, çinko sülfat monohidrat, fosfotidilserin (soya lesitini), nikotinamid (B3 vitamini), menakuinon-7 (K2 vitamini), renklendirici: beta karoten, kıvam arttırıcı: ksantan gam, koruyucu: potasyum sorbat, D-pantotenat, kalsiyum (B5 vitamini), kolekalsiferol (D3 vitamini), retinil asetat (A vitamini), manganez sülfat monohidrat, riboflavin 5’-fosfat, sodyum (B2 vitamini), piridoksin hidroklorür (B6 vitamini), tiamin hidroklorür (B1 vitamini), tatlandırıcı: steviol glikozitler, pteroilmonoglutamik asit (folik asit), sodyum molibdat dihidrat, potasyum iyodat, sodyum selenit, D-biotin, krom pikolinat, metilkobalamin (B12 vitamini).",
       "etiketteki_kullanim": "Tavsiye edilen günlük alım miktarı 4-10 yaş gurubu çocuklar, 11 yaş ve üzeri bireyler için tok karnına 5 ml tüketilmesi şeklindedir.",
       "gunluk_kullanim": {"birim": "ml", "en_az": 5.0, "en_cok": 5.0, "carpan_en_az": 1.0, "carpan_en_cok": 1.0},
-      "yas_siniri": {"min": 11, "max": null},
+      "yas_siniri": {"min": 4, "max": null},
       "kaynak": {"url": "https://www.orzax.com.tr/ocean-vm-arginin-ps-likit/", "erisim_tarihi": "2026-10-29"}
     },
     {

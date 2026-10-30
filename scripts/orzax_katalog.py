@@ -218,14 +218,18 @@ def _beyanlar(satirlar: list[str]) -> tuple[list[str], list[str], list[str]]:
 
 
 def _yas(kullanim: str) -> dict:
+    """Etiketteki kullanım metnindeki tüm yaş ifadelerini birleştirir (v0.3 Ek 1).
+
+    "2-10 yaş grubu çocuklar için 1 puf, 11 yaş ve üzeri bireyler için 2 puf" → 2 yaş ve üzeri. Alt sınır metindeki en
+    küçük yaştır; metinde açık uçlu bir grup ("ve üzeri", "üstü") ya da yetişkinler varsa üst sınır yoktur.
+    """
     k = kullanim.casefold()
-    m = re.search(r"(\d+)\s*yaş\s*ve\s*üzeri", k)
-    if m:
-        return {"min": int(m[1]), "max": None}
-    m = re.search(r"(\d+)\s*[-–]\s*(\d+)\s*yaş", k)
-    if m:
-        ust = None if "yetişkin" in k else int(m[2])
-        return {"min": int(m[1]), "max": ust}
+    araliklar = [(int(a), int(b)) for a, b in re.findall(r"(\d+)\s*[-–]\s*(\d+)\s*yaş", k)]
+    acik = [int(a) for a in re.findall(r"(\d+)\s*yaş\s*(?:ve\s*üzeri|üstü|ve\s*üstü)", k)]
+    if araliklar or acik:
+        alt = min([a for a, _ in araliklar] + acik)
+        ust = None if acik or "yetişkin" in k else max(b for _, b in araliklar)
+        return {"min": alt, "max": ust}
     if "yetişkin" in k and "çocuk" not in k:
         return {"min": 18, "max": None}
     return {"min": None, "max": None}

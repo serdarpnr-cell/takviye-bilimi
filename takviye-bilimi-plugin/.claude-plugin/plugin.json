@@ -1,0 +1,6 @@
+{
+  "name": "takviye-bilimi",
+  "version": "0.3.0",
+  "description": "Takviye edici gıdalar, vitaminler ve mineraller için kaynaklı, Türkçe kanıt rehberi. /takviye komutu Takviye Bilimi araçlarını açıkça seçer.",
+  "author": {"name": "Orzax"}
+}

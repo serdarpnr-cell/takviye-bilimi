@@ -1,0 +1,87 @@
+{
+  "_not": "takviye_rehberi (v0.3 Bölüm 4): kullanıcının konusu → hedef → aday etken maddeler. Liste yalnızca hangi maddenin görüneceğini belirler; kanıt düzeyi ve 'kimde' bilgisi yalnızca kanıt kartından gelir. 'kartlar' alanı özette öncelik verilecek kanıt kartlarıdır (dosya adı, .json olmadan). Eşleme medikal kurul onayından geçmeden yayına girmez: durum taslak iken yalnızca TB_TASLAK_GOSTER=1 olan deneme sunucusunda sunulur. 'ad' alanı kural tablosunda tanımı olmayan maddeler içindir.",
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "hedefler": {
+    "kis_bagisiklik": {
+      "ad": "Kış ve bağışıklık",
+      "esanlamlar": ["kış", "kis", "kışın", "kış geldi", "soğuk algınlığı", "soguk alginligi", "grip", "nezle", "bağışıklık", "bagisiklik", "bağışıklığım", "bağışıklığımı", "okul mevsimi", "sık hastalanıyorum", "mevsim geçişi", "üşütme"],
+      "maddeler": [
+        {"etken_madde": "d3", "kartlar": ["solunum_yolu_enfeksiyonu__tum_yaslar"]},
+        {"etken_madde": "c_vitamini"},
+        {"etken_madde": "cinko"}
+      ]
+    },
+    "kemik_kas": {
+      "ad": "Kemik ve kas",
+      "esanlamlar": ["kemik", "kemiklerim", "kemik erimesi", "osteoporoz", "kas", "kaslarım", "eklem"],
+      "maddeler": [
+        {"etken_madde": "d3", "kartlar": ["kirik__eksikligi_secilmemis_yetiskin"]},
+        {"etken_madde": "kalsiyum"},
+        {"etken_madde": "k2"},
+        {"etken_madde": "magnezyum", "kartlar": ["kas_kramplari__ileri_yas_idiyopatik"]}
+      ]
+    },
+    "gebelik": {
+      "ad": "Gebelik ve gebelik planı",
+      "esanlamlar": ["gebelik", "gebeyim", "gebe", "hamile", "hamileyim", "hamilelik", "bebek planlıyoruz", "bebek istiyoruz", "çocuk planlıyoruz", "emziriyorum", "emzirme", "lohusa"],
+      "evre_belirler": true,
+      "maddeler": [
+        {"etken_madde": "folik_asit"},
+        {"etken_madde": "iyot"},
+        {"etken_madde": "d3", "kartlar": []},
+        {"etken_madde": "demir", "kartlar": []},
+        {"etken_madde": "omega3", "not": "DHA", "kartlar": ["erken_dogum__gebeler"]}
+      ]
+    },
+    "cocuk_ergen": {
+      "ad": "Çocuk ve ergen",
+      "esanlamlar": ["çocuğum", "cocugum", "çocuk", "çocuklar", "oğlum", "kızım", "ergen", "genç", "okul çağı", "bebeğim"],
+      "maddeler": [
+        {"etken_madde": "d3", "kartlar": ["solunum_yolu_enfeksiyonu__tum_yaslar"]},
+        {"etken_madde": "omega3", "kartlar": []},
+        {"etken_madde": "demir", "kartlar": []}
+      ]
+    },
+    "yas_50_ustu": {
+      "ad": "50 yaş ve üstü",
+      "esanlamlar": ["50 yaş", "50 yaşını", "elli yaş", "yaşlandım", "yaşlılık", "ileri yaş", "menopoz", "60 yaş", "65 yaş", "emekli"],
+      "maddeler": [
+        {"etken_madde": "d3", "kartlar": ["kanser_kalp_damar__50_yas_ustu", "kirik__eksikligi_secilmemis_yetiskin"]},
+        {"etken_madde": "b12", "kartlar": ["serum_duzeyi__eksikligi_olan_yetiskin"]},
+        {"etken_madde": "kalsiyum"}
+      ]
+    },
+    "vegan_vejetaryen": {
+      "ad": "Vegan ve vejetaryen beslenme",
+      "esanlamlar": ["vegan", "veganım", "vejetaryen", "vejeteryan", "et yemiyorum", "bitkisel beslenme"],
+      "maddeler": [
+        {"etken_madde": "b12", "kartlar": ["serum_duzeyi__eksikligi_olan_yetiskin"]},
+        {"etken_madde": "d3", "kartlar": []},
+        {"etken_madde": "omega3", "not": "alg kaynaklı", "kartlar": []},
+        {"etken_madde": "demir", "kartlar": []},
+        {"etken_madde": "iyot"},
+        {"etken_madde": "cinko"}
+      ]
+    },
+    "spor": {
+      "ad": "Spor ve egzersiz",
+      "esanlamlar": ["spor", "spor yapıyorum", "egzersiz", "antrenman", "fitness", "koşu", "kas yapmak", "vücut geliştirme", "salon"],
+      "maddeler": [
+        {"etken_madde": "protein", "ad": "Protein"},
+        {"etken_madde": "kreatin", "ad": "Kreatin"},
+        {"etken_madde": "magnezyum", "kartlar": []}
+      ]
+    },
+    "sac_cilt_tirnak": {
+      "ad": "Saç, cilt ve tırnak",
+      "esanlamlar": ["saç", "sac", "saçım", "saçlarım", "cilt", "cildim", "tırnak", "tırnaklarım", "kolajen"],
+      "maddeler": [
+        {"etken_madde": "biotin"},
+        {"etken_madde": "cinko"},
+        {"etken_madde": "kolajen", "ad": "Kolajen"}
+      ]
+    }
+  }
+}

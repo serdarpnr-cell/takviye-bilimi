@@ -1,0 +1,29 @@
+{
+  "id": "c_vitamini__soguk_alginligi_suresi__duzenli_kullanim",
+  "etken_madde": "c_vitamini",
+  "sonuc_alani": "Soğuk algınlığının süresi",
+  "populasyon": "Düzenli C vitamini kullanan yetişkin ve çocuklar; belirtiler başladıktan sonra başlayanlar ayrı",
+  "soru": "C vitamini soğuk algınlığının süresini kısaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "fayda",
+  "gerekce": "Düzenli kullanımda algınlık süresi yetişkinlerde %8 (%3–12), çocuklarda %14 (%7–21) kısaldı. Belirtiler başladıktan sonra başlanan C vitamini çalışmalarında tutarlı bir etki görülmedi.",
+  "halk_ozeti": "Her gün C vitamini alanlarda soğuk algınlığı biraz daha kısa sürdü: yetişkinlerde yaklaşık %8. Hasta olunca başlamak ise tutarlı bir fark göstermedi. Fark küçüktür ve algınlık yine geçirilir.",
+  "mutlak_fark": {
+    "metin": "Bu sonuç bir oran (süre kısalması) olarak verilir; 100 kişide gösterim uygulanamaz. Yetişkinlerde süre %8 kısaldı.",
+    "hesap": "Kaynak: Cochrane 2013 özet metni: yetişkinlerde %8 (%3–12), çocuklarda %14 (%7–21) kısalma. Gün cinsinden fark özetle verilmiyor; kurul için açık soru."
+  },
+  "calisilan_dozlar": "Günde en az 0,2 g; çocuk çalışmalarında günde 1–2 g ile süre %18 kısaldı.",
+  "ne_bilmiyoruz": "Belirtiler başladıktan sonra başlanan C vitamini yalnızca birkaç çalışmada denendi; bu kullanım şekli için kanıt yetersiz.",
+  "kaynaklar": [
+    "cochrane_c_vitamini_soguk_2013",
+    "nih_ods_c_vitamini"
+  ],
+  "kurul_acik_sorulari": [
+    "Süre kısalmasının gün karşılığı",
+    "Kanıt düzeyi 'orta': özette GRADE yok; kurul değerlendirmeli"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

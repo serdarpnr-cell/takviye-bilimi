@@ -48,6 +48,6 @@ def test_dort_kart_hatasiz_cizilir(monkeypatch):
     tahlil = next(r for r in rapor if r["ad"] == "tahlil_ferritin")
     assert set(tahlil["mesajlar"]) <= {"ui/initialize", "ui/notifications/initialized", "ui/notifications/size-changed"}, tahlil
     assert str(kart_onizleme.TAHLIL_DEGERI) not in tahlil["mesaj_icerigi"]
-    assert {"karsilastirma_magnezyum", "parti_demo", "tahlil_ferritin"} <= adlar
+    assert {"kiyas_d_vitamini", "urun_metin_yedegi", "parti_demo", "tahlil_ferritin"} <= adlar
     # Kanıt kartı sayfalamayı modelden gizli araçla kendisi yapar.
     assert "katalog_sayfasi" in next(r for r in rapor if r["ad"] == "kanit_d_vitamini")["tools_call"]

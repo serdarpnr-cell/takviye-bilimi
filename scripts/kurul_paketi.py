@@ -77,6 +77,8 @@ def kartlar() -> str:
                             + _alan("Gerekçe", k["gerekce"]) + _alan("Halk özeti", k["halk_ozeti"])
                             + _alan("Mutlak fark", k["mutlak_fark"]["metin"]) + _alan("Hesap", k["mutlak_fark"]["hesap"])
                             + _alan("Çalışmalarda kullanılan miktar", k["calisilan_dozlar"]) + _alan("Ne bilmiyoruz", k["ne_bilmiyoruz"])
+                            + (_alan("Takviyeye genellenemez", "Evet: reçeteli ilaç formülasyonu çalışmaları") if k.get("takviyeye_genellenemez") else "")
+                            + (_alan("Kurul için açık sorular", "; ".join(k["kurul_acik_sorulari"])) if k.get("kurul_acik_sorulari") else "")
                             + _alan("Durum", k["durum"]) + _alan("Son arama", k["son_arama_tarihi"]) + "</table>"
                             + "<details open><summary>Kaynaklar ve alıntılar</summary>" + _kaynaklar(k["kaynaklar"]) + "</details>"
                             + _karar(k["id"]) + "</div>")

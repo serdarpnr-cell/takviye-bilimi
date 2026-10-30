@@ -15,7 +15,8 @@ Sunucu durumsuzdur (`stateless_http=True`): her istek ayrı işlenir, oturum ya 
 | `kisisel_rutin` | yaş, cinsiyet, gebelik/emzirme, ilaç grubu, kullanılan ürünler ve içerikleri | **Var** | Yanıt üretilir, saklanmaz |
 | `yasam_karnesi` | hareket, uyku, beslenme, balık, tütün, stres cevapları; isteğe bağlı yaş | **Var** (tütün, stres) | Yanıt üretilir, saklanmaz |
 | `sikayet_yolu` | yakınma metni, isteğe bağlı yaş ve cinsiyet | **Var** (yakınma) | Yanıt üretilir, saklanmaz |
-| `urun_karsilastir` | ürün adları, isteğe bağlı yaş | Düşük | Yanıt üretilir, saklanmaz |
+| `karsilastir` | madde adı, form, isteğe bağlı yaş, marka, ilaç grubu | **Var** (ilaç grubu) | Yanıt üretilir, saklanmaz |
+| `takviye_rehberi` | konu metni; isteğe bağlı hedef, madde, yaş, cinsiyet, gebelik/emzirme, ilaç grubu | **Var** (gebelik, ilaç grubu) | Yanıt üretilir, saklanmaz; toplu sayaçta yalnızca yaş aralığı |
 | `parti_analizi` | parti numarası ya da karekod içeriği | Yok | Yanıt üretilir, saklanmaz |
 | `tahlil_goster` | yalnızca tahlil adı (ör. "ferritin") | Yok: **değer alınmaz** | Genel bilgi döner |
 | `katalog_sayfasi` | madde adı, sayfa, isteğe bağlı yaş (kartın kendisi çağırır) | Düşük | Yanıt üretilir, saklanmaz |

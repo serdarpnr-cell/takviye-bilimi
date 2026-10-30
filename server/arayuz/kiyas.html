@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kıyas kartı</title>
+<style>
+__ORTAK_CSS__
+  .cipler { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+  .cip { background: var(--zemin); color: var(--ikincil); border: 1px solid var(--cizgi); padding: 4px 10px;
+         border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .cip[aria-pressed="true"] { background: var(--vurgu); color: var(--vurgu-metin); border-color: var(--vurgu); }
+  .tablo-kutu { overflow-x: auto; border: 1px solid var(--cizgi); border-radius: 10px; }
+  table.kiyas { min-width: 760px; font-size: 13px; }
+  .kiyas th, .kiyas td { padding: 8px; border-bottom: 1px solid var(--cizgi); text-align: left; vertical-align: top; white-space: normal; }
+  .kiyas td:last-child { text-align: left; }
+  .kiyas th { background: var(--yuzey); font-size: 12px; color: var(--ikincil); position: sticky; top: 0; }
+  /* İlk sütun (ürün adı) yatay kaydırmada sabit kalır. */
+  .kiyas th:first-child, .kiyas td:first-child { position: sticky; left: 0; background: var(--zemin); z-index: 1; min-width: 170px; }
+  .kiyas th:first-child { background: var(--yuzey); z-index: 2; }
+  .kiyas a { font-weight: 600; }
+  .efsa { min-width: 120px; }
+  .kartlar { display: none; }
+  .kartlar .kart dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 6px 0 0; font-size: 13px; }
+  .kartlar dt { color: var(--ikincil); }
+  .kartlar dd { margin: 0; }
+  /* 480 px altında satırlar kart listesine dönüşür. */
+  @media (max-width: 480px) { .tablo-kutu { display: none; } .kartlar { display: block; } }
+</style>
+</head>
+<body>
+<main>
+  <section id="icerik"><p class="ikincil">Kıyas kartı yükleniyor…</p></section>
+</main>
+<script>
+__ORTAK_JS__
+const { el, rozet } = TB;
+const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+const FORM_ADI = { damla: "Damla", sprey: "Sprey", tablet: "Tablet", kapsul: "Kapsül", cigneme: "Çiğneme", toz: "Toz",
+                   efervesan: "Efervesan", sase: "Saşe", diger: "Diğer" };
+let secili = null;
+
+// EFSA çubuğu: porsiyondaki miktar ve sınır çizgisi. Oran porsiyon başınadır; öneri değil.
+function efsaCubugu(r) {
+  if (r.efsa_orani == null) return el("span", { className: "ikincil", textContent: r.efsa_siniri ? "Hesaplanamadı" : "Sayısal sınır yok" });
+  const eksen = Math.max(100, r.efsa_orani) * 1.1;
+  return el("div", { className: "efsa" },
+    el("div", { className: "cubuk" },
+      el("div", { className: "cubuk-dolgu" }, el("span", { style: `width:${(r.efsa_orani / eksen) * 100}%` })),
+      el("div", { className: "cubuk-sinir", style: `left:${(100 / eksen) * 100}%` })),
+    el("span", { className: "ikincil", textContent: `%${r.efsa_orani} · sınır ${r.efsa_siniri}` }));
+}
+
+function rozetler(r) {
+  return el("div", { className: "rozetler" },
+    rozet(r.tek_bilesen ? "Yalnızca bu madde" : "Kombine"),
+    rozet(`Yaş: ${r.yas_siniri}`, r.yas_siniri_disinda ? "kotu" : ""),
+    ...r.uyari_bayraklari.map((b) => rozet(b, (r.kirmizi_bayraklar || []).includes(b) ? "kotu" : "uyari")),
+    rozet(r.parti_analizi_var ? "Parti analizi var" : "Parti analizi yok"));
+}
+
+const adBaglantisi = (r) => TB.baglanti(r.urun_sayfasi, r.ad);
+const miktar = (r) => (r.porsiyondaki_miktar != null ? `${sayi(r.porsiyondaki_miktar)} ${r.birim}` : "Hesaplanamadı");
+
+function tablo(satirlar) {
+  const basliklar = ["Ürün", "Form", "Porsiyon", "Porsiyondaki miktar", "BRD", "EFSA sınırına oran", "Ek etken maddeler", "Bayraklar"];
+  return el("div", { className: "tablo-kutu" }, el("table", { className: "kiyas" },
+    el("thead", {}, el("tr", {}, ...basliklar.map((b) => el("th", { scope: "col", textContent: b })))),
+    el("tbody", {}, ...satirlar.map((r) => el("tr", {},
+      el("td", {}, adBaglantisi(r), el("div", { className: "ikincil", textContent: r.seri || r.marka })),
+      el("td", { textContent: FORM_ADI[r.form] || r.form }),
+      el("td", { textContent: r.porsiyon || "—" }),
+      el("td", {}, el("strong", { textContent: miktar(r) }), el("div", { className: "ikincil", textContent: r.etiketteki_miktar })),
+      el("td", { textContent: r.brd || "—" }),
+      el("td", {}, efsaCubugu(r)),
+      el("td", { className: "ikincil", textContent: r.ek_etken_maddeler.length ? r.ek_etken_maddeler.join(", ") : "—" }),
+      el("td", {}, rozetler(r)))))));
+}
+
+function kartListesi(satirlar) {
+  return el("div", { className: "kartlar" }, ...satirlar.map((r) => el("div", { className: "kart" },
+    adBaglantisi(r), rozetler(r),
+    el("dl", {},
+      el("dt", { textContent: "Form" }), el("dd", { textContent: FORM_ADI[r.form] || r.form }),
+      el("dt", { textContent: "Porsiyonda" }), el("dd", { textContent: `${miktar(r)} (${r.porsiyon || "porsiyon"})` }),
+      el("dt", { textContent: "BRD" }), el("dd", { textContent: r.brd || "—" }),
+      el("dt", { textContent: "Ek maddeler" }), el("dd", { textContent: r.ek_etken_maddeler.join(", ") || "—" })),
+    efsaCubugu(r))));
+}
+
+function ciz(sonuc) {
+  const v = sonuc.structuredContent;
+  const b = document.getElementById("icerik");
+  if (!v.satirlar?.length) {
+    TB.doldur(b, el("h1", { textContent: "Ürün kıyası" }), el("p", { textContent: v.kisa_ozet }),
+      v.katalog_kapsami ? el("p", { className: "ikincil", textContent: v.katalog_kapsami }) : null,
+      TB.kaynaklar(v.kaynaklar), el("p", { className: "ikincil", textContent: v.uyari }));
+    return;
+  }
+  const gorunen = secili ? v.satirlar.filter((r) => r.form === secili) : v.satirlar;
+  const cipler = el("div", { className: "cipler" },
+    ...[null, ...v.formlar].map((f) => {
+      const c = el("button", { type: "button", className: "cip", textContent: f ? FORM_ADI[f] || f : "Tümü" });
+      c.setAttribute("aria-pressed", String(secili === f));
+      c.addEventListener("click", () => { secili = f; ciz(sonuc); });
+      return c;
+    }));
+  cipler.setAttribute("role", "group");
+  cipler.setAttribute("aria-label", "Form süzgeci");
+  TB.doldur(b,
+    el("h1", { textContent: `${v.etken_madde_adi}: ürün kıyası` }),
+    el("div", { className: "rozetler" }, rozet(`${v.toplam_urun} ürün`), rozet(`EFSA sınırı: ${v.efsa_sinir_grubu}`),
+      v.kart_durumu === "taslak" ? rozet("Kanıt kartı taslak", "uyari") : null,
+      v.toplam_sayfa > 1 ? rozet(`Sayfa ${v.sayfa}/${v.toplam_sayfa}`) : null),
+    el("p", { textContent: v.kisa_ozet }),
+    el("p", { className: "ikincil", textContent: `${v.siralama_olcutu} ${v.efsa_notu}` }),
+    cipler, tablo(gorunen), kartListesi(gorunen),
+    TB.kaynaklar(v.kaynaklar), el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+TB.baslat("takviye-bilimi-kiyas", { sonuc: ciz });
+</script>
+</body>
+</html>

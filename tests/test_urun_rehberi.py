@@ -21,7 +21,8 @@ def test_tek_urun_karti(uyari_var):
     metinler = [b["metin"] for b in u["urun_sayfasi_beyanlari"]]
     assert "Normal kemiklerin korunmasında katkıda bulunur." in metinler
     # D3 ve K2 içeren üründe adı geçmeyen beyanın hangi maddeye ait olduğu sayfadan anlaşılmaz.
-    assert all(b["ilgili_etken_madde"] == "Sayfada belirtilmemiş" for b in u["urun_sayfasi_beyanlari"])
+    # v0.3 Ek 9: "Sayfada belirtilmemiş" yazılmaz; liste boş kalır.
+    assert all(b["ilgili_etken_madde"] == [] for b in u["urun_sayfasi_beyanlari"])
     assert "yorgunluğu gidereceğini" in u["beyan_aciklamasi"]
     assert u["urun_sayfasi"].startswith("https://www.orzax.com.tr/")
     assert "yayımlanmış parti analizi bulunmuyor" in u["parti_analizi"]

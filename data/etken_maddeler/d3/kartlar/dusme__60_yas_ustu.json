@@ -1,0 +1,29 @@
+{
+  "id": "d3__dusme__60_yas_ustu",
+  "etken_madde": "d3",
+  "sonuc_alani": "Düşme",
+  "populasyon": "60–84 yaş, eksikliğe göre seçilmemiş yetişkinler (D-Health); toplumda yaşayan 65 yaş ve üstü (USPSTF)",
+  "soru": "D vitamini takviyesi yaşlılarda düşmeyi azaltır mı?",
+  "kanit_duzeyi": "guclu",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "USPSTF 2018, D vitamini takviyesinin yaşlılarda düşmeyi önlemede yararı olmadığına dair yeterli kanıt bulur ve bu amaçla kullanılmamasını önerir (D önerisi). D-Health'te geçen ay düşme oranında fark yoktu (OR 1,02; %95 GA 0,95–1,10).",
+  "halk_ozeti": "Toplumda yaşayan, D vitamini eksikliği bilinmeyen yaşlılarda D vitamini takviyesi düşmeleri azaltmadı. Düşmeyi önlemede egzersiz programlarının yararı gösterilmiştir. Normal kilodaki kişilerde düşme riskinde artış sinyali görüldü.",
+  "mutlak_fark": {
+    "metin": "100 kişide kaç kişinin düştüğü özette verilmediği için hesaplanamadı. Göreli olarak fark yok (OR 1,02).",
+    "hesap": "Kaynak: D-Health düşme analizi özet metni (OR 1,02; %95 GA 0,95–1,10). Grup başına düşme oranı tam metin tablosundadır; kurul için açık soru."
+  },
+  "calisilan_dozlar": "D-Health'te ayda bir kez 60.000 IU kolekalsiferol.",
+  "ne_bilmiyoruz": "Beden kitle indeksi 25'in altında olanlarda D vitamini düşme riskini artırdı (OR 1,25; %95 GA 1,09–1,43); bu alt grup bulgusunun anlamı belirsiz. Eksikliği olanlarda sonuç farklı olabilir.",
+  "kaynaklar": [
+    "uspstf_dusme_2018",
+    "d_health_dusme_2021"
+  ],
+  "kurul_acik_sorulari": [
+    "D-Health tam metninden grup başına düşme oranı",
+    "Normal kilodakilerde artış sinyalinin kartta nasıl gösterileceği"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

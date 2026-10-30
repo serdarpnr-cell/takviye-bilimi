@@ -30,7 +30,8 @@ CAGRILAR = {
     },
     "etken_madde_rehberi": {"etken_madde": "D vitamini", "yas": 41},
     "sikayet_yolu": {"sikayet": "Kendimi yorgun hissediyorum", "yas": 41, "cinsiyet": "kadin"},
-    "urun_karsilastir": {"urunler": ["Ocean D3K2 Damla", "Ocean Magnezyum Complex"], "yas": 41},
+    "karsilastir": {"etken_madde": "D vitamini", "yas": 8, "ilac_grubu": ["kan_sulandirici_varfarin"]},
+    "takviye_rehberi": {"konu": "Kış geldi, hangi vitaminleri almam gerek?"},
     "tahlil_goster": {"tahlil": "B12"},
     "yasam_karnesi": {"cevaplar": {"hareket_gun": 2, "uyku_saat": 7, "sebze_meyve_porsiyon": 3,
                                    "balik_haftalik": 1, "sigara": "hayir", "stres": "bazen"}},
@@ -42,7 +43,10 @@ async def _arac_testleri(oturum: ClientSession) -> None:
     # katalog_sayfasi görsel kartın kendi çağırdığı araçtır (modelden gizli).
     assert {t.name for t in araclar} == set(CAGRILAR) | {"katalog_sayfasi"}
     for t in araclar:
-        assert t.annotations.readOnlyHint is True
+        a = t.annotations
+        # v0.3 Bölüm 6: dizin başvurusu için zorunlu ek açıklamalar.
+        assert (a.readOnlyHint, a.destructiveHint, a.idempotentHint, a.openWorldHint) == (True, False, True, False), t.name
+        assert a.title, t.name
     for ad, arg in CAGRILAR.items():
         sonuc = await oturum.call_tool(ad, arg)
         assert not sonuc.isError, (ad, sonuc.content)

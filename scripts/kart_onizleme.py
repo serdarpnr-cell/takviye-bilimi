@@ -65,10 +65,13 @@ def senaryolar() -> list[dict]:
                                                diger_urun_icerikleri=[{"ad": "Multivitamin", "icerikler": [
                                                    {"etken_madde": "D vitamini", "miktar": 2000, "birim": "IU"}]}])),
          "beklenen": [".cubuk-dolgu span", ".cubuk-sinir", ".rozet"]},
-        {"ad": "karsilastirma_magnezyum", "html": arayuz.kart_html("karsilastirma"), "girdi": {},
-         "sonuc": _sonuc(araclar.urun_karsilastir(["Ocean ExtraMag Magnezyum Bisglisinat + P5P", "Ocean Magnezyum Complex",
-                                                    "Ocean ExtraMag Magnezyum Sitrat Saşe"], 40)),
-         "beklenen": ["table thead th", "tbody tr"]},
+        {"ad": "kiyas_d_vitamini", "html": arayuz.kart_html("kiyas"), "girdi": {"etken_madde": "D vitamini", "yas": 8},
+         "sonuc": _sonuc(araclar.karsilastir("D vitamini", yas=8, ilac_grubu=["kan_sulandirici_varfarin"])),
+         "tikla": ".cip:nth-child(2)", "beklenen": ["table.kiyas thead th", "tbody tr", ".cubuk-sinir", ".cip"]},
+        # structuredContent yoksa kart metin içeriğini gösterir (v0.3 Ek 11).
+        {"ad": "urun_metin_yedegi", "html": arayuz.kart_html("urun"), "girdi": {},
+         "sonuc": {"content": [{"type": "text", "text": "Yalnızca metin yanıtı."}], "isError": False},
+         "beklenen": [".metin-yaniti"]},
         {"ad": "parti_demo", "html": arayuz.kart_html("parti"), "girdi": {"karekod_veya_parti_no": "DEMO-0001"},
          "sonuc": _sonuc(araclar.parti_analizi("DEMO-0001")), "beklenen": [".demo", ".cubuk-sinir"]},
         # Tahlil: kullanıcı değerini kartta girer; değer hiçbir mesajla dışarı çıkmamalı (testte denetlenir).

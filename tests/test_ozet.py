@@ -27,6 +27,10 @@ def _cagrilar():
         yield "etken_madde_rehberi", araclar.etken_madde_rehberi(ad, yas=42, cinsiyet="erkek", ilac_grubu=["metformin"])
     for u in veri.urunler():
         yield "urun_rehberi", araclar.urun_rehberi(u["ad"], yas=8)
+    for konu in ["Kış geldi, hangi vitaminler?", "hamileyim", "veganım", "D vitamini kullanmalı mıyım", "bilinmeyen konu"]:
+        yield "takviye_rehberi", araclar.takviye_rehberi(konu)
+    for em in ["D vitamini", "magnezyum", "omega-3", "C vitamini", "multivitamin"]:
+        yield "karsilastir", araclar.karsilastir(em, ilac_grubu=["kan_sulandirici_varfarin"])
 
 
 def test_her_ozet_sinir_icinde_ve_zorunlu_parcalari_tasir(taslak_ayari):
@@ -34,7 +38,10 @@ def test_her_ozet_sinir_icinde_ve_zorunlu_parcalari_tasir(taslak_ayari):
         m = ozet.metin(arac, v)
         assert len(m) <= ozet.OZET_SINIRI, (arac, v["kisa_ozet"][:60], len(m))
         assert m.startswith(v["kisa_ozet"]), arac
-        assert m.rstrip().endswith(v["uyari"]), arac
+        # Kapı araçlarında köprü sorusu uyarıdan sonraki son satırdır (v0.3 Bölüm 1).
+        son = f"Köprü sorusu (kullanıcıya iletin): {v['kopru']['soru']}" if v.get("kopru") else v["uyari"]
+        assert m.rstrip().endswith(son), arac
+        assert v["uyari"] in m, arac
         kaynak_satiri = [s for s in m.splitlines() if re.match(r"- .*https?://", s)]
         assert len(kaynak_satiri) <= ozet.EN_FAZLA_KAYNAK, arac
 
@@ -44,7 +51,7 @@ def test_ozet_sabit_metni_tekrar_etmez():
     v = araclar.etken_madde_rehberi("D vitamini")
     m = ozet.metin("etken_madde_rehberi", v)
     assert veri.VERI_NOTU not in m and veri.GELISTIRICI not in m
-    assert veri.VERI_NOTU in TALIMATLAR and "Orzax tarafından geliştirilmiştir" in TALIMATLAR
+    assert "Orzax tarafından geliştirildi" in TALIMATLAR and "yalnızca Orzax ürünlerini içerir" in TALIMATLAR
 
 
 def test_rehber_ozetinde_en_fazla_bes_urun(monkeypatch):

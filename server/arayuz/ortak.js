@@ -5,6 +5,10 @@ const TB = (() => {
   let sonId = 0;
   const bekleyenler = new Map();
   const dinleyiciler = { sonuc: () => {}, girdi: () => {} };
+  // ?debug: host mesajlarını konsola yazar (v0.3 Ek 11). Kişisel veri içerebilecek değerler kartta kalır; yalnızca konsol.
+  const HATA_AYIKLA = /[?&]debug\b/.test(location.search) || /[?&#]debug\b/.test(location.hash);
+  const kaydet = (...x) => { if (HATA_AYIKLA) console.log("[takviye-bilimi]", ...x); };
+  let sonucGeldi = false;
 
   function istek(method, params) {
     const id = ++sonId;
@@ -20,6 +24,7 @@ const TB = (() => {
   window.addEventListener("message", (olay) => {
     const m = olay.data;
     if (!m || m.jsonrpc !== "2.0") return;
+    kaydet("host →", m.method || `yanıt #${m.id}`, m);
     if (m.id !== undefined && bekleyenler.has(m.id)) {
       const { coz, reddet } = bekleyenler.get(m.id);
       bekleyenler.delete(m.id);
@@ -68,13 +73,42 @@ const TB = (() => {
     return izgara;
   }
 
-  function baslat(ad, { sonuc, girdi } = {}) {
-    if (sonuc) dinleyiciler.sonuc = sonuc;
-    if (girdi) dinleyiciler.girdi = girdi;
-    istek("ui/initialize", { appInfo: { name: ad, version: "0.2.0" }, appCapabilities: {}, protocolVersion: PROTOKOL })
-      .then((s) => { temaUygula(s?.hostContext); bildirim("ui/notifications/initialized", {}); })
-      .catch(() => {});
+  // Görünür hata ya da düz metin kutusu: kartın #icerik bölümüne yazılır.
+  function kutuyaYaz(baslik, metin, hata = false) {
+    const kutu = document.getElementById("icerik") || document.body;
+    doldur(kutu, el("h1", { textContent: baslik }), el("p", { className: hata ? "hata" : "", textContent: metin }),
+      el("p", { className: "ikincil", textContent: "Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın." }));
   }
 
-  return { istek, bildirim, el, doldur, rozet, baglanti, kaynaklar, noktaDizisi, baslat };
+  // structuredContent ya da kisa_ozet yoksa araç sonucunun metin içeriği gösterilir (v0.3 Ek 11).
+  function metinGoster(p) {
+    const metin = (p?.content || []).filter((c) => c.type === "text").map((c) => c.text).join("\n\n");
+    if (metin) {
+      const kutu = document.getElementById("icerik") || document.body;
+      doldur(kutu, el("h1", { textContent: "Takviye Bilimi" }), el("pre", { className: "metin-yaniti", textContent: metin }));
+    } else {
+      kutuyaYaz("Takviye Bilimi", "Araç sonucu boş geldi. Soruyu sohbette yeniden sorabilirsiniz.", true);
+    }
+  }
+
+  function baslat(ad, { sonuc, girdi, bekle = true } = {}) {
+    if (sonuc) dinleyiciler.sonuc = (p) => {
+      sonucGeldi = true;
+      if (p?.isError || !p?.structuredContent?.kisa_ozet) return metinGoster(p);
+      try { sonuc(p); } catch (e) { kaydet("çizim hatası", e); metinGoster(p); }
+    };
+    if (girdi) dinleyiciler.girdi = girdi;
+    istek("ui/initialize", { appInfo: { name: ad, version: "0.3.0" }, appCapabilities: {}, protocolVersion: PROTOKOL })
+      .then((s) => { temaUygula(s?.hostContext); bildirim("ui/notifications/initialized", {}); })
+      .catch((e) => {
+        kaydet("ui/initialize hatası", e);
+        kutuyaYaz("Kart başlatılamadı", "Görsel kart bu sohbet uygulamasıyla bağlantı kuramadı. Yanıtın metin hâli sohbette yer alıyor.", true);
+      });
+    // 5 sn içinde sonuç gelmezse görünür hata.
+    if (bekle) setTimeout(() => {
+      if (!sonucGeldi) kutuyaYaz("Sonuç gelmedi", "Araç sonucu 5 saniye içinde ulaşmadı. Yanıtın metin hâli sohbette yer alıyor; kartı yenilemek için soruyu yeniden sorabilirsiniz.", true);
+    }, 5000);
+  }
+
+  return { istek, bildirim, el, doldur, rozet, baglanti, kaynaklar, noktaDizisi, baslat, metinGoster };
 })();
