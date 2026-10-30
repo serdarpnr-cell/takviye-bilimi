@@ -1,0 +1,60 @@
+{
+  "id": "b12",
+  "ad": "B12 vitamini",
+  "katalog_kimlikleri": ["b12"],
+  "beyan_anahtarlari": ["b12 vitamini", "b12"],
+  "kisa_ozet": "B12 vitamini kan hücrelerinin oluşumu ve sinir sisteminin normal çalışması için gereklidir. Eksikliği olanlarda ağızdan yüksek miktarda B12, kan düzeyini iğneye yakın düzeltti; kanıt sınırlı. Eksikliği olmayanlarda B12 takviyesi hafıza ve ruh hali üzerinde fark yaratmadı; yorgunluk için yeterli çalışma yok.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Uzun süre metformin kullananlar",
+      "kosul": {"ilac_grubu": ["metformin"]},
+      "gerekce": "DPP/DPPOS çalışmasında uzun süreli metformin kullanımı B12 eksikliğiyle ilişkiliydi; yazarlar metformin kullananlarda düzenli B12 ölçümünün düşünülmesini öneriyor.",
+      "kaynaklar": ["dppos_metformin_b12_2016"]
+    },
+    {
+      "grup": "Uzun süre mide asidini baskılayan ilaç kullananlar",
+      "kosul": {"ilac_grubu": ["mide_asidi_baskilayici"]},
+      "gerekce": "Gözlemsel bir çalışmada iki yıl ya da daha uzun mide asidi baskılayıcı kullanımı, B12 eksikliği riskinin artmasıyla ilişkiliydi.",
+      "kaynaklar": ["lam_mide_asidi_b12_2013"]
+    },
+    {
+      "grup": "B12 eksikliği tanısı konmuş kişiler",
+      "gerekce": "Küçük çalışmalarda ağızdan yüksek miktarda B12 kan düzeyini iğneye yakın düzeltti (düşük kalite kanıt); yol ve miktar hekimle belirlenir.",
+      "kaynaklar": ["cochrane_b12_agizdan_igne_2018", "bsh_b12_folat_2014"]
+    },
+    {
+      "grup": "Belirgin eksikliği olmayan yetişkinler",
+      "kosul": {"yas_min": 18},
+      "gerekce": "B12 takviyesi bilişsel işlev ve depresif belirtilerde fark yaratmadı; yorgunluk için yeterli çalışma yok.",
+      "kaynaklar": ["markun_b12_2021", "cochrane_bilis_vitamin_2018"]
+    }
+  ],
+  "formlar": {
+    "agizdan_ve_igne": "Eksikliği olanlarda yapılan küçük çalışmalarda ağızdan günde 1000 µg B12, kan düzeyini iğneyle verilen B12'ye benzer biçimde düzeltti ve daha ucuzdu; belirtilere etkisi ölçülmedi. Hangi yolun uygun olduğuna hekim karar verir.",
+    "metil_ve_siyano": "Takviyelerdeki B12 formları (metilkobalamin, siyanokobalamin ve diğerleri) vücutta aynı çekirdek moleküle dönüşür; hücre içindeki aktif formların oranı alınan forma göre değişmez. Bu aramada metil ve siyano formlarını klinik sonuçla karşılaştıran randomize çalışma bulunmadı.",
+    "kaynaklar": ["cochrane_b12_agizdan_igne_2018", "b12_formlar_2017"]
+  },
+  "tahlil_notu": {
+    "metin": "B12 eksikliğini tek başına kesin gösteren bir test yok; sonuç belirtilerle birlikte değerlendirilir ve laboratuvarın kendi referans aralığına göre yorumlanır.",
+    "kaynaklar": ["bsh_b12_folat_2014"]
+  },
+  "dikkat_kurallari": [
+    {
+      "kosul": {"ilac_grubu": ["metformin"]},
+      "mesaj": "Uzun süre metformin kullananlarda B12 eksikliği daha sık görülür; B12 düzeyinin ölçülmesi gerekip gerekmediğini hekiminize sorun.",
+      "kaynaklar": ["dppos_metformin_b12_2016"]
+    },
+    {
+      "kosul": {"ilac_grubu": ["mide_asidi_baskilayici"]},
+      "mesaj": "Uzun süre mide asidini baskılayan ilaç kullanımı B12 eksikliği riskinin artmasıyla ilişkilidir; B12 düzeyinin ölçülmesi gerekip gerekmediğini hekiminize sorun.",
+      "kaynaklar": ["lam_mide_asidi_b12_2013"]
+    }
+  ],
+  "hekime_sorulacaklar": ["B12 düzeyimin ölçülmesi gerekir mi?", "Kullandığım ilaçlar B12 düzeyimi etkiler mi?", "Eksiklik varsa ağızdan mı iğneyle mi kullanmam uygun olur?"],
+  "uretici_icerikleri": [],
+  "kaynaklar": ["nih_ods_b12", "bsh_b12_folat_2014", "cochrane_b12_agizdan_igne_2018", "markun_b12_2021"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

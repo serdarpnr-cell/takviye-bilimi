@@ -1,0 +1,22 @@
+{
+  "id": "omega3__erken_dogum__gebeler",
+  "etken_madde": "omega3",
+  "sonuc_alani": "Erken doğum",
+  "populasyon": "Gebe kadınlar",
+  "soru": "Gebelikte omega-3 kullanımı erken doğumu azaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "belirsiz",
+  "gerekce": "Cochrane derlemesi (2018; 70 çalışma, 19.927 kadın) 37. ve 34. haftadan önce doğumda azalma buldu (yüksek kalite kanıt). Sonraki büyük ORIP çalışması (5517 kadın, günde 900 mg) 34. haftadan önce doğumda fark bulmadı. ADORE çalışmasında yüksek miktarın etkisi yalnızca başlangıçta DHA düzeyi düşük olanlarda görüldü.",
+  "halk_ozeti": "Eski çalışmaları birleştiren bir derlemede gebelikte omega-3 kullananlarda erken doğum biraz daha azdı: 100 gebeden yaklaşık 13 yerine 12'si. Ancak sonra yapılan büyük bir çalışma fark bulmadı. Fayda yalnızca omega-3 düzeyi düşük gebelerde olabilir. Gebelikte takviye kullanımını hekiminizle konuşun.",
+  "mutlak_fark": {
+    "metin": "Cochrane: 37. haftadan önce doğum 100 gebede 13'e karşı 12. ORIP: 34. haftadan önce doğum 100 gebede yaklaşık 2, iki grupta aynı.",
+    "hesap": "Cochrane: kontrol %13,4, omega-3 %11,9 → 100 kişide yaklaşık 13 ve 12. ORIP: 61/2734 = %2,2 (omega-3), 55/2752 = %2,0 (kontrol) → ikisi de 100 kişide yaklaşık 2. 42 haftayı aşan gebelik (Cochrane): %1,6 → %2,6, yani 100 gebede yaklaşık 2 → 3."
+  },
+  "calisilan_dozlar": "Cochrane'de takviye ya da omega-3'ten zengin besin, miktarlar farklı; ORIP'te günde 900 mg; ADORE'de günde 1000 mg ile 200 mg DHA karşılaştırıldı.",
+  "ne_bilmiyoruz": "Hangi gebelerin yararlandığı belirsiz; başlangıç omega-3 düzeyini ölçmek rutin değildir. Cochrane'de gebeliğin 42 haftayı aşması omega-3 alanlarda 100 gebede yaklaşık 2'den 3'e çıktı (orta kalite kanıt). ADORE kapsülleri bir üretici tarafından sağlandı.",
+  "kaynaklar": ["cochrane_omega3_gebelik_2018", "orip_omega3_gebelik_2019", "adore_dha_gebelik_2021"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

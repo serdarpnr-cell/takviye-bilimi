@@ -851,7 +851,7 @@ def etken_madde_rehberi(
 
     # TB-18: profil verildiyse kullanıcının grubu ilk satıra çıkar. Gruplar listedeki sırayla denenir (ör. gebelik
     # yetişkin grubundan önce); koşulu olmayan grup (ör. prediyabet) profilden çıkarılamaz, otomatik seçilmez.
-    profil_verildi = any(profil[a] for a in ("yas", "cinsiyet", "evre"))
+    profil_verildi = any(profil[a] for a in ("yas", "cinsiyet", "evre", "ilac_grubu"))
     senin_grubun = None
     if m and profil_verildi:
         g = next((g for g in m.get("kimde_kanit_var", []) if "kosul" in g and _kosul_saglanir(g["kosul"], profil)), None)
@@ -937,7 +937,7 @@ def etken_madde_rehberi(
     if m is None:
         return _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorular, len(eslesen), kaynak_idleri)
     kaynak_idleri += m.get("kaynaklar", []) + m.get("uretici_icerikleri", [])
-    for alan in ("besinle_karsilama", "tahlil_notu"):
+    for alan in ("besinle_karsilama", "tahlil_notu", "formlar"):
         kaynak_idleri += m.get(alan, {}).get("kaynaklar", [])
     for g in m.get("kimde_kanit_var", []):
         kaynak_idleri += g["kaynaklar"]
@@ -976,6 +976,8 @@ def etken_madde_rehberi(
         },
         "besinle_karsilama": m.get("besinle_karsilama", {}).get("metin"),
         **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m.get("tahlil_notu") else {}),
+        # TB-21: form karşılaştırması (ör. B12'de ağızdan–iğne, metil–siyano).
+        **({"formlar": {k: v for k, v in m["formlar"].items() if k != "kaynaklar"}} if m.get("formlar") else {}),
         "efsa_ust_sinir": efsa,
         "etkilesimler": etkilesimler,
         "etkilesim_notu": (

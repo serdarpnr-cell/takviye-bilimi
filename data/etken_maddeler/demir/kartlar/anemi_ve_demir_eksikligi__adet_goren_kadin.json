@@ -1,0 +1,22 @@
+{
+  "id": "demir__anemi_ve_demir_eksikligi__adet_goren_kadin",
+  "etken_madde": "demir",
+  "sonuc_alani": "Anemi ve demir eksikliği",
+  "populasyon": "Adet gören, gebe olmayan kadınlar",
+  "soru": "Günlük demir takviyesi adet gören kadınlarda anemi ve demir eksikliği sıklığını azaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "fayda",
+  "gerekce": "Cochrane derlemesi (2016) 67 çalışmayı (8506 kadın) inceledi: demir alanlarda çalışma sonunda anemi ve demir eksikliği daha az görüldü (ikisi de orta kalite kanıt). Çalışmaların çoğunda kalite bilgisi yetersizdi.",
+  "halk_ozeti": "Adet gören kadınlarda her gün demir kullanımı, çalışma sonunda kansızlık (anemi) ve demir eksikliği görülme sıklığını azalttı. Bunun karşılığında mide-bağırsak yakınmaları daha sık görüldü. Demire eksiklik kan tahliliyle doğrulanmadan başlanmamalı; ihtiyaç ve süre hekimle belirlenir.",
+  "mutlak_fark": {
+    "metin": "Özet başlangıçtaki anemi oranını vermediği için '100 kişiden kaç' hesaplanamadı. Göreli olarak anemi riski demir alanlarda yaklaşık %61 daha düşüktü.",
+    "hesap": "RR 0,39 → 1 − 0,39 = 0,61 (%61 göreli azalma); başlangıç oranı özette yok."
+  },
+  "calisilan_dozlar": "Haftada en az beş gün ağızdan demir (bazı çalışmalarda folik asit ya da C vitaminiyle); miktarlar çalışmalar arasında farklıydı.",
+  "ne_bilmiyoruz": "Demirin düşünme becerileri üzerindeki etkisi belirsiz. Gebe kadınlar bu derlemeye dahil değildi. Hangi başlangıç düzeyinde ne kadar fayda olduğu özette yok.",
+  "kaynaklar": ["cochrane_demir_kadin_2016", "bsg_demir_eksikligi_2021"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

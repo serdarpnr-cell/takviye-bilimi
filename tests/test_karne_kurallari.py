@@ -95,3 +95,12 @@ def test_dil_takviye_almaya_yonlendirmez(kartlar_var):
     for kalip in [r"takviye al", r"\balmal[ıi]s[ıi]n[ıi]z\b", r"\bal[ıi]n[ıi]z?\b", r"\bkullan[ıi]n[ıi]z?\b", r"başlay[ıi]n"]:
         assert not re.search(kalip, metin), kalip
     assert all("inceleyebilirsiniz" in b["mesaj"] for b in y["takviye_baglantilari"])
+
+
+def test_omega3_karti_varken_kopru_kurulur(monkeypatch):
+    # TB-12: omega-3 kartı (taslak) sunulabilirken az balık yiyene köprü kurulur.
+    monkeypatch.setenv("TB_TASLAK_GOSTER", "1")
+    y = yasam_karnesi({**IYI, "balik_haftalik": "hic"})
+    assert "Omega-3 (EPA + DHA)" in _idler(y, "takviye_baglantilari")
+    monkeypatch.delenv("TB_TASLAK_GOSTER")
+    assert yasam_karnesi({**IYI, "balik_haftalik": "hic"})["takviye_baglantilari"] == []

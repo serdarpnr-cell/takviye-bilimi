@@ -1,0 +1,22 @@
+{
+  "id": "demir__sindirim_yan_etkileri__agizdan_demir_kullanan_yetiskin",
+  "etken_madde": "demir",
+  "sonuc_alani": "Mide-bağırsak yan etkileri",
+  "populasyon": "Ağızdan demir kullanan yetişkinler",
+  "soru": "Ağızdan demir kullanımı mide-bağırsak yakınmalarını artırır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "zarar",
+  "gerekce": "Kırk üç çalışmalık (6831 kişi) meta-analizde demir sülfat, plaseboya göre mide-bağırsak yan etkisi olasılığını artırdı (OR 2,32); çalışmalar arasında farklılık orta düzeydeydi. Cochrane derlemesinde (2016) kabızlık artışı yüksek kalite kanıtla görüldü.",
+  "halk_ozeti": "Ağızdan demir kullananlarda kabızlık ve ishal gibi mide-bağırsak yakınmaları, demir kullanmayanlara göre daha sık görüldü. Bu yakınmalar demirin bırakılmasına yol açabilir. Yakınma olursa demiri kendi başınıza değiştirmek ya da artırmak yerine hekiminize danışın.",
+  "mutlak_fark": {
+    "metin": "Hesaplanamadı: özetler olay oranını değil göreli riski veriyor (OR 2,32; kabızlıkta RR 2,07).",
+    "hesap": "OR 2,32 (Tolkien 2015); RR 2,07 kabızlık (Cochrane 2016); başlangıç oranları özette yok."
+  },
+  "calisilan_dozlar": "Çoğunlukla demir sülfat; meta-analizde miktar ile yan etki arasında ilişki bulunmadı.",
+  "ne_bilmiyoruz": "Demir sülfat dışındaki formlarda (ör. bisglisinat) yan etki sıklığının farklı olup olmadığı bu kartta değerlendirilmedi.",
+  "kaynaklar": ["tolkien_demir_sindirim_2015", "cochrane_demir_kadin_2016"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

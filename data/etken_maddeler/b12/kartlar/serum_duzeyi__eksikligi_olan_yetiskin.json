@@ -1,0 +1,22 @@
+{
+  "id": "b12__serum_duzeyi__eksikligi_olan_yetiskin",
+  "etken_madde": "b12",
+  "sonuc_alani": "Kan B12 düzeyinin düzelmesi (ağızdan ve iğne karşılaştırması)",
+  "populasyon": "B12 eksikliği tanısı konmuş yetişkinler",
+  "soru": "Eksikliği olan kişide ağızdan alınan B12, iğneyle verilen B12 kadar kan düzeyini düzeltir mi?",
+  "kanit_duzeyi": "zayif",
+  "sonuc_yonu": "fayda",
+  "gerekce": "Cochrane derlemesi (2018) üç randomize çalışmayı (153 kişi) inceledi: günde 1000 µg ağızdan B12, kan düzeyini iğneyle verilen B12'ye benzer biçimde düzeltti; kanıt kalitesi düşük. BSH kılavuzu (2014), uygun miktar ve düzenli kullanımla ağızdan kullanımın uygun olabileceğini belirtir.",
+  "halk_ozeti": "B12 eksikliği olan kişilerde yapılan az sayıda küçük çalışmada, ağızdan yüksek miktarda alınan B12 kandaki düzeyi iğne kadar düzeltti. Çalışmalar az ve küçük olduğu için emin değiliz. Belirtilerin düzelip düzelmediği ölçülmedi. Ağızdan mı iğneyle mi kullanılacağına hekim karar verir.",
+  "mutlak_fark": {
+    "metin": "Hesaplanamadı: çalışmalar kişi sayısı değil, ortalama kan B12 düzeyini karşılaştırdı.",
+    "hesap": "Özetler olay sayısı vermiyor; '100 kişiden kaç' biçiminde fark hesaplanamaz."
+  },
+  "calisilan_dozlar": "Ağızdan günde 1000 µg; iğne grubunda uygulama sıklığı çalışmalar arasında farklıydı.",
+  "ne_bilmiyoruz": "Hiçbir çalışma eksiklik belirtilerinin (ör. sinir sistemi belirtileri) düzelip düzelmediğini ölçmedi. Çalışmalar küçük ve kısa süreliydi.",
+  "kaynaklar": ["cochrane_b12_agizdan_igne_2018", "bsh_b12_folat_2014"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "demir__yorgunluk__anemisi_olmayan_demir_eksikligi",
+  "etken_madde": "demir",
+  "sonuc_alani": "Yorgunluk",
+  "populasyon": "Anemisi olmayan ama tahlilde demir eksikliği saptanmış yetişkinler",
+  "soru": "Anemisi olmayan demir eksikliğinde demir takviyesi yorgunluğu azaltır mı?",
+  "kanit_duzeyi": "zayif",
+  "sonuc_yonu": "fayda",
+  "gerekce": "Bir sistematik derleme (2018) 4 çalışmada (714 kişi) kişilerin bildirdiği yorgunlukta azalma buldu; ölçülen fiziksel kapasitede fark yoktu. Cochrane derlemesi (2016) adet gören kadınlarda yorgunluğun azaldığını belirtiyor.",
+  "halk_ozeti": "Tahlilde demir eksikliği olan ama anemisi olmayan yetişkinlerde demir kullananlar, kendilerini biraz daha az yorgun hissettiklerini bildirdi. Ölçülen fiziksel kapasitede fark yoktu. Çalışmalar az olduğu için emin değiliz. Bu sonuç, demir eksikliği olmayan kişilerdeki yorgunluk için geçerli değildir.",
+  "mutlak_fark": {
+    "metin": "Hesaplanamadı: yorgunluk ölçek puanı olarak karşılaştırıldı (standart ortalama fark -0,38).",
+    "hesap": "SMD -0,38 (4 çalışma, 714 kişi); kişi sayısı üzerinden olay oranı bildirilmedi."
+  },
+  "calisilan_dozlar": "Ağızdan, kas içi ya da damar içi demir; miktar ve süre çalışmalar arasında farklıydı.",
+  "ne_bilmiyoruz": "Yorgunluk kişinin kendi bildirimine dayanıyor ve yalnızca birkaç çalışmada ölçüldü. Etkinin hangi ferritin düzeyinden itibaren ortaya çıktığını bilmiyoruz.",
+  "kaynaklar": ["houston_demir_yorgunluk_2018", "cochrane_demir_kadin_2016"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

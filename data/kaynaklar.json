@@ -345,7 +345,8 @@
       "alintilar": [
         "Approximately a third of men and postmenopausal women presenting with IDA have an underlying pathological abnormality, most commonly in the GI tract.",
         "We recommend that iron deficiency should be confirmed by iron studies prior to investigation.",
-        "IDA can be caused by a range of GI pathologies including cancer"
+        "IDA can be caused by a range of GI pathologies including cancer",
+        "Serum ferritin is the single most useful marker of IDA"
       ],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
@@ -530,6 +531,247 @@
       "alintilar": ["What are probiotics and what do they do?"],
       "dogrulandi": true,
       "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_b12_agizdan_igne_2018": {
+      "tur": "meta_analiz",
+      "pmid": "29543316",
+      "baslik": "Oral vitamin B 12 versus intramuscular vitamin B 12 for vitamin B 12 deficiency",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2018,
+      "alintilar": [
+        "Three RCTs met our inclusion criteria. The trials randomised 153 participants",
+        "In two trials employing 1000 μg/day oral vitamin B 12 , there was no clinically relevant difference in vitamin B 12 levels when compared with IM vitamin B 12 .",
+        "Low quality evidence shows oral and IM vitamin B 12 having similar effects in terms of normalising serum vitamin B 12 levels, but oral treatment costs less.",
+        "No trial reported on clinical signs and symptoms of vitamin B 12 deficiency"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "bsh_b12_folat_2014": {
+      "tur": "kilavuz",
+      "pmid": "24942828",
+      "baslik": "Guidelines for the diagnosis and treatment of cobalamin and folate disorders",
+      "kurum_veya_dergi": "Br J Haematol",
+      "yil": 2014,
+      "alintilar": [
+        "Oral therapy may be suitable and acceptable provided appropriate doses are taken and compliance is not an issue.",
+        "local reference ranges should be established",
+        "there is no 'gold standard' test to define deficiency"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "markun_b12_2021": {
+      "tur": "meta_analiz",
+      "pmid": "33809274",
+      "baslik": "Effects of Vitamin B12 Supplementation on Cognitive Function, Depressive Symptoms, and Fatigue: A Systematic Review, Meta-Analysis, and Meta-Regression",
+      "kurum_veya_dergi": "Nutrients",
+      "yil": 2021,
+      "alintilar": [
+        "A total of 16 RCTs with 6276 participants were included.",
+        "only one study reported effects on idiopathic fatigue, and therefore, no analysis was possible.",
+        "Vitamin B12 supplementation is likely ineffective for improving cognitive function and depressive symptoms in patients without advanced neurological disorders."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_bilis_vitamin_2018": {
+      "tur": "meta_analiz",
+      "pmid": "30556597",
+      "baslik": "Vitamin and mineral supplementation for maintaining cognitive function in cognitively healthy people in mid and late life",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2018,
+      "alintilar": [
+        "We included 14 studies with 27,882 participants which compared folic acid, vitamin B12, vitamin B6, or a combination of these to placebo.",
+        "probably has little or no effect on global cognitive function at any time point up to 5 years"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "dppos_metformin_b12_2016": {
+      "tur": "rct",
+      "pmid": "26900641",
+      "baslik": "Long-term Metformin Use and Vitamin B12 Deficiency in the Diabetes Prevention Program Outcomes Study",
+      "kurum_veya_dergi": "J Clin Endocrinol Metab",
+      "yil": 2016,
+      "alintilar": [
+        "Low B12 (≤ 203 pg/mL) occurred more often in MET than PLA at 5 years (4.3 vs 2.3%; P = .02) but not at 13 years (7.4 vs 5.4%; P = .12).",
+        "Routine testing of vitamin B12 levels in metformin-treated patients should be considered."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "lam_mide_asidi_b12_2013": {
+      "tur": "gozlemsel",
+      "pmid": "24327038",
+      "baslik": "Proton pump inhibitor and histamine 2 receptor antagonist use and vitamin B12 deficiency",
+      "kurum_veya_dergi": "JAMA",
+      "yil": 2013,
+      "alintilar": [
+        "Both a 2 or more years' supply of PPIs (OR, 1.65 [95% CI, 1.58-1.73]) and a 2 or more years' supply of H2RAs (OR, 1.25 [95% CI, 1.17-1.34]) were associated with an increased risk for vitamin B12 deficiency."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "b12_formlar_2017": {
+      "tur": "derleme",
+      "pmid": "28223907",
+      "baslik": "Comparative Bioavailability and Utilization of Particular Forms of B 12 Supplements With Potential to Mitigate B 12 -related Genetic Polymorphisms",
+      "kurum_veya_dergi": "Integr Med (Encinitas)",
+      "yil": 2017,
+      "alintilar": [
+        "all supplemental or food-derived B 12 forms are reduced to a core cobalamin molecule, which converts to the intracellular active forms: MeCbl and AdCbl, in a ratio not influenced by the form of B 12 ingested."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_demir_kadin_2016": {
+      "tur": "meta_analiz",
+      "pmid": "27087396",
+      "baslik": "Daily iron supplementation for improving anaemia, iron status and health in menstruating women",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2016,
+      "alintilar": [
+        "We included 67 trials (from 76 reports), recruiting 8506 women",
+        "Women receiving iron were significantly less likely to be anaemic at the end of intervention compared to women receiving control (risk ratio (RR) 0.39 (95% confidence interval (CI) 0.25 to 0.60, 10 studies, 3273 women, moderate quality evidence).",
+        "Women receiving iron had a reduced risk of iron deficiency compared to women receiving control (RR 0.62, 95% CI 0.50 to 0.76, 7 studies, 1088 women, moderate quality evidence).",
+        "Five studies recruiting 521 women identified an increased prevalence of gastrointestinal side effects in women taking iron (RR 1.99, 95% CI 1.26 to 3.12, low quality evidence).",
+        "eight studies recruiting 1036 women identified an increased prevalence of hard stools/constipation (RR 2.07, 95% CI 1.35 to 3.17, high quality evidence)",
+        "Iron supplementation improved maximal and submaximal exercise performance, and appears to reduce symptomatic fatigue."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "houston_demir_yorgunluk_2018": {
+      "tur": "meta_analiz",
+      "pmid": "29626044",
+      "baslik": "Efficacy of iron supplementation on fatigue and physical capacity in non-anaemic iron-deficient adults: a systematic review of randomised controlled trials",
+      "kurum_veya_dergi": "BMJ Open",
+      "yil": 2018,
+      "alintilar": [
+        "iron supplementation was associated with reduced self-reported fatigue (standardised mean difference (SMD) -0.38; 95% CI -0.52 to -0.23; I 2 0%; 4 trials; 714 participants)",
+        "In IDNA adults, iron supplementation is associated with reduced subjective measures of fatigue but not with objective improvements in physical capacity."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "tolkien_demir_sindirim_2015": {
+      "tur": "meta_analiz",
+      "pmid": "25700159",
+      "baslik": "Ferrous sulfate supplementation causes significant gastrointestinal side-effects in adults: a systematic review and meta-analysis",
+      "kurum_veya_dergi": "PLoS One",
+      "yil": 2015,
+      "alintilar": [
+        "Forty three trials comprising 6831 adult participants were included.",
+        "Ferrous sulfate supplementation significantly increased risk of GI side-effects versus placebo with an odds ratio (OR) of 2.32 [95% CI 1.74-3.08, p<0.0001, I2 = 53.6%]",
+        "Meta-regression did not provide significant evidence of an association between the study OR and the iron dose."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_magnezyum_kramp_2020": {
+      "tur": "meta_analiz",
+      "pmid": "32956536",
+      "baslik": "Magnesium for skeletal muscle cramps",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2020,
+      "alintilar": [
+        "largely in older adults (mean age 61.6 to 69.3 years)",
+        "the difference in the number of cramps per week at four weeks (MD -0.18 cramps/week, 95% CI -0.84 to 0.49; 5 studies, 307 participants; moderate-certainty evidence)",
+        "It is unlikely that magnesium supplementation provides clinically meaningful cramp prophylaxis to older adults experiencing skeletal muscle cramps.",
+        "for those experiencing pregnancy-associated rest cramps the literature is conflicting and further research in this population is needed.",
+        "Overall, oral magnesium was associated with mostly gastrointestinal adverse events (e.g. diarrhoea), experienced by 11% (10% in control) to 37% (14% in control) of participants."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_omega3_kvh_2020": {
+      "tur": "meta_analiz",
+      "pmid": "32114706",
+      "baslik": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2020,
+      "alintilar": [
+        "We included 86 RCTs (162,796 participants)",
+        "cardiovascular events (RR 0.96, 95% CI 0.92 to 1.01; 140,482 participants; 17,619 people experienced events in 43 RCTs; high-certainty evidence)",
+        "all-cause mortality (risk ratio (RR) 0.97, 95% confidence interval (CI) 0.93 to 1.01; 143,693 participants; 11,297 deaths in 45 RCTs; high-certainty evidence)",
+        "coronary heart disease events (NNTB 167, RR 0.91, 95% CI 0.85 to 0.97; 134,116 participants; 8791 people experienced coronary heart disease events in 32 RCTs, low-certainty evidence)",
+        "LCn3 doses ranged from 0.5 g a day to more than 5 g a day"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "vital_omega3_2019": {
+      "tur": "rct",
+      "pmid": "30415637",
+      "baslik": "Marine n-3 Fatty Acids and Prevention of Cardiovascular Disease and Cancer",
+      "kurum_veya_dergi": "N Engl J Med",
+      "yil": 2019,
+      "alintilar": [
+        "marine n-3 fatty acids (at a dose of 1 g per day)",
+        "A total of 25,871 participants",
+        "During a median follow-up of 5.3 years, a major cardiovascular event occurred in 386 participants in the n-3 group and in 419 in the placebo group (hazard ratio, 0.92; 95% confidence interval [CI], 0.80 to 1.06; P=0.24).",
+        "No excess risks of bleeding or other serious adverse events were observed."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_omega3_gebelik_2018": {
+      "tur": "meta_analiz",
+      "pmid": "30480773",
+      "baslik": "Omega-3 fatty acid addition during pregnancy",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2018,
+      "alintilar": [
+        "we included 70 RCTs (involving 19,927 women",
+        "Preterm birth < 37 weeks (13.4% versus 11.9%; risk ratio (RR) 0.89, 95% confidence interval (CI) 0.81 to 0.97; 26 RCTs, 10,304 participants; high-quality evidence)",
+        "early preterm birth < 34 weeks (4.6% versus 2.7%; RR 0.58, 95% CI 0.44 to 0.77; 9 RCTs, 5204 participants; high-quality evidence)",
+        "Prolonged gestation > 42 weeks was probably increased from 1.6% to 2.6% in women who received omega-3 LCPUFA compared with no omega-3"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "orip_omega3_gebelik_2019": {
+      "tur": "rct",
+      "pmid": "31509674",
+      "baslik": "A Randomized Trial of Prenatal n-3 Fatty Acid Supplementation and Preterm Delivery",
+      "kurum_veya_dergi": "N Engl J Med",
+      "yil": 2019,
+      "alintilar": [
+        "A total of 5544 pregnancies in 5517 women were randomly assigned at six centers in Australia",
+        "fish-oil capsules that contained 900 mg of n-3 long-chain polyunsaturated fatty acids",
+        "Early preterm delivery occurred in the case of 61 of 2734 pregnancies (2.2%) in the n-3 group and 55 of 2752 pregnancies (2.0%) in the control group; the between-group difference was not significant (adjusted relative risk, 1.13; 95% confidence interval [CI], 0.79 to 1.63; P = 0.50)."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "adore_dha_gebelik_2021": {
+      "tur": "rct",
+      "pmid": "34308309",
+      "baslik": "Higher dose docosahexaenoic acid supplementation during pregnancy and early preterm birth: A randomised, double-blind, adaptive-design superiority trial",
+      "kurum_veya_dergi": "EClinicalMedicine",
+      "yil": 2021,
+      "alintilar": [
+        "We hypothesized that 1000 mg DHA per day would be superior to 200 mg, the amount in most prenatal supplements.",
+        "especially if participants had low DHA status at enrolment [2.0% (5/249) vs 4.1%, (9/219), pp=0.93]",
+        "Participants with high enrolment DHA status did not realize a dose effect"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "magnezyum_gece_krampi_2017": {
+      "tur": "rct",
+      "pmid": "28241153",
+      "baslik": "Effect of Magnesium Oxide Supplementation on Nocturnal Leg Cramps: A Randomized Clinical Trial",
+      "kurum_veya_dergi": "JAMA Intern Med",
+      "yil": 2017,
+      "alintilar": [
+        "Of the 94 individuals (39% male; mean [SD] age, 64.9 [11.1] years) randomly assigned to magnesium oxide (48) or placebo (46)",
+        "a difference between groups of 0.38 (0.48) NLC per week (P = .67 in an intention-to-treat analysis)",
+        "Oral magnesium oxide was not superior to placebo for older adults experiencing NLC."
+      ],
+      "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
     }
   }

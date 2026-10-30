@@ -1,0 +1,19 @@
+{
+  "id": "b12__bilissel_islev_ve_yorgunluk__eksikligi_olmayan_yetiskin",
+  "etken_madde": "b12",
+  "sonuc_alani": "Bilişsel işlev, depresif belirtiler ve yorgunluk",
+  "populasyon": "Belirgin B12 eksikliği ya da ileri nörolojik hastalığı olmayan yetişkinler",
+  "soru": "Eksikliği olmayan kişide B12 takviyesi hafızayı, ruh halini ya da yorgunluğu etkiler mi?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "16 randomize çalışmayı (6276 kişi) birleştiren meta-analiz B12'nin bilişsel işlev ve depresif belirtiler üzerinde etkisini bulmadı. B vitaminlerini inceleyen 14 çalışmalık (27.882 kişi) Cochrane derlemesi de genel bilişsel işlevde az ya da hiç etki buldu. Yorgunluk için yalnızca bir çalışma vardı; analiz yapılamadı.",
+  "halk_ozeti": "Belirgin eksikliği olmayan yetişkinlerde B12 takviyesi, hafıza ve düşünme becerileri ile depresif belirtilerde fark yaratmadı. Yorgunluk için yeterli çalışma yok; bu yüzden eksiklik yokken B12'nin yorgunluğa iyi geldiğini söyleyemeyiz. Süren yorgunluğun nedeni hekimle araştırılmalıdır.",
+  "mutlak_fark": {"metin": "Hesaplanamadı: sonuçlar test puanı farkı olarak bildirildi.", "hesap": "Özetlerde kişi sayısı üzerinden olay oranı yok; mutlak fark hesaplanamaz."},
+  "calisilan_dozlar": "B12 tek başına ya da folik asit ve B6 ile birlikte; miktarlar çalışmalar arasında farklıydı.",
+  "ne_bilmiyoruz": "Eksiklik olmadan yaşanan açıklanamayan yorgunlukta B12'nin etkisi neredeyse hiç çalışılmadı. Cochrane derlemesindeki katılımcıların çoğu ileri yaştaydı ve kalp-damar hastalığı öyküsü vardı.",
+  "kaynaklar": ["markun_b12_2021", "cochrane_bilis_vitamin_2018"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

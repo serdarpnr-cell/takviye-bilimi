@@ -1,0 +1,19 @@
+{
+  "id": "magnezyum__kas_kramplari__ileri_yas_idiyopatik",
+  "etken_madde": "magnezyum",
+  "sonuc_alani": "Kas krampları",
+  "populasyon": "Nedeni bilinmeyen (idiyopatik) kas krampı olan, çoğu ileri yaştaki yetişkinler",
+  "soru": "Magnezyum takviyesi ileri yaştaki kişilerde kas kramplarını azaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "Cochrane derlemesi (2020): ortalama yaşı 61,6–69,3 olan kişilerde magnezyum haftalık kramp sayısını plaseboya göre anlamlı azaltmadı (orta kesinlikte kanıt). 94 kişilik bir randomize çalışmada (ortalama yaş 64,9) magnezyum oksit plasebodan üstün bulunmadı. Gebelikteki kramplarda sonuçlar çelişkili.",
+  "halk_ozeti": "Nedeni bilinmeyen gece bacak krampları olan ileri yaştaki kişilerde magnezyum, kramp sayısında anlamlı fark yaratmadı. Gebelikte görülen kramplarda çalışmalar çelişkili; emin değiliz. Magnezyum kullananlarda ishal gibi mide-bağırsak yakınmaları daha sık görüldü.",
+  "mutlak_fark": {"metin": "Haftalık kramp sayısındaki fark haftada yaklaşık 0,2 kramp; anlamlı değil.", "hesap": "MD -0,18 kramp/hafta (5 çalışma, 307 kişi); 0,18 ≈ 0,2."},
+  "calisilan_dozlar": "Çoğunlukla ağızdan magnezyum (bir çalışmada damar içi); süre genellikle dört hafta.",
+  "ne_bilmiyoruz": "Egzersizle ya da bir hastalıkla ilişkili kramplarda randomize çalışma yok. Gebelikteki kramplar için daha fazla araştırma gerekiyor.",
+  "kaynaklar": ["cochrane_magnezyum_kramp_2020", "magnezyum_gece_krampi_2017"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

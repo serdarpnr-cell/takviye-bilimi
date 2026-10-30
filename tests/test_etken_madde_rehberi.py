@@ -183,3 +183,46 @@ def test_doz_onermez(ad, taslak):
     metin = _metin(etken_madde_rehberi(ad, yas=40, evre="gebe", sigara="her_gun"))
     for kalip in DOZ_KALIPLARI:
         assert not re.search(kalip, metin), kalip
+
+
+@pytest.mark.parametrize("ad, alan", [
+    ("B12", "Bilişsel işlev, depresif belirtiler ve yorgunluk"),
+    ("demir", "Anemi ve demir eksikliği"),
+    ("magnezyum", "Kas krampları"),
+    ("omega-3", "Kalp-damar olayları"),
+])
+def test_faz1_kartlari_taslak_olarak_sunulur(ad, alan, taslak):
+    # TB-13: yorgunluk ekseninin kartları. Taslak etiketi her kartta durur.
+    y = etken_madde_rehberi(ad)
+    assert alan in {k["sonuc_alani"] for k in y["kanit_duzeyi"]}
+    assert all(k["durum"].startswith("Taslak") for k in y["kanit_duzeyi"])
+    assert y["kanit_durumu"].startswith("Taslak")
+
+
+def test_faz1_kartlari_yayin_sunucusunda_gorunmez(monkeypatch):
+    monkeypatch.delenv("TB_TASLAK_GOSTER", raising=False)
+    for ad in ("B12", "demir", "magnezyum", "omega-3"):
+        assert "kanit_duzeyi" not in etken_madde_rehberi(ad)
+
+
+def test_b12_form_bolumu_dolu(taslak):
+    # TB-21 ve kabul ölçütü: "Hangi B12 bilimsel olarak en güçlü?" → form bölümü dolu.
+    f = etken_madde_rehberi("B12")["formlar"]
+    assert "1000 µg" in f["agizdan_ve_igne"] and "hekim" in f["agizdan_ve_igne"]
+    assert "randomize çalışma bulunmadı" in f["metil_ve_siyano"]
+
+
+def test_b12_metformin_grubu_one_cikar(taslak):
+    y = etken_madde_rehberi("B12", yas=60, ilac_grubu=["metformin"])
+    assert y["senin_grubun"]["grup"] == "Uzun süre metformin kullananlar"
+    assert any("metformin" in d for d in y["dikkat_edecekler"])
+
+
+def test_olumsuz_ve_belirsiz_sonuclar_yumusatilmaz(taslak):
+    # CLAUDE.md kural 6: "etkisiz" ve "belirsiz" sonuçlar gizlenmez.
+    kartlar = {k["sonuc_alani"]: k for ad in ("omega-3", "magnezyum", "B12")
+               for k in etken_madde_rehberi(ad)["kanit_duzeyi"]}
+    assert kartlar["Kalp-damar olayları"]["sonuc_yonu"] == "etkisiz"
+    assert kartlar["Kas krampları"]["sonuc_yonu"] == "etkisiz"
+    assert kartlar["Erken doğum"]["sonuc_yonu"] == "belirsiz"
+    assert "100 kişiden yaklaşık 3" in kartlar["Kalp-damar olayları"]["mutlak_fark"]
