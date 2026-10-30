@@ -49,6 +49,7 @@ SENARYOLAR: list[tuple[str, str, list[tuple[str, dict]]]] = [
         "diger_urun_icerikleri": [{"ad": "Multivitamin", "icerikler": [
             {"etken_madde": "D vitamini", "miktar": 2000, "birim": "IU"}]}]})]),
     ("6", "Parti: L2410A17", [("parti_analizi", {"karekod_veya_parti_no": "L2410A17"})]),
+    ("6b", "Parti: DEMO-0001 (demo kart)", [("parti_analizi", {"karekod_veya_parti_no": "DEMO-0001"})]),
     ("7", "Etken madde: omega-3", [("etken_madde_rehberi", {"etken_madde": "omega-3"})]),
     ("8", "Etken madde: D vitamini, 42 yaş erkek", [("etken_madde_rehberi", {
         "etken_madde": "D vitamini", "yas": 42, "cinsiyet": "erkek"})]),
@@ -60,6 +61,9 @@ SENARYOLAR: list[tuple[str, str, list[tuple[str, dict]]]] = [
         ("etken_madde_rehberi", {"etken_madde": "demir"}),
         ("etken_madde_rehberi", {"etken_madde": "magnezyum"})]),
     ("11", "\"En güçlü B12\"", [("etken_madde_rehberi", {"etken_madde": "B12"})]),
+    ("12", "Karşılaştırma: 3 magnezyum ürünü", [("urun_karsilastir", {"urunler": [
+        "Ocean ExtraMag Magnezyum Bisglisinat + P5P", "Ocean Magnezyum Complex", "Ocean ExtraMag Magnezyum Sitrat Saşe"]})]),
+    ("13", "Tahlil görünümü: ferritin", [("tahlil_goster", {"tahlil": "ferritin"})]),
 ]
 
 

@@ -94,3 +94,20 @@ def test_tahlil_karti_degeri_gondermez_ve_saklamaz():
     for yasak in ["localStorage", "sessionStorage", "indexedDB", "fetch(", "XMLHttpRequest", "tools/call", "ui/message",
                   "document.cookie", "TB.istek"]:
         assert yasak not in betik, yasak
+
+
+# ---- kurul paketi ------------------------------------------------------------
+
+def test_kurul_paketi_her_taslak_icerigi_karar_alaniyla_listeler():
+    import subprocess
+    import sys
+    kok = veri.VERI_DIZINI.parent
+    subprocess.run([sys.executable, str(kok / "scripts" / "kurul_paketi.py")], check=True, capture_output=True)
+    paket = (kok / "kurul" / "kurul_paketi.html").read_text(encoding="utf-8")
+    kartlar = [json.loads(p.read_text(encoding="utf-8")) for p in (veri.VERI_DIZINI / "etken_maddeler").glob("*/kartlar/*.json")]
+    for k in kartlar:
+        assert f"Karar ({k['id']})" in paket, k["id"]
+    for liste in veri._zorunlu_uyarilar().values():
+        for u in liste:
+            assert f"Karar ({u['id']})" in paket
+    assert "Karar (DEMO-0001)" in paket and "İkinci göz" in paket

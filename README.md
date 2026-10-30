@@ -35,6 +35,8 @@ Bilmen gerekenler:
 | `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Toplam EFSA değerinin %75'ine ulaşırsa `sinira_yakinlik` bilgi notu eklenir. Gebelikte A vitamini gibi duruma bağlı kurallar `evre` koşuluyla tetiklenir. Miktarı doğrulanamayan içerik özette "N içerik doğrulanamadı" olarak yazılır; o maddenin üst sınır satırı `kontrol: "eksik"` ve `asiyor: null` olur. Doz önermez. |
 | `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), `senin_grubun` (profil verilirse ilk satırda), `urun_sayfasi_beyanlari`, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, en fazla 5 katalog ürünü (yaş sınırına uyanlar; yalnızca bu maddeyi içerenler önce, sonra alfabetik; kalanı `katalog_ozeti` içinde sayıyla). Demir, B12 ve D vitamininde `zorunlu_uyarilar` (tahlilsiz kullanma, tahlilden önce başlama) kart olsun olmasın en üsttedir. Kanıt kartı olmayan maddede ürün listesi dönmez: "kanıt kartı hazırlanıyor", kurum bilgi sayfası (`genel_kilavuz`) ve yalnızca ürün sayısı döner. |
 | `sikayet_yolu` | `sikayet` (ör. "hep yorgunum"), isteğe bağlı `yas`, `cinsiyet` | Şikâyetten yola çıkan giriş: kırmızı bayraklar (yaşa ve cinsiyete göre), hekimin isteyebileceği ilk basamak tahliller, tahlil öncesi takviye uyarıları, yaşam karnesi önerisi ve ilgili kanıt kartları. Ürün listesi döndürmez. Yollar `data/sikayet_yollari.json` dosyasındadır; şu an yalnızca yorgunluk. |
+| `urun_karsilastir` | `urunler` (2–5 ad), isteğe bağlı `yas` | Ürünleri aynı ölçütlerle yan yana: sunum biçimi, tek ya da kombine, yaş sınırı, parti analizi, etiketteki kullanım, doğrulanamayan satır, etken madde matrisi. Sıra kullanıcının yazdığı sıradır; sıralama ya da öneri yoktur. |
+| `tahlil_goster` | `tahlil` (B12, ferritin, D vitamini) | Tahlilin neyi ölçtüğü, yaygın birimler, tahlil öncesi uyarı. **Değer almaz**: kullanıcı değerini ve raporundaki referans aralığını kartta girer; değer cihazda kalır, saklanmaz. |
 | `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten). Takviye bağlantısı yalnızca kanıt kartı hazır maddelere kurulur. Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile (her soruda en fazla 4 seçenek, 4 + 2 soru akışı) döndürür. Hedeflerin `ilk_adim` alanı mevcut seviyeye göre değişir. |
 
 ### Model katmanı ve görsel kart (mimari v2)
@@ -62,6 +64,9 @@ Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dı
 | Karne | `yasam_karnesi` | `ui://takviye-bilimi/karne` | Seçenekli form, alan başına seviye, hedef kartları |
 | Kanıt | `etken_madde_rehberi` | `ui://takviye-bilimi/kanit` | Zorunlu uyarı kutusu, "Senin grubun", sonuç alanı başına düzey ve yön rozetleri, 100 kişilik ikon dizisi (ör. 62'ye karşı 61), en fazla 5 ürün ve "Diğer ürünler" (modelden gizli `katalog_sayfasi` ile sayfalama) |
 | Ürün | `urun_rehberi` | `ui://takviye-bilimi/urun` | Etken madde başına miktar çubuğu ve EFSA üst sınır çizgisi, "doğrulanamadı" ve parti rozetleri, yaş sınırı uyarısı, beyanlar ve ilgili madde |
+| Karşılaştırma | `urun_karsilastir` | `ui://takviye-bilimi/karsilastirma` | Kriter tablosu, ilk sütun sabit; sıralama yok |
+| Parti | `parti_analizi` | `ui://takviye-bilimi/parti` | Etiketteki ve ölçülen miktar çubukları, laboratuvar ve tarih; demo kayıt kesik çizgili ve "DEMO" rozetli |
+| Tahlil | `tahlil_goster` | `ui://takviye-bilimi/tahlil` | Kullanıcının değeri, kendi raporundaki referans bandı üzerinde; projeksiyon ve sabit "normal" aralık yok |
 | Rutin | `kisisel_rutin` | `ui://takviye-bilimi/rutin` | Madde başına ürünlerden yığılmış çubuk ve EFSA çizgisi; aşım, eksik veri ve sınıra yakınlık rozetleri |
 
 Kartlar veriyi yalnızca araç sonucundan (`structuredContent`) alır, dış kaynak yüklemez; ortak stil ve köprü `server/arayuz/ortak.css` ve `ortak.js` dosyalarındadır ve her sayfaya satır içi gömülür. Ambalaj görseli yoktur (katalogda görsel adresi tutulmuyor; dış ağ kapalı). Kişisel projeksiyon ("değerin şöyle yükselir") çizilmez; ikon dizisi yalnızca çalışma sonuçlarını gösterir.
@@ -71,6 +76,15 @@ Tarayıcıda denetim (Node.js ve Playwright gerekir): `NODE_PATH=$(npm root -g) 
 ### Karne formu (MCP Apps)
 
 `yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. Her ui:// sayfasının altında sabit "Takviye Bilimi · Orzax tarafından geliştirildi · Kaynaklar · Prototip" alt bilgisi bulunur (`server/arayuz.py`). MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.
+
+### Parti analizi verisi
+
+`data/parti_analizleri.json` yayımlanmış parti analizlerini tutar. Şu an yalnızca `DEMO-0001` gösterim kaydı vardır: her yanıtta ve kartta "DEMO · gerçek analiz değil" olarak etiketlenir ve ürünün "parti analizi var" bilgisini değiştirmez. Gerçek analizler Orzax kalite ekibinden `demo: false` olarak eklenecek.
+
+### Medikal kurul ve KVKK
+
+- `.venv/bin/python scripts/kurul_paketi.py` → `kurul/kurul_paketi.html`: kurul onayı bekleyen tüm içerik (kartlar, monografiler, zorunlu uyarılar, şikâyet yolları, kurallar, demo kayıt) kaynakları, doğrulanmış alıntıları ve "onayla / düzelt / reddet" alanıyla.
+- `docs/KVKK_KONTROL.md`: araç başına veri akışı, uygulanmış teknik önlemler ve hukukun karar vermesi gereken noktalar.
 
 ### Gizlilik
 

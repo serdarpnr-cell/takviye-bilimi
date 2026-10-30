@@ -54,21 +54,21 @@
     "semantic_hash": "1c3e780b58af59a2b8bfb983edfbc0b6"
   },
   "server/app.py": {
-    "mtime": 1793354294.894126,
-    "seen": 1793354687.2912126,
-    "ast_hash": "81a290b37e813dac32cbbf2fcc4c8314",
+    "mtime": 1793364121.2424297,
+    "seen": 1793364509.3206308,
+    "ast_hash": "5b6607fb96cf9cc8ed9307a46fc9e3a0",
     "semantic_hash": ""
   },
   "server/araclar.py": {
-    "mtime": 1793354627.3145237,
-    "seen": 1793354687.291214,
-    "ast_hash": "b0457ecd58b764f67f4aaec4a46a9228",
+    "mtime": 1793364097.2124038,
+    "seen": 1793364509.320632,
+    "ast_hash": "6cce7f4795d48b0ea8ab44b56e3eda83",
     "semantic_hash": ""
   },
   "server/veri.py": {
-    "mtime": 1793349732.0585563,
-    "seen": 1793354687.2912192,
-    "ast_hash": "8883781728948884bcc832bb95e05527",
+    "mtime": 1793364027.3554072,
+    "seen": 1793364509.320639,
+    "ast_hash": "0d7df0cf43539248d570c70fe1417dc1",
     "semantic_hash": ""
   },
   "tests/conftest.py": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "tests/test_mcp_sunucu.py": {
-    "mtime": 1793349732.0585563,
-    "seen": 1793354687.2912347,
-    "ast_hash": "0afac77c17c6fe9df2a30e8bfdf6414d",
+    "mtime": 1793364228.46998,
+    "seen": 1793364509.3206599,
+    "ast_hash": "625e4a8b1b50a00ed9c4c79ff9e35461",
     "semantic_hash": ""
   },
   "tests/test_parti_analizi.py": {
@@ -126,9 +126,9 @@
     "semantic_hash": "7fa0c67b5339931301e3b47017ead503"
   },
   "README.md": {
-    "mtime": 1793354672.1454706,
-    "seen": 1793354687.2912483,
-    "ast_hash": "f2872cbb9d4de52d6103b7dd233dcc58",
+    "mtime": 1793364476.6630313,
+    "seen": 1793364509.3206766,
+    "ast_hash": "9cf1f10cd7ba23d3344e33df8e592451",
     "semantic_hash": ""
   },
   "docs/KANIT_PROTOKOLU.md": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "server/arayuz/karne.html": {
-    "mtime": 1793354157.5711336,
-    "seen": 1793354687.291273,
-    "ast_hash": "97992651a5554f1e93509e07cbc38f78",
+    "mtime": 1793364274.5052433,
+    "seen": 1793364509.3207066,
+    "ast_hash": "717639924130b2f3a7319dc9a22f2e8c",
     "semantic_hash": ""
   },
   "data/zorunlu_uyarilar.json": {
@@ -270,9 +270,9 @@
     "semantic_hash": ""
   },
   "scripts/olcum.py": {
-    "mtime": 1793349732.0585563,
-    "seen": 1793354687.291206,
-    "ast_hash": "c78f74f6bc366c076fd631e9e6068f47",
+    "mtime": 1793364501.5228195,
+    "seen": 1793364509.3206227,
+    "ast_hash": "1b2f8adcc42bb0a23a529ed24266d81c",
     "semantic_hash": ""
   },
   "tests/test_arayuz_alt_bilgi.py": {
@@ -390,9 +390,9 @@
     "semantic_hash": ""
   },
   "server/ozet.py": {
-    "mtime": 1793349732.0585563,
-    "seen": 1793354687.2912178,
-    "ast_hash": "72cf0634cd1c7651f3e7e6ae1d0b1710",
+    "mtime": 1793364121.243325,
+    "seen": 1793364509.3206375,
+    "ast_hash": "5879dee09e5f66086ee470790c3f8b74",
     "semantic_hash": ""
   },
   "tests/test_ozet.py": {
@@ -438,15 +438,15 @@
     "semantic_hash": ""
   },
   "scripts/kart_onizleme.mjs": {
-    "mtime": 1793354598.7730715,
-    "seen": 1793354687.2911978,
-    "ast_hash": "e1950dd70511cbaef92155b7919673df",
+    "mtime": 1793364228.4681609,
+    "seen": 1793364509.3206122,
+    "ast_hash": "0dbc8acc54699e06f5f5b38553a5b62a",
     "semantic_hash": ""
   },
   "scripts/kart_onizleme.py": {
-    "mtime": 1793354329.0199037,
-    "seen": 1793354687.2911992,
-    "ast_hash": "46b3c05a4b460d4b5acfbff7035cbf3a",
+    "mtime": 1793364274.507991,
+    "seen": 1793364509.3206136,
+    "ast_hash": "70114fa66df7def8e13902b610fe8347",
     "semantic_hash": ""
   },
   "server/arayuz/ortak.js": {
@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "tests/test_kart_cizimi.py": {
-    "mtime": 1793354483.1399128,
-    "seen": 1793354687.2912292,
-    "ast_hash": "0a80823d5d8c18a35fb9ea968c050f38",
+    "mtime": 1793364228.4690728,
+    "seen": 1793364509.320653,
+    "ast_hash": "6358ca0568649b232a60789f282010a7",
     "semantic_hash": ""
   },
   "docs/olcumler/2026-10-30_faz2_sonra.md": {
@@ -483,6 +483,60 @@
     "mtime": 1793354579.3569121,
     "seen": 1793354687.2912757,
     "ast_hash": "75f11032bebaf24b92b3636c82d80a25",
+    "semantic_hash": ""
+  },
+  "data/parti_analizleri.json": {
+    "mtime": 1793364027.3225434,
+    "seen": 1793364509.3205962,
+    "ast_hash": "8c5b89612fc16c23eabb82e0182b06b3",
+    "semantic_hash": ""
+  },
+  "scripts/kurul_paketi.py": {
+    "mtime": 1793364454.8945687,
+    "seen": 1793364509.320619,
+    "ast_hash": "2f43296dd2be71871e59dec6662b36a0",
+    "semantic_hash": ""
+  },
+  "tests/test_faz3.py": {
+    "mtime": 1793364476.63857,
+    "seen": 1793364509.3206468,
+    "ast_hash": "80f31fea51b1853ab17e7d0b75c72575",
+    "semantic_hash": ""
+  },
+  "docs/KVKK_KONTROL.md": {
+    "mtime": 1793364414.5865664,
+    "seen": 1793364509.320689,
+    "ast_hash": "5b6c9f99ba6bf24b53ed6b71800455af",
+    "semantic_hash": ""
+  },
+  "docs/olcumler/2026-10-30_faz3_sonra.md": {
+    "mtime": 1793364505.5627713,
+    "seen": 1793364509.3206966,
+    "ast_hash": "496c3876dae55913e992c01309269b3c",
+    "semantic_hash": ""
+  },
+  "kurul/kurul_paketi.html": {
+    "mtime": 1793364478.7814338,
+    "seen": 1793364509.3207018,
+    "ast_hash": "953b150c61f6aa9406058bb4090e8019",
+    "semantic_hash": ""
+  },
+  "server/arayuz/karsilastirma.html": {
+    "mtime": 1793364186.9225528,
+    "seen": 1793364509.320708,
+    "ast_hash": "45cd6e85531743b1097879dcb3ed38bb",
+    "semantic_hash": ""
+  },
+  "server/arayuz/parti.html": {
+    "mtime": 1793364174.738552,
+    "seen": 1793364509.3207095,
+    "ast_hash": "a700fc91a1e50fb602d5e2a8c83376bc",
+    "semantic_hash": ""
+  },
+  "server/arayuz/tahlil.html": {
+    "mtime": 1793364326.1425612,
+    "seen": 1793364509.320712,
+    "ast_hash": "3d512793a575424b68f18507075644cf",
     "semantic_hash": ""
   }
 }
