@@ -197,7 +197,7 @@ function sonucuIsle(sonuc) {
   }
   b.append(el("h2", { textContent: "Tahlille değerlendirilenler" }),
     el("ul", {}, ...v.tahlil_onerisi.maddeler.map((t) => el("li", { textContent: t.mesaj }))));
-  b.append(el("h2", { textContent: "Kaynaklar" }),
+  b.append(el("h2", { id: "kaynaklar", textContent: "Kaynaklar" }),
     el("ul", {}, ...v.kaynaklar.map((k) => {
       const a = el("a", { href: k.url, textContent: `${k.baslik} (${k.kurum_veya_dergi}${k.yil ? ", " + k.yil : ""})` });
       a.addEventListener("click", (o) => { o.preventDefault(); istek("ui/open-link", { url: k.url }).catch(() => {}); });
