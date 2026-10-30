@@ -371,6 +371,30 @@
       ],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
+    },
+    "wolffenbuttel_b12_2019": {
+      "tur": "derleme",
+      "pmid": "31193945",
+      "baslik": "The Many Faces of Cobalamin (Vitamin B 12 ) Deficiency",
+      "kurum_veya_dergi": "Mayo Clin Proc Innov Qual Outcomes",
+      "yil": 2019,
+      "alintilar": [
+        "many people with symptoms related to cobalamin deficiency may have serum vitamin B 12 levels above the lower reference level of 140 pmol/L.",
+        "in a considerable number of cases this issue can be caused by the earlier use of oral supplementation with multivitamins or high-dose oral vitamin B 12 preparations.",
+        "Oral supplementation may increase the serum vitamin B 12 level but often not enough to replenish the vitamin B 12 levels in the tissues"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "zittermann_d_doz_yanit_2014": {
+      "tur": "sistematik_derleme",
+      "pmid": "24292820",
+      "baslik": "Vitamin D supplementation, body weight and human serum 25-hydroxyvitamin D response: a systematic review",
+      "kurum_veya_dergi": "Eur J Nutr",
+      "yil": 2014,
+      "alintilar": ["There was a logarithmic association between vitamin D dose per kg body weight per day and increment in circulating 25OHD."],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }

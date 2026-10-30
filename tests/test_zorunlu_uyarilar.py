@@ -1,4 +1,4 @@
-"""TB-03: demirde zorunlu güvenlik uyarıları kanıt kartından bağımsız gösterilir."""
+"""TB-03, TB-04: demir, B12 ve D vitamininde zorunlu güvenlik uyarıları kanıt kartından bağımsız gösterilir."""
 
 import sys
 from pathlib import Path
@@ -39,16 +39,26 @@ def test_demir_erkek_notu_yalnizca_erkekte(taslak_ayari):
         assert any("doğrulanmadan" in m for m in _mesajlar(y))
 
 
+@pytest.mark.parametrize("ad, parca", [
+    ("B12", "B12 tahlilinden önce takviyeye başlamak sonucu yanıltabilir"),
+    ("D vitamini", "takviyeye başladıktan sonra yapılan tahlil başlangıçtaki düzeyi göstermez"),
+    ("demir", "Demir takviyesi kandaki demir değerini etkiler"),
+])
+def test_tahlil_oncesi_uyarisi(taslak_ayari, ad, parca):
+    y = araclar.etken_madde_rehberi(ad)
+    assert any(parca in m for m in _mesajlar(y)), _mesajlar(y)
+
+
 def test_uyarilar_taslak_etiketli_ve_kaynakli(taslak_ayari):
     kayitlar = veri.kaynak_kayitlari()
-    for ad in ("demir",):
+    for ad in ("demir", "B12", "D vitamini"):
         y = araclar.etken_madde_rehberi(ad, cinsiyet="erkek")
         assert y["zorunlu_uyarilar"]
         urls = {k["url"] for k in y["kaynaklar"]}
         for u in y["zorunlu_uyarilar"]:
             assert u["durum"].startswith("Taslak")
             assert u["dayanak"]
-        for em_id in ("demir",):
+        for em_id in ("demir", "b12", "d3"):
             for u in veri.zorunlu_uyarilar(em_id):
                 for kid in u["kaynaklar"]:
                     assert kayitlar[kid]["dogrulandi"], kid
