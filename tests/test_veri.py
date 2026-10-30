@@ -91,5 +91,6 @@ async def test_yasakli_ifade_yok():
 
 
 async def test_arac_aciklamalari_kisa():
+    # v0.3 Bölüm 3 açıklamaları örnek kullanıcı cümleleri taşır; yine de kısa kalmalı.
     for t in await mcp.list_tools():
-        assert len(t.description) <= 300, t.name
+        assert len(t.description) <= 1000, t.name

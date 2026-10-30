@@ -11,6 +11,8 @@ from typing import Callable
 
 from mcp.types import CallToolResult, TextContent
 
+from .veri import yuzde
+
 # Türkçe metinde 1 token ≈ 3 karakter varsayımıyla 1.500 token sınırının altında kalır.
 OZET_SINIRI = 4500
 EN_FAZLA_KAYNAK = 5
@@ -25,6 +27,12 @@ def _kaynak_satirlari(v: dict) -> list[str]:
     if len(kaynaklar) > EN_FAZLA_KAYNAK:
         satirlar.append(f"- … ve {len(kaynaklar) - EN_FAZLA_KAYNAK} kaynak daha (kartta).")
     return ["Kaynaklar:", *satirlar] if satirlar else []
+
+
+def cumle(*parcalar: str) -> str:
+    """Cümleleri birleştirir; sonu noktalı parçadan sonra çift nokta oluşmaz (v0.3 Ek 8)."""
+    temiz = [p.strip() for p in parcalar if p and p.strip()]
+    return " ".join(p if p.endswith((".", "!", "?", ":")) else p + "." for p in temiz)
 
 
 def _madde(baslik: str, ogeler: list[str]) -> list[str]:
@@ -43,13 +51,17 @@ def _urun_rehberi(v: dict) -> list[str]:
         parca = f"{e['etken_madde']}: {m['etiketteki_miktar']}"
         if m.get("beslenme_referans_degeri"):
             parca += f", BRD {m['beslenme_referans_degeri']}"
-        if m.get("yetiskin_ust_siniri"):
+        if e.get("olcek", {}).get("oran_metni"):
+            parca += f"; {e['olcek']['oran_metni']}"
+        elif m.get("yetiskin_ust_siniri"):
             parca += f"; üst sınır {m['yetiskin_ust_siniri']}"
         if e.get("dogrulanamadi"):
             parca += " [DOĞRULANAMADI: hesaplara katılmadı]"
         icerik.append(parca)
     beyanlar = [b["metin"] for b in u["urun_sayfasi_beyanlari"]]
-    return [*satirlar, *_madde("İçerik", icerik), *_madde("Ürün sayfası beyanları", beyanlar[:6]),
+    bayraklar = [x["metin"] for x in u.get("etkilesim_bayraklari", [])]
+    return [*satirlar, *_madde("İçerik", icerik), *_madde("Etkileşim bayrakları", bayraklar),
+            *_madde("Ürün sayfası beyanları", beyanlar[:6]),
             *([u["beyan_aciklamasi"]] if beyanlar else []), u["etiket_uyarilari"], u["parti_analizi"]]
 
 
@@ -58,7 +70,7 @@ def _etken_madde_rehberi(v: dict) -> list[str]:
     if v.get("kanit_durumu"):
         satirlar.append(f"Durum: {v['kanit_durumu']}")
     kartlar = [
-        f"{k['sonuc_alani']} ({k['populasyon']}): düzey {k['duzey']}, sonuç {k['sonuc_yonu']}. {k['mutlak_fark']}"
+        f"{k['sonuc_alani']} ({k['populasyon']}): düzey {k['duzey']}, sonuç {k.get('sonuc_etiketi', k['sonuc_yonu'])}. {k['mutlak_fark']}"
         for k in v.get("kanit_duzeyi", [])
     ]
     satirlar += _madde("Kanıt kartları", kartlar)
@@ -70,7 +82,8 @@ def _etken_madde_rehberi(v: dict) -> list[str]:
         g = v["genel_kilavuz"]
         satirlar.append(f"Genel bilgi: {g['baslik']} ({g['kurum']}, {g['dil']}) {g['url']}")
     if v.get("efsa_ust_sinir"):
-        satirlar.append(f"EFSA: {v['efsa_ust_sinir']['deger']}. {v['efsa_ust_sinir']['not']}")
+        e = v["efsa_ust_sinir"]
+        satirlar.append("EFSA: " + cumle(e["deger"], "" if e["not"] else e["kapsam"], e["not"]))
     satirlar += _madde("Dikkat", v.get("dikkat_edecekler", []))
     satirlar += _madde("Etkileşimler", [e["mesaj"] for e in v.get("etkilesimler", [])])
     satirlar += _madde("Hekime sorulacaklar", v.get("hekime_sorulacaklar", []))
@@ -123,23 +136,43 @@ def _parti_analizi(v: dict) -> list[str]:
     return [
         *([v["demo_notu"]] if v.get("demo") else []),
         f"Laboratuvar: {v['laboratuvar']} · Tarih: {v['analiz_tarihi']}",
-        *_madde("Etiketteki ve ölçülen", [f"{r['etken_madde']}: {r['etiketteki']} → {r['olculen']} {r['birim']} (etiketin %{r['etikete_orani']}'i)"
+        *_madde("Etiketteki ve ölçülen", [f"{r['etken_madde']}: {r['etiketteki']} → {r['olculen']} {r['birim']} (etiketin {yuzde(r['etikete_orani'])})"
                                          for r in v["sonuclar"]]),
         v["okuma_notu"],
     ]
 
 
-def _urun_karsilastir(v: dict) -> list[str]:
-    if "urunler" not in v:
-        return [*_madde("Tanınmayan", v["taninmayan_urunler"]),
-                *_madde("Birden fazla eşleşen", [f"{k}: {', '.join(a)}" for k, a in v["birden_fazla_eslesen_urunler"].items()])]
-    satirlar = [f"{u['ad']}: {u['sunum_bicimi']}, {u['tek_ya_da_kombine']}, yaş {u['yas_siniri']}"
-                + (" [YAŞ SINIRI DIŞINDA]" if u.get("yas_siniri_disinda") else "")
-                + f", parti analizi {u['parti_analizi']}" + (f", {u['dogrulanamayan_satir']} satır doğrulanamadı" if u["dogrulanamayan_satir"] else "")
-                for u in v["urunler"]]
-    maddeler = [f"{r['etken_madde']}: " + " | ".join((h["etiketteki"] if h else "yok") for h in r["urunler"])
-                for r in v["etken_madde_karsilastirmasi"]]
-    return [*_madde("Ürünler", satirlar), *_madde("Etken madde (ürün sırasıyla)", maddeler), v["siralama_olcutu"]]
+def _karsilastir(v: dict) -> list[str]:
+    if not v.get("satirlar"):
+        return []
+    satirlar = []
+    for r in v["satirlar"][:12]:
+        miktar = f"{r['porsiyondaki_miktar']} {r['birim']}" if r["porsiyondaki_miktar"] is not None else "hesaplanamadı"
+        oran = f", EFSA {yuzde(r['efsa_orani'])}" if r["efsa_orani"] is not None else ""
+        bayrak = f" [{'; '.join(r['uyari_bayraklari'])}]" if r["uyari_bayraklari"] else ""
+        satirlar.append(f"{r['ad']}: {r['form']}, {miktar}{oran}, {'tek bileşen' if r['tek_bilesen'] else 'kombine'}, "
+                        f"yaş {r['yas_siniri']}{bayrak}")
+    if len(v["satirlar"]) > 12:
+        satirlar.append(f"… ve {v['toplam_urun'] - 12} ürün daha (kıyas kartında).")
+    return [*_madde("Ürünler (porsiyon başına)", satirlar), f"EFSA sınırı: {v['efsa_sinir_grubu']}. {v['efsa_notu']}",
+            v["siralama_olcutu"]]
+
+
+def _takviye_rehberi(v: dict) -> list[str]:
+    maddeler = []
+    for m in v["maddeler"]:
+        parca = f"{m['etken_madde']} [kart: {m['kart_durumu']}]: " + (m.get("ozet") or m.get("not", ""))
+        if m.get("kimde_kanit"):
+            parca += f" {m['kimde_kanit']}"
+        if m.get("guvenlik"):
+            parca += " Güvenlik: " + " ".join(m["guvenlik"])
+        if m.get("genel_bilgi"):
+            parca += " Genel bilgi: NIH ODS sayfası (İngilizce, kaynaklarda)."
+        maddeler.append(parca)
+    sorular = [f"{s['soru']} Seçenekler: {' / '.join(s['secenekler'])}" for s in v.get("sorulacaklar", [])]
+    return [*_madde("Maddeler", maddeler), *([v["besinle_karsilama"]] if v.get("besinle_karsilama") else []),
+            *([v["katalog_notu"]] if v.get("katalog_notu") else []),
+            *([v["soru_yonergesi"]] if v.get("soru_yonergesi") else []), *_madde("Sorulacaklar", sorular)]
 
 
 def _tahlil_goster(v: dict) -> list[str]:
@@ -176,15 +209,20 @@ _OZETLEYICILER: dict[str, Callable[[dict], list[str]]] = {
     "yasam_karnesi": _yasam_karnesi,
     "parti_analizi": _parti_analizi,
     "sikayet_yolu": _sikayet_yolu,
-    "urun_karsilastir": _urun_karsilastir,
+    "karsilastir": _karsilastir,
+    "takviye_rehberi": _takviye_rehberi,
     "tahlil_goster": _tahlil_goster,
 }
 
 
 def metin(arac: str, v: dict) -> str:
-    """Modele giden özet. Sınırı aşarsa gövde kırpılır; özet, kaynaklar ve uyarı her zaman kalır."""
+    """Modele giden özet. Sınırı aşarsa gövde kırpılır; özet, kaynaklar, uyarı ve köprü sorusu her zaman kalır.
+
+    Kapı araçlarının köprü sorusu metnin son satırıdır (v0.3 Bölüm 1): structuredContent okumayan istemciler için.
+    """
     bas = [v["kisa_ozet"]]
-    son = [*_kaynak_satirlari(v), v["uyari"]]
+    kopru = [f"Köprü sorusu (kullanıcıya iletin): {v['kopru']['soru']}"] if v.get("kopru") else []
+    son = [*_kaynak_satirlari(v), v["uyari"], *kopru]
     govde = [s for s in _OZETLEYICILER[arac](v) if s]
     sigar = lambda g: len("\n".join(bas + g + son)) <= OZET_SINIRI  # noqa: E731
     if not sigar(govde):

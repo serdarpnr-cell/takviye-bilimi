@@ -61,8 +61,8 @@ SENARYOLAR: list[tuple[str, str, list[tuple[str, dict]]]] = [
         ("etken_madde_rehberi", {"etken_madde": "demir"}),
         ("etken_madde_rehberi", {"etken_madde": "magnezyum"})]),
     ("11", "\"En güçlü B12\"", [("etken_madde_rehberi", {"etken_madde": "B12"})]),
-    ("12", "Karşılaştırma: 3 magnezyum ürünü", [("urun_karsilastir", {"urunler": [
-        "Ocean ExtraMag Magnezyum Bisglisinat + P5P", "Ocean Magnezyum Complex", "Ocean ExtraMag Magnezyum Sitrat Saşe"]})]),
+    ("12", "Kıyas: magnezyum ürünleri", [("karsilastir", {"etken_madde": "magnezyum"})]),
+    ("14", "Takviye rehberi: kış", [("takviye_rehberi", {"konu": "Kış geldi, hangi vitaminler?"})]),
     ("13", "Tahlil görünümü: ferritin", [("tahlil_goster", {"tahlil": "ferritin"})]),
 ]
 

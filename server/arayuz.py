@@ -22,6 +22,14 @@ _ALT_BILGI = (
 )
 
 
+def _marka_bandi() -> str:
+    """Kart başlığı: logo + "Takviye Bilimi". Resmi logo pazarlamadan gelince arayuz/logo.svg olarak eklenir (siteden
+    kazınmaz); dosya yokken yalnızca yazı gösterilir."""
+    logo = DIZIN / "logo.svg"
+    svg = logo.read_text(encoding="utf-8") if logo.exists() else ""
+    return f'<header class="marka-bandi" id="marka-bandi">{svg}<span>Takviye Bilimi</span></header>'
+
+
 def _sayfa(ad: str, **yer_tutucular: str) -> str:
     """ui:// sayfasını okur; ortak stil ve köprüyü gömer, yer tutucuları doldurur, sabit alt bilgiyi <main> sonrasına ekler."""
     html = (DIZIN / ad).read_text(encoding="utf-8")
@@ -29,6 +37,7 @@ def _sayfa(ad: str, **yer_tutucular: str) -> str:
     html = html.replace("__ORTAK_JS__", (DIZIN / "ortak.js").read_text(encoding="utf-8"))
     for anahtar, deger in yer_tutucular.items():
         html = html.replace(f"__{anahtar}__", deger)
+    html = html.replace("<main>", "<main>\n" + _marka_bandi(), 1)
     return html.replace("</head>", _ALT_BILGI_STILI + "\n</head>", 1).replace("</main>", "</main>\n" + _ALT_BILGI, 1)
 
 

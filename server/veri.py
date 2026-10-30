@@ -389,3 +389,57 @@ def kanit_tabani_kimlikleri() -> list[str]:
 
 def _sunulabilir(kayit: dict) -> bool:
     return kayit["durum"] == "onaylandi" or (kayit["durum"] == "taslak" and taslaklar_gosterilsin())
+
+
+sunulabilir = _sunulabilir
+
+
+@lru_cache(maxsize=1)
+def hedef_eslemesi() -> dict:
+    return _yukle("hedef_eslemesi.json")
+
+
+# --------------------------------------------------------------------------- #
+# Tek gösterim kuralı (v0.3 Ek 4): ürün listesi ve katalog sayısı yalnızca sunulabilir kanıt kartı olan maddede.
+# --------------------------------------------------------------------------- #
+
+KART_HAZIR, KART_TASLAK, KART_HAZIRLANIYOR = "hazir", "taslak", "hazirlaniyor"
+
+
+def kart_durumu(em_id: str) -> str:
+    """hazir: kurul onaylı; taslak: onay bekliyor ve taslak gösterimi açık; hazirlaniyor: sunulabilir kart yok."""
+    m = monografi(em_id)
+    if m is None or not m["kartlar"]:
+        return KART_HAZIRLANIYOR
+    return KART_HAZIR if m["durum"] == "onaylandi" else KART_TASLAK
+
+
+def urun_listesi_gosterilir(em_id: str) -> bool:
+    """Bütün araçlarda aynı kural: kartı hazır ya da taslak gösterimdeyse ürünler listelenir, değilse yalnızca sayı."""
+    return kart_durumu(em_id) != KART_HAZIRLANIYOR
+
+
+def sorgudaki_etken_madde(metin: str) -> str | None:
+    """Serbest metinde adı geçen ilk etken maddeyi bulur (ör. 'Solgar D3 1000 IU' → d3); en uzun ad önce denenir."""
+    n = f" {normalize(metin)} "
+    return next((em for ad, em in _beyan_adlari() if f" {ad} " in n), None)
+
+
+_BIRLER_EKI = {1: "i", 2: "si", 3: "ü", 4: "ü", 5: "i", 6: "sı", 7: "si", 8: "i", 9: "u"}
+_ONLAR_EKI = {1: "u", 2: "si", 3: "u", 4: "ı", 5: "si", 6: "ı", 7: "i", 8: "i", 9: "ı"}
+
+
+def yuzde(n: int) -> str:
+    """Yüzdeyi Türkçe iyelik ekiyle yazar: %20'si, %35'i, %100'ü, %0'ı."""
+    n = int(n)
+    if n == 0:
+        return "%0'ı"
+    if n % 10:
+        ek = _BIRLER_EKI[n % 10]
+    elif n % 100:
+        ek = _ONLAR_EKI[(n // 10) % 10]
+    elif n % 1000:
+        ek = "ü"
+    else:
+        ek = "i"
+    return f"%{n}'{ek}"

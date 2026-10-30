@@ -20,7 +20,8 @@ __ORTAK_JS__
 const { el, rozet } = TB;
 const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
 
-// EFSA göstergesi: çubuk ürünün porsiyondaki miktarı, kırmızı çizgi yetişkin üst sınırı. Yorum yok, yalnızca oran.
+// EFSA göstergesi: çubuk ürünün porsiyondaki miktarı, kırmızı çizgi yaş verildiyse yaş grubunun, verilmediyse
+// yetişkinin üst sınırı (v0.3 Ek 10). Yorum yok, yalnızca oran.
 function gosterge(o) {
   if (o?.miktar == null || o?.ust_sinir == null) return null;
   const eksen = Math.max(o.ust_sinir, o.miktar) * 1.1;
@@ -29,7 +30,7 @@ function gosterge(o) {
     el("div", { className: "cubuk" },
       el("div", { className: "cubuk-dolgu" }, el("span", { style: `width:${(o.miktar / eksen) * 100}%` })),
       el("div", { className: "cubuk-sinir", style: `left:${(o.ust_sinir / eksen) * 100}%` })),
-    el("div", { className: "ikincil", textContent: `Porsiyonda ${sayi(o.miktar)} ${o.birim}; EFSA yetişkin üst sınırının yaklaşık %${yuzde}'i (çizgi).` }));
+    el("div", { className: "ikincil", textContent: o.oran_metni || `Porsiyonda ${sayi(o.miktar)} ${o.birim}; EFSA ${o.sinir_grubu} üst sınırına oranı %${yuzde} (çizgi).` }));
 }
 
 function icerikSatiri(e) {
@@ -41,6 +42,17 @@ function icerikSatiri(e) {
     e.dogrulanamadi ? el("p", { className: "ikincil", textContent: e.dogrulanamadi }) : gosterge(e.olcek),
     !e.dogrulanamadi && e.olcek?.ust_sinir == null && m.yetiskin_ust_siniri ? el("p", { className: "ikincil", textContent: m.yetiskin_ust_siniri }) : null,
     e.okuma_notu ? el("p", { className: "ikincil", textContent: e.okuma_notu }) : null);
+}
+
+function bilesimOzeti(o) {
+  if (!o) return null;
+  const satirlar = [
+    o.tatlandiricilar?.length ? `Tatlandırıcı: ${o.tatlandiricilar.join(", ")}` : null,
+    o.seker_ve_seker_kaynaklari?.length ? `Şeker: ${o.seker_ve_seker_kaynaklari.join(", ")}` : null,
+    o.d3_kaynagi ? `D3 kaynağı: ${o.d3_kaynagi}` : null,
+    o.k_vitamini_formu ? `K vitamini formu: ${o.k_vitamini_formu}` : null,
+  ].filter(Boolean);
+  return satirlar.length ? el("div", { className: "rozetler" }, ...satirlar.map((x) => rozet(x))) : null;
 }
 
 function ciz(sonuc) {
@@ -59,16 +71,19 @@ function ciz(sonuc) {
     el("h1", { textContent: u.ad }),
     el("div", { className: "rozetler" }, rozet(u.marka), rozet(u.seri), rozet(`Yaş: ${u.yas_siniri}`),
       rozet(u.parti_analizi.includes("bulunmuyor") ? "Yayımlanmış parti analizi yok" : "Parti analizi var")),
+    ...(u.etkilesim_bayraklari || []).map((b) => el("div", { className: "kart guvenlik" },
+      el("div", { className: "rozetler" }, rozet(b.metin, b.kirmizi ? "kotu" : "uyari")), el("p", { textContent: b.mesaj }))),
     v.yas_uyarisi ? el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Yaş sınırı" }), el("p", { textContent: v.yas_uyarisi })) : null,
     el("p", { className: "ikincil", textContent: `Etiketteki kullanım: ${u.etiketteki_kullanim}` }),
     el("section", {}, el("h2", { textContent: `İçerik (${u.porsiyon || "porsiyon"})` }),
       el("div", { className: "kart" }, ...u.etken_maddeler.map(icerikSatiri))),
     u.urun_sayfasi_beyanlari.length ? el("section", {}, el("h2", { textContent: "Ürün sayfası beyanları" }),
       el("div", { className: "kart" },
+        // v0.3 Ek 9: ilgili madde boşsa ek yazılmaz.
         el("ul", {}, ...u.urun_sayfasi_beyanlari.map((x) => el("li", {}, x.metin,
-          el("span", { className: "ikincil", textContent: ` · ${Array.isArray(x.ilgili_etken_madde) ? x.ilgili_etken_madde.join(", ") : x.ilgili_etken_madde}` })))),
+          x.ilgili_etken_madde?.length ? el("span", { className: "ikincil", textContent: ` · ${x.ilgili_etken_madde.join(", ")}` }) : null))),
         el("p", { className: "ikincil", textContent: `${u.beyan_aciklamasi} ${u.beyan_notu}` }))) : null,
-    el("section", {}, el("h2", { textContent: "Bileşim" }), el("p", { className: "ikincil", textContent: u.bilesim })),
+    el("section", {}, el("h2", { textContent: "Bileşim" }), bilesimOzeti(u.bilesim_ozeti), el("p", { className: "ikincil", textContent: u.bilesim })),
     el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Etiket uyarıları" }), el("p", { textContent: u.etiket_uyarilari })),
     el("p", {}, TB.baglanti(u.urun_sayfasi, "Ürün sayfası"), el("span", { className: "ikincil", textContent: ` · erişim ${u.erisim_tarihi}` })),
     TB.kaynaklar(v.kaynaklar),

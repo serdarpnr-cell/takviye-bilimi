@@ -86,7 +86,11 @@ def test_tanimsiz_kod_reddedilir():
 
 
 def test_sunucu_talimati_secenekli_soruyu_soyler():
-    assert "Karne sorularını seçenekleriyle iki adımda sor" in TALIMATLAR
+    # v0.3: seçenekli sorma kuralı yönergede, iki adım kuralı karne aracının açıklamasında.
+    from server.app import ACIKLAMALAR
+
+    assert "seçenekli sor" in TALIMATLAR
+    assert "soruları iki adımda, seçenekli sor" in ACIKLAMALAR["yasam_karnesi"]
 
 
 async def test_arac_arayuz_kaynagina_baglidir():

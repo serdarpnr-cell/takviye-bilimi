@@ -10,39 +10,56 @@ from server.app import mcp
 from server.arayuz import kart_html
 
 
-# ---- urun_karsilastir --------------------------------------------------------
+# ---- karsilastir (v0.3 Bölüm 5) ---------------------------------------------
 
-def test_karsilastirma_kullanici_sirasini_korur_ve_siralamaz():
-    adlar = ["Ocean Magnezyum Complex", "Ocean ExtraMag Magnezyum Sitrat Saşe", "Ocean ExtraMag Magnezyum Bisglisinat + P5P"]
-    y = araclar.urun_karsilastir(adlar)
-    assert [u["ad"] for u in y["urunler"]] == adlar
-    assert "Sıralama, puan ya da öneri yoktur" in y["siralama_olcutu"]
+@pytest.fixture
+def taslak(monkeypatch):
+    monkeypatch.setenv("TB_TASLAK_GOSTER", "1")
+
+
+def test_kiyas_tum_urunler_ve_siralama(taslak):
+    y = araclar.karsilastir("D vitamini")
+    eslesen = [u for u in veri.urunler() if any(e["etken_madde"] == "d3" for e in u["etken_maddeler"])]
+    assert y["toplam_urun"] == len(eslesen) > 5  # 5 ürün sınırı yok
+    tek = [r["tek_bilesen"] for r in y["satirlar"]]
+    assert tek == sorted(tek, reverse=True)  # önce yalnızca bu maddeyi içerenler
+    tekler = [r["porsiyondaki_miktar"] for r in y["satirlar"] if r["tek_bilesen"]]
+    assert tekler == sorted(tekler)  # sonra miktar (artan)
+    assert "Sıra öneri değildir" in y["siralama_olcutu"]
     metin = json.dumps(y, ensure_ascii=False).casefold()
-    for yasak in ["en iyi", "önerilir", "tercih edin", "puan:", "kazanan"]:
+    for yasak in ["en iyi", "önerilir", "tercih edin", "kazanan"]:
         assert yasak not in metin, yasak
 
 
-def test_karsilastirma_olcutleri_ve_madde_matrisi():
-    y = araclar.urun_karsilastir(["Ocean D3K2 Damla", "Ocean Magnezyum Complex"], yas=8)
-    d3k2 = y["urunler"][0]
-    assert d3k2["sunum_bicimi"] == "damla"
-    assert d3k2["tek_ya_da_kombine"].startswith("kombine")
+def test_kiyas_yas_grubu_siniri_ve_varfarin(taslak):
+    y = araclar.karsilastir("D vitamini", yas=8, ilac_grubu=["kan_sulandirici_varfarin"])
+    sprey = next(r for r in y["satirlar"] if r["ad"] == "Ocean Vitamin D3 400 IU Sprey")
+    assert sprey["efsa_sinir_degeri"] == 50 and sprey["efsa_orani"] == 20 and sprey["form"] == "sprey"
+    d3k2 = next(r for r in y["satirlar"] if r["ad"] == "Ocean D3K2 Damla")
+    assert "K vitamini — varfarin: hekime danışın" in d3k2["uyari_bayraklari"] and d3k2["kirmizi_bayrak"] is True
     assert d3k2["yas_siniri_disinda"] is True
-    assert d3k2["parti_analizi"] == "yayımlanmış analiz yok"
-    satir = next(r for r in y["etken_madde_karsilastirmasi"] if r["etken_madde"] == "Magnezyum")
-    assert satir["urunler"][0] is None and satir["urunler"][1]["etiketteki"].startswith("Magnezyum")
 
 
-def test_karsilastirma_karantinadaki_satiri_isaretler():
-    y = araclar.urun_karsilastir(["Day2Day The Collagen Mag Plus", "Ocean D3K2 Damla"])
-    assert y["urunler"][0]["dogrulanamayan_satir"] == 4
-    d3 = next(r for r in y["etken_madde_karsilastirmasi"] if r["etken_madde"] == "D3 vitamini")
-    assert d3["urunler"][0]["dogrulanamadi"] is True and d3["urunler"][1]["dogrulanamadi"] is False
+def test_kiyas_form_ve_tek_bilesen_suzgeci(taslak):
+    y = araclar.karsilastir("D vitamini", form="sprey", sadece_tek_bilesen=True)
+    assert y["satirlar"] and all(r["form"] == "sprey" and r["tek_bilesen"] for r in y["satirlar"])
 
 
-def test_karsilastirma_en_az_iki_urun_ister():
-    y = araclar.urun_karsilastir(["Ocean D3K2 Damla", "Bilinmeyen Ürün"])
-    assert "urunler" not in y and y["taninmayan_urunler"] == ["Bilinmeyen Ürün"]
+def test_kiyas_katalog_disi_marka_aday_listelemez():
+    y = araclar.karsilastir("D vitamini", marka="Solgar")
+    assert y["satirlar"] == [] and "yalnızca Orzax ürünlerini" in y["kisa_ozet"] and "kisisel_rutin" in y["kisa_ozet"]
+
+
+def test_kiyas_karti_olmayan_maddede_urun_listelemez():
+    # Tek gösterim kuralı (v0.3 Ek 4).
+    y = araclar.karsilastir("C vitamini")
+    assert y["satirlar"] == [] and y["katalogdaki_urun_sayisi"] > 0
+
+
+def test_kiyas_karti_dis_kaynak_yuklemez():
+    html = kart_html("kiyas")
+    assert not re.search(r"""(src|href)\s*=\s*["']https?://""", html)
+    assert "@media (max-width: 480px)" in html and "ui/open-link" in html
 
 
 # ---- parti_analizi (demo) ----------------------------------------------------

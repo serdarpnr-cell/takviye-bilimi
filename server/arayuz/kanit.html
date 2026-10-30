@@ -21,7 +21,8 @@ __ORTAK_CSS__
 __ORTAK_JS__
 const { el, rozet } = TB;
 const DUZEY = { guclu: ["Güçlü kanıt", "iyi"], orta: ["Orta düzey kanıt", "orta"], zayif: ["Zayıf kanıt", ""], yetersiz: ["Yetersiz kanıt", ""] };
-const YON = { fayda: ["Fayda", "iyi"], etkisiz: ["Etkisiz", "orta"], zarar: ["Dikkat: zarar", "kotu"], belirsiz: ["Belirsiz", ""] };
+const YON = { fayda: ["Fayda", "iyi"], kucuk_fayda: ["Küçük fayda", "orta"], etkisiz: ["Etkisiz bulundu", "orta"],
+              zarar: ["Güvenlik sinyali", "kotu"], belirsiz: ["Belirsiz", ""] };
 let girdi = {};
 
 function liste(baslik, ogeler, sinif = "", kapali = false) {
@@ -41,7 +42,7 @@ function yuzKiside(y) {
 
 function sonucKarti(k) {
   const [dz, ds] = DUZEY[k.duzey] || [k.duzey, ""];
-  const [yn, ys] = YON[k.sonuc_yonu] || [k.sonuc_yonu, ""];
+  const [yn, ys] = YON[k.sonuc_etiketi || k.sonuc_yonu] || [k.sonuc_yonu, ""];
   return el("div", { className: "kart sonuc-karti" },
     el("h3", { textContent: k.sonuc_alani }),
     el("div", { className: "populasyon", textContent: k.populasyon }),
@@ -106,7 +107,7 @@ function ciz(sonuc) {
     v.genel_kilavuz ? el("p", {}, "Genel bilgi: ", TB.baglanti(v.genel_kilavuz.url, `${v.genel_kilavuz.baslik} (${v.genel_kilavuz.kurum}, ${v.genel_kilavuz.dil})`)) : null,
     v.efsa_ust_sinir ? el("section", {}, el("h2", { textContent: "Güvenlik tavanı" }), el("div", { className: "kart" },
       el("strong", { textContent: v.efsa_ust_sinir.deger || "Belirlenmemiş" }),
-      el("p", { className: "ikincil", textContent: `${v.efsa_ust_sinir.kapsam} ${v.efsa_ust_sinir.not}` }))) : null,
+      el("p", { className: "ikincil", textContent: [v.efsa_ust_sinir.kapsam, v.efsa_ust_sinir.not].filter(Boolean).join(" ") }))) : null,
     liste("Dikkat", v.dikkat_edecekler, "guvenlik"),
     liste("Etkileşimler", (v.etkilesimler || []).map((e) => `${e.ile.join(", ")}: ${e.mesaj}`)),
     liste("Hekime sorulacaklar", v.hekime_sorulacaklar, "", true),
