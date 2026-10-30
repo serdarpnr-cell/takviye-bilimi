@@ -36,7 +36,77 @@ def _yukle(goreli_yol: str) -> dict:
 
 @lru_cache(maxsize=1)
 def urunler() -> list[dict]:
-    return _yukle("urunler.json")["urunler"]
+    return katalog_dogrula(_yukle("urunler.json")["urunler"])
+
+
+# --------------------------------------------------------------------------- #
+# Katalog doğrulaması: şüpheli satırlar karantinaya alınır, hesaplamalara katılmaz.
+# --------------------------------------------------------------------------- #
+
+# Etiketteki miktarın beslenme referans değeri (BRD) yüzdesine bölümü, o maddenin BRD'sini verir. Bir maddenin
+# katalogdaki ürünlerden çıkan BRD'lerinin ortancası esas alınır; bir satır bu değerin yarısı ile iki katı dışında
+# kalıyorsa miktar ile yüzde birbirini tutmuyor demektir. Kural en az KONSENSUS_EN_AZ satırı olan maddelere uygulanır.
+BRD_TOLERANSI = 2
+KONSENSUS_EN_AZ = 3
+_BIRIM_ADLARI = {1_000: ("mg", "µg"), 1 / 1_000: ("µg", "mg")}
+
+
+def brd_yuzdesi(metin: str | None) -> float | None:
+    """'%500', '%9285,70', 'NE* %100' → sayı; '**' (BRD yok) ya da boş → None."""
+    m = re.search(r"\d[\d.,]*", metin or "")
+    if not m:
+        return None
+    sayi = m.group(0)
+    if "," in sayi:
+        sayi = sayi.replace(".", "").replace(",", ".")
+    return float(sayi) or None
+
+
+def _ima_edilen_brd(em_id: str, satir: dict) -> float | None:
+    std = standart_miktar(em_id, satir["miktar"], satir["birim"])
+    yuzde = brd_yuzdesi(satir["brd"])
+    return std * 100 / yuzde if std and yuzde else None
+
+
+def katalog_dogrula(liste: list[dict]) -> list[dict]:
+    """Her içerik satırına, şüpheliyse 'karantina' alanı ekler: gerekçe ve varsa olası doğru birim."""
+    tanimli = kurallar()["etken_maddeler"]
+    satirlar = [(e["etken_madde"], e) for u in liste for e in u["etken_maddeler"] if e["etken_madde"] in tanimli]
+    orneklem: dict[str, list[float]] = {}
+    for em_id, e in satirlar:
+        b = _ima_edilen_brd(em_id, e)
+        if b:
+            orneklem.setdefault(em_id, []).append(b)
+    konsensus = {em_id: sorted(v)[len(v) // 2] for em_id, v in orneklem.items() if len(v) >= KONSENSUS_EN_AZ}
+
+    for em_id, e in satirlar:
+        e.pop("karantina", None)
+        if e["miktar"] is None and e["miktar_metni"] and _birim_kodu(tanimli[em_id]["birim"]) in ("g", "mg", "ug"):
+            # Ayrıştırıcı miktarı okuyamadı ya da makul bulmadı (birimsiz, üst sınırın çok üstünde).
+            e["karantina"] = {"gerekce": " ".join(e["okuma_notlari"]) or f"'{e['miktar_metni']}' okunamadı."}
+            continue
+        b = _ima_edilen_brd(em_id, e)
+        if b is None or em_id not in konsensus:
+            continue
+        oran = b / konsensus[em_id]
+        if 1 / BRD_TOLERANSI <= oran <= BRD_TOLERANSI:
+            continue
+        kayit = {"gerekce": (
+            f"Etiketteki miktar ({e['miktar_metni']}) ile beslenme referans değeri yüzdesi ({e['brd']}) birbirini tutmuyor."
+        )}
+        for katsayi, (eski, yeni) in _BIRIM_ADLARI.items():
+            if _birim_kodu(e["birim"]) == _birim_kodu(eski) and katsayi / BRD_TOLERANSI <= oran <= katsayi * BRD_TOLERANSI:
+                kayit["olasi_birim"] = yeni
+                kayit["gerekce"] += f" Yüzdeyle tutarlı birim {yeni}; sitedeki birim büyük olasılıkla hatalı."
+        e["karantina"] = kayit
+    return liste
+
+
+def satir_miktari(satir: dict) -> float | None:
+    """İçerik satırının standart birimdeki miktarı; karantinadaki ya da çevrilemeyen satırda None."""
+    if satir.get("karantina") or not satir["etken_madde"]:
+        return None
+    return standart_miktar(satir["etken_madde"], satir["miktar"], satir["birim"])
 
 
 @lru_cache(maxsize=1)

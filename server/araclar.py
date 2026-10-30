@@ -29,7 +29,7 @@ def _urun_karti(u: dict) -> dict:
     etkenler = []
     for em in u["etken_maddeler"]:
         em_id = em["etken_madde"]
-        std = veri.standart_miktar(em_id, em["miktar"], em["birim"]) if em_id else None
+        std = veri.satir_miktari(em)
         sinir = veri.ust_sinir(em_id, 18) if em_id else None
         etkenler.append({
             "etken_madde": em["etiketteki_ad"],
@@ -41,6 +41,7 @@ def _urun_karti(u: dict) -> dict:
                 "yetiskin_ust_siniri": _sinir_metni(em_id, sinir) if em_id else None,
             },
             **({"okuma_notu": " ".join(em["okuma_notlari"])} if em["okuma_notlari"] else {}),
+            **({"dogrulanamadi": _karantina_metni(em)} if em.get("karantina") else {}),
         })
     beyan = veri.urun_beyanlari().get(u["id"], {})
     return {
@@ -61,6 +62,11 @@ def _urun_karti(u: dict) -> dict:
         "urun_sayfasi": u["kaynak"]["url"],
         "erisim_tarihi": u["kaynak"]["erisim_tarihi"],
     }
+
+
+def _karantina_metni(em: dict) -> str:
+    k = em["karantina"]
+    return f"Bu satır doğrulanamadı ve hesaplamalara katılmadı. {k['gerekce']}"
 
 
 def _urun_kaynaklari(u: dict) -> list[dict]:
@@ -211,7 +217,7 @@ def kisisel_rutin(
                 if em["etken_madde"] is None:
                     kurali_olmayan.append(f"{u['ad']}: {em['etiketteki_ad']}")
                     continue
-                std = veri.standart_miktar(em["etken_madde"], em["miktar"], em["birim"])
+                std = veri.satir_miktari(em)
                 # Etiketteki en yüksek günlük kullanım esas alınır; hesaplanamazsa porsiyon başına miktar kullanılır.
                 carpan = em.get("gunluk_carpan")
                 if carpan is None:
