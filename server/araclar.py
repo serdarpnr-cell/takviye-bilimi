@@ -258,28 +258,36 @@ def kisisel_rutin(
         if len(urun_adlari) > 1:
             tekrar_edenler.append({"etken_madde": veri.etken_madde_adi(em_id), "urunler": urun_adlari})
 
-    # Üst sınır karşılaştırması: yalnızca rakam, yorum yok.
+    # Üst sınır karşılaştırması: yalnızca rakam, yorum yok. Miktarı doğrulanamayan içerik sessizce düşmez:
+    # o maddenin satırı "eksik" işaretlenir, aşım ancak doğrulanan kısım bile sınırı geçiyorsa kesin sayılır.
     ust_sinir_kontrolu = []
     sinir_kaynaklari: list[str] = []
-    birim_cevrilemeyen = []
+    dogrulanamayan = []
     for em_id, liste in icerik_kaynaklari.items():
         gecerli = [(ad, m) for ad, m in liste if m is not None]
-        birim_cevrilemeyen += [f"{ad}: {veri.etken_madde_adi(em_id)}" for ad, m in liste if m is None]
-        if not gecerli:
-            continue
+        eksikler = sorted({ad for ad, m in liste if m is None}, key=veri.normalize)
+        if em_id not in parca_idleri:
+            dogrulanamayan += [f"{ad}: {veri.etken_madde_adi(em_id)}" for ad in eksikler]
         sinir = veri.ust_sinir(em_id, yas)
         if sinir is None:
             continue
         toplam = sum(m for _, m in gecerli)
+        asiyor = toplam > sinir["deger"]
         ust_sinir_kontrolu.append({
             "etken_madde": veri.etken_madde_adi(em_id),
-            "takviyelerden_toplam": f"{_sayi(toplam)} {sinir['birim']} / gün",
+            "takviyelerden_toplam": (
+                f"{_sayi(toplam)} {sinir['birim']} / gün" + (" (yalnızca doğrulanan içerikler)" if eksikler else "")
+                if gecerli else "Hesaplanamadı"
+            ),
             "efsa_degeri": _sinir_metni(em_id, sinir),
-            "asiyor": toplam > sinir["deger"],
+            "asiyor": True if asiyor else (None if eksikler else False),
+            "kontrol": "eksik" if eksikler else "tam",
+            **({"dogrulanamayan_urunler": eksikler} if eksikler else {}),
             "kapsam": sinir["kapsam"],
         })
         sinir_kaynaklari += sinir["kaynaklar"]
     asimlar = [k for k in ust_sinir_kontrolu if k["asiyor"]]
+    eksik_kontroller = [k for k in ust_sinir_kontrolu if k["kontrol"] == "eksik"]
 
     # Etiketteki kullanım ve yaş sınırı.
     etiket_bilgileri = []
@@ -342,13 +350,26 @@ def kisisel_rutin(
     if "d3" in icerik_kaynaklari:
         sorular.append("D vitamini düzeyimin ölçülmesi gerekir mi?")
 
+    dogrulanamayan = sorted(set(dogrulanamayan), key=veri.normalize)
     ozet_parcalari = [
         f"{len(tekrar_edenler)} tekrar eden etken madde",
         f"{len(asimlar)} EFSA değeri aşımı",
         f"{len(etkilesimler)} etkileşim veya zamanlama notu",
     ]
+    eksik_metni = ""
+    if dogrulanamayan:
+        eksik_metni = f" {len(dogrulanamayan)} içerik doğrulanamadı ve hesaba katılmadı"
+        if eksik_kontroller:
+            eksik_metni += (
+                "; şu maddelerde üst sınır kontrolü eksik: "
+                + ", ".join(k["etken_madde"] for k in eksik_kontroller)
+            )
+        eksik_metni += "."
     return veri.zarf({
-        "kisa_ozet": "Rutin kontrolü: " + ", ".join(ozet_parcalari) + ". Bu bir değerlendirme değildir; sonuçları hekiminiz veya eczacınızla konuşun.",
+        "kisa_ozet": (
+            "Rutin kontrolü: " + ", ".join(ozet_parcalari) + "." + eksik_metni
+            + " Bu bir değerlendirme değildir; sonuçları hekiminiz veya eczacınızla konuşun."
+        ),
         "tekrar_eden_etken_maddeler": tekrar_edenler,
         "ust_sinir_kontrolu": ust_sinir_kontrolu,
         "ust_sinir_notu": (
@@ -363,7 +384,11 @@ def kisisel_rutin(
         "taninmayan_urunler": tanimsiz_urunler,
         "birden_fazla_eslesen_urunler": belirsiz_urunler,
         "taninmayan_icerikler": tanimsiz_icerikler,
-        "birimi_cevrilemeyen_icerikler": sorted(set(birim_cevrilemeyen)),
+        "dogrulanamayan_icerikler": dogrulanamayan,
+        **({"dogrulanamayan_notu": (
+            "Bu içeriklerin miktarı ürün sayfasında hatalı ya da okunamaz görünüyor veya birimi çevrilemedi. "
+            "Toplamlar ve üst sınır karşılaştırması bu içerikler olmadan hesaplandı; ambalajdaki etiketi kontrol edin."
+        )} if dogrulanamayan else {}),
         "gizlilik": "Girilen bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, veri.kaynaklar(["efsa_ul_ozet_2025", *sinir_kaynaklari], [veri.urun_kaynagi(u) for u in bulunan_urunler]))
 
