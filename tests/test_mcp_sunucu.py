@@ -28,6 +28,7 @@ CAGRILAR = {
         "diger_urun_icerikleri": [{"ad": "Multi", "icerikler": [{"etken_madde": "D vitamini", "miktar": 800, "birim": "IU"}]}],
     },
     "etken_madde_rehberi": {"etken_madde": "D vitamini", "yas": 41},
+    "sikayet_yolu": {"sikayet": "Kendimi yorgun hissediyorum", "yas": 41, "cinsiyet": "kadin"},
     "yasam_karnesi": {"cevaplar": {"hareket_gun": 2, "uyku_saat": 7, "sebze_meyve_porsiyon": 3,
                                    "balik_haftalik": 1, "sigara": "hayir", "stres": "bazen"}},
 }

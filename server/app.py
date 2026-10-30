@@ -149,6 +149,23 @@ def etken_madde_rehberi(
     return araclar.etken_madde_rehberi(etken_madde, yas, cinsiyet, evre, sigara, ilac_grubu)
 
 
+@mcp.tool(
+    title="Şikâyet yolu",
+    description=(
+        "Kullanıcı bir yakınmadan (ör. yorgunluk, halsizlik) yola çıkıp ne kullanması gerektiğini sorduğunda önce "
+        "bunu kullan. Dikkat edilecek işaretleri, hekimin isteyebileceği tahlilleri, yaşam karnesini ve ilgili kanıt "
+        "kartlarını tek yanıtta verir; ürün önermez."
+    ),
+    annotations=SALT_OKUMA,
+)
+def sikayet_yolu(
+    sikayet: Annotated[str, Field(description="Kullanıcının yakınması, ör. 'yorgunluk', 'hep yorgunum'")],
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş (yıl)")] = None,
+    cinsiyet: araclar.Cinsiyet | None = None,
+) -> dict[str, Any]:
+    return araclar.sikayet_yolu(sikayet, yas, cinsiyet)
+
+
 @mcp.resource(
     KARNE_ARAYUZU,
     name="karne",

@@ -195,6 +195,20 @@ def urun_saglik_beyanlari(u: dict) -> list[dict]:
 
 
 @lru_cache(maxsize=1)
+def sikayet_yollari() -> dict:
+    return _yukle("sikayet_yollari.json")["yollar"]
+
+
+def sikayet_id(metin: str) -> str | None:
+    """Serbest metindeki şikâyeti (ör. 'yorgunum', 'halsizlik') yol kimliğine çevirir."""
+    n = f" {normalize(metin)} "
+    for sid, yol in sikayet_yollari().items():
+        if any(f" {normalize(e)} " in n for e in [sid, *yol["esanlamlar"]]):
+            return sid
+    return None
+
+
+@lru_cache(maxsize=1)
 def _zorunlu_uyarilar() -> dict:
     return _yukle("zorunlu_uyarilar.json")["uyarilar"]
 

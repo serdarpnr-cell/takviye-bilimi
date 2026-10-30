@@ -1,0 +1,25 @@
+{
+  "_not": "Şikâyetten yola çıkan giriş (TB-19). Ürün önermez; önce kırmızı bayrak, sonra hekimin isteyebileceği tahliller, yaşam karnesi ve ilgili kanıt kartları. Medikal kurul onayı bekler. kosul alanı etken_madde_rehberi profiliyle aynı biçimdedir.",
+  "yollar": {
+    "yorgunluk": {
+      "ad": "Yorgunluk",
+      "esanlamlar": ["yorgunluk", "yorgun", "yorgunum", "halsizlik", "halsiz", "bitkinlik", "bitkin", "enerjim yok", "enerjisizlik", "tukenmislik", "hep yorgunum"],
+      "durum": "taslak",
+      "giris": "Yorgunluğun uyku, stres, beslenme, hareketsizlik ve çeşitli hastalıklar gibi birçok nedeni olabilir. Önce nedeni hekimle araştırılır; takviyeye tahlilden önce başlanmaz.",
+      "kirmizi_bayraklar": [
+        {"kosul": {}, "mesaj": "Yeni başlayan ve süren yorgunluk, özellikle ileri yaşta, gecikmeden hekimle değerlendirilmelidir.", "kaynaklar": ["bjc_yorgunluk_ileri_yas_2022"]},
+        {"kosul": {}, "mesaj": "Yorgunlukla birlikte istemsiz kilo kaybı, karın ağrısı, kabızlık ya da başka mide-bağırsak yakınmaları varsa, özellikle ileri yaşta, gecikmeden hekime başvurun.", "kaynaklar": ["bjgp_yorgunluk_belirtiler_2023"]},
+        {"kosul": {"cinsiyet": ["erkek"], "yas_min": 59}, "mesaj": "Senin yaş ve cinsiyet grubunda yorgunluğa kilo kaybı ya da mide-bağırsak yakınmaları eşlik ediyorsa, altta yatan bir hastalık açısından değerlendirme gecikmemelidir.", "kaynaklar": ["bjgp_yorgunluk_belirtiler_2023", "bjc_yorgunluk_ileri_yas_2022"]},
+        {"kosul": {"cinsiyet": ["kadin"], "yas_min": 65}, "mesaj": "Senin yaş ve cinsiyet grubunda yorgunluğa kilo kaybı eşlik ediyorsa, altta yatan bir hastalık açısından değerlendirme gecikmemelidir.", "kaynaklar": ["bjgp_yorgunluk_belirtiler_2023"]}
+      ],
+      "tahliller": {
+        "liste": ["Tam kan sayımı", "Böbrek fonksiyon testleri", "Karaciğer fonksiyon testleri", "Tiroid (TSH)", "Kemik profili", "CRP (iltihap belirteci)", "Ferritin (demir depoları)", "Çölyak testi (IgA doku transglutaminaz)", "CK (kas enzimi)"],
+        "not": "Bunlar İngiltere'de NICE'ın yorgunlukta önerdiği ilk basamak tahlillerdir; hangilerinin gerekli olduğuna belirtilerine göre hekim karar verir. B12 ve D vitamini bu ilk listede yer almaz; hekim gerekli görürse ister.",
+        "kaynaklar": ["nice_cks_yorgunluk_tahlil_2025"]
+      },
+      "tahlil_oncesi_uyarilari": ["b12_tahlil_oncesi", "demir_tahlil_oncesi"],
+      "karne": "Uyku, hareket, beslenme ve stresin yorgunlukla ilişkisini görmek için yaşam karnesi doldurulabilir.",
+      "ilgili_maddeler": ["demir", "b12", "magnezyum"]
+    }
+  }
+}

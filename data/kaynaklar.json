@@ -773,6 +773,46 @@
       ],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
+    },
+    "bjgp_yorgunluk_belirtiler_2023": {
+      "tur": "gozlemsel",
+      "pmid": "36702593",
+      "baslik": "Underlying cancer risk among patients with fatigue and other vague symptoms: a population-based cohort study in primary care",
+      "kurum_veya_dergi": "Br J Gen Pract",
+      "yil": 2023,
+      "alintilar": [
+        "Cancer risk exceeded 3% in older males with fatigue combined with any of the vague symptoms studied.",
+        "The age at which risk exceeded 3% was 59 years for fatigue-weight loss, 65 years for fatigue-abdominal pain, 67 years for fatigue-constipation, and 67 years for fatigue-other upper gastrointestinal symptoms.",
+        "For females, risk exceeded 3% only in older patients with fatigue-weight loss (from 65 years)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "bjc_yorgunluk_ileri_yas_2022": {
+      "tur": "gozlemsel",
+      "pmid": "35181753",
+      "baslik": "Risk of cancer following primary care presentation with fatigue: a population-based cohort study of a quarter of a million patients",
+      "kurum_veya_dergi": "Br J Cancer",
+      "yil": 2022,
+      "alintilar": [
+        "12-month cancer risk exceeded 3% in men aged 65 and over and women aged 80 and over",
+        "In older patients, new-onset fatigue is associated with cancer risk exceeding current thresholds for urgent specialist referral."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nice_cks_yorgunluk_tahlil_2025": {
+      "tur": "gozlemsel",
+      "pmid": "40085492",
+      "baslik": "'Tired all the time': What general practitioners request and find in patients with tiredness/fatigue - an audit against NICE clinical knowledge summary of tiredness/fatigue in adults",
+      "kurum_veya_dergi": "Ann Clin Biochem",
+      "yil": 2025,
+      "alintilar": [
+        "We report on how many first-line investigations recommended by the NICE CKS were requested",
+        "full blood count (FBC) 89%, renal function (U&Es) 83%, liver function tests (LFTs) 80%, thyroid-stimulating hormone (TSH) 80%, bone profile 70%, C-reactive protein (CRP) 66%, plasma viscosity (PV) 46%, ferritin 9.4%, IgA tissue transglutaminase (TTG) 3.2%, and creatine kinase (CK) 1.4%"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }

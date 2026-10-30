@@ -1016,3 +1016,67 @@ def _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorula
         "katalog_kapsami": _katalog_sayisi_metni(urun_sayisi),
         "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
+
+
+# --------------------------------------------------------------------------- #
+# 6. sikayet_yolu (TB-19)
+# --------------------------------------------------------------------------- #
+
+
+def sikayet_yolu(sikayet: str, yas: int | None = None, cinsiyet: str | None = None) -> dict:
+    """Şikâyetten yola çıkar: kırmızı bayrak, hekimin isteyebileceği tahliller, karne ve ilgili kanıt kartları.
+
+    Ürün listesi ve ürün önerisi döndürmez; kanıt kartı olmayan maddede bunu söyler.
+    """
+    sid = veri.sikayet_id(sikayet)
+    if sid is None:
+        return veri.zarf({
+            "kisa_ozet": (f"'{sikayet}' için şikâyet yolu henüz hazırlanmadı. Hazır yollar: "
+                          + ", ".join(y["ad"] for y in veri.sikayet_yollari().values()) + ". "
+                          "Süren ya da yeni başlayan bir yakınma hekimle değerlendirilmelidir."),
+            "hazir_yollar": [y["ad"] for y in veri.sikayet_yollari().values()],
+        }, veri.kaynaklar(["orzax_urunler"]))
+
+    yol = veri.sikayet_yollari()[sid]
+    profil = {"yas": yas, "cinsiyet": cinsiyet}
+    kaynak_idleri: list[str] = []
+    bayraklar = []
+    for b in yol["kirmizi_bayraklar"]:
+        if _kosul_saglanir(b["kosul"], profil):
+            bayraklar.append({"mesaj": b["mesaj"], "dayanak": [_kunye(i) for i in b["kaynaklar"]]})
+            kaynak_idleri += b["kaynaklar"]
+    kaynak_idleri += yol["tahliller"]["kaynaklar"]
+
+    uyarilar = {u["id"]: u for em in yol["ilgili_maddeler"] for u in veri.zorunlu_uyarilar(em)}
+    tahlil_oncesi = []
+    for uid in yol["tahlil_oncesi_uyarilari"]:
+        tahlil_oncesi.append(uyarilar[uid]["mesaj"])
+        kaynak_idleri += uyarilar[uid]["kaynaklar"]
+
+    kartlar = []
+    for em_id in yol["ilgili_maddeler"]:
+        m = veri.monografi(em_id)
+        if m is None:
+            kartlar.append({"etken_madde": _rehber_adi(em_id), "durum": "Kanıt kartı hazırlanıyor."})
+            continue
+        for k in m["kartlar"]:
+            kartlar.append({
+                "etken_madde": m["ad"], "sonuc_alani": k["sonuc_alani"], "populasyon": k["populasyon"],
+                "duzey": k["kanit_duzeyi"], "sonuc_yonu": k["sonuc_yonu"],
+                **({"durum": TASLAK_NOTU} if k["durum"] == "taslak" else {}),
+            })
+            kaynak_idleri += k["kaynaklar"]
+
+    return veri.zarf({
+        "kisa_ozet": (bayraklar[-1]["mesaj"] + " " if len(bayraklar) > 2 else "") + yol["giris"],
+        **({"durum": "Taslak: bu şikâyet yolu medikal kurul onayı bekliyor."} if yol["durum"] == "taslak" else {}),
+        "kirmizi_bayraklar": bayraklar,
+        "hekimin_isteyebilecegi_tahliller": {"liste": yol["tahliller"]["liste"], "not": yol["tahliller"]["not"]},
+        "tahlil_oncesi": tahlil_oncesi,
+        "yasam_karnesi": {"oneri": yol["karne"], "arac": "yasam_karnesi"},
+        "ilgili_kanit_kartlari": kartlar,
+        "kanit_karti_araci": "etken_madde_rehberi",
+        "beyan_aciklamasi": BEYAN_ACIKLAMASI,
+        "urun_notu": "Bu yol ürün önermez. Belirli bir ürünün etiket bilgisi için ürün adıyla sorulabilir.",
+        "gizlilik": "Bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
+    }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
