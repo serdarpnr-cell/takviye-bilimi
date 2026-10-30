@@ -302,49 +302,56 @@
       "kosul": {"etken_madde": "k2", "ilac_grubu": "kan_sulandirici_varfarin"},
       "seviye": "hekime_danis",
       "mesaj": "K vitamini, varfarin gibi K vitamini antagonisti kan sulandırıcıların etkisini değiştirebilir. Başlamadan, bırakmadan veya miktarı değiştirmeden önce hekiminize danışın.",
-      "soru": "Varfarin kullanırken K vitamini içeren bir ürün kullanmam INR takibimi etkiler mi?"
+      "soru": "Varfarin kullanırken K vitamini içeren bir ürün kullanmam INR takibimi etkiler mi?",
+      "kaynaklar": ["nih_ods_k_vitamini_hp"]
     },
     {
       "id": "omega3_kan_sulandirici",
       "kosul": {"etken_madde": "omega3", "ilac_grubu": ["kan_sulandirici_varfarin", "kan_sulandirici_diger"]},
       "seviye": "hekime_danis",
-      "mesaj": "Omega-3 içeren ürünler kan sulandırıcılarla birlikte kullanılacaksa hekime danışılmalıdır.",
-      "soru": "Kullandığım kan sulandırıcıyla birlikte omega-3 içeren bir ürün kullanmamın sakıncası var mı?"
+      "mesaj": "Yüksek miktarda balık yağı kanın pıhtılaşma süresini uzatabilir; omega-3 ilaçlarının prospektüsleri, kan sulandırıcıyla birlikte kullananlarda INR'nin düzenli izlenmesini ister. Kan sulandırıcı kullanıyorsanız omega-3 içeren ürüne başlamadan önce hekiminize danışın.",
+      "soru": "Kullandığım kan sulandırıcıyla birlikte omega-3 içeren bir ürün kullanmamın sakıncası var mı?",
+      "kaynaklar": ["nih_ods_omega3_hp"]
     },
     {
       "id": "demir_kalsiyum",
       "kosul": {"etken_madde": "demir", "diger_etken_madde": "kalsiyum"},
       "seviye": "zamanlama",
-      "mesaj": "Demir ve kalsiyum birbirinin emilimini azaltabilir. Etiketlerde aralarına en az 2 saat bırakılması önerilir.",
-      "soru": "Demir ve kalsiyum içeren ürünlerimi günün hangi saatlerinde almam uygun olur?"
+      "mesaj": "Kalsiyum demirin emilimini azaltabilir. Uzmanlar kalsiyum ve demir takviyelerinin günün farklı saatlerinde alınmasını önerir.",
+      "soru": "Demir ve kalsiyum içeren ürünlerimi günün hangi saatlerinde almam uygun olur?",
+      "kaynaklar": ["nih_ods_demir_hp"]
     },
     {
       "id": "demir_tiroid",
       "kosul": {"etken_madde": "demir", "ilac_grubu": "tiroid_hormonu"},
       "seviye": "zamanlama",
-      "mesaj": "Demir, tiroid hormonunun emilimini azaltabilir. Aradaki süre için hekiminize veya eczacınıza danışın.",
-      "soru": "Tiroid ilacım ile demir içeren ürün arasında ne kadar süre bırakmalıyım?"
+      "mesaj": "Demir ile levotiroksinin (tiroid hormonu) aynı anda alınması bazı kişilerde ilacın etkisini belirgin azaltabilir. Aradaki süre için hekiminize veya eczacınıza danışın.",
+      "soru": "Tiroid ilacım ile demir içeren ürün arasında ne kadar süre bırakmalıyım?",
+      "kaynaklar": ["nih_ods_demir_hp", "skelin_levotiroksin_emilim_2017"]
     },
     {
       "id": "magnezyum_tiroid",
       "kosul": {"etken_madde": "magnezyum", "ilac_grubu": "tiroid_hormonu"},
       "seviye": "zamanlama",
-      "mesaj": "Magnezyum, tiroid hormonunun emilimini azaltabilir. Aradaki süre için hekiminize veya eczacınıza danışın.",
-      "soru": "Tiroid ilacım ile magnezyum içeren ürün arasında ne kadar süre bırakmalıyım?"
+      "mesaj": "Magnezyum levotiroksinin (tiroid hormonu) emilimini azaltır; küçük bir çalışmada bu etki demir ve kalsiyumunkinden zayıftı. Araştırmacılar ilacın magnezyum içeren üründen ayrı saatte alınmasını öneriyor; süre için hekiminize veya eczacınıza danışın.",
+      "soru": "Tiroid ilacım ile magnezyum içeren ürün arasında ne kadar süre bırakmalıyım?",
+      "kaynaklar": ["thyromag_magnezyum_levotiroksin_2025"]
     },
     {
       "id": "mineral_antibiyotik",
       "kosul": {"etken_madde": ["demir", "magnezyum", "kalsiyum", "cinko"], "ilac_grubu": "antibiyotik_kinolon_tetrasiklin"},
       "seviye": "zamanlama",
-      "mesaj": "Demir, magnezyum, kalsiyum ve çinko bazı antibiyotiklerin emilimini azaltabilir. Aradaki süre için eczacınıza danışın.",
-      "soru": "Antibiyotiğimi kullandığım sürece mineral içeren ürünlerime ara vermeli miyim ya da saatlerini değiştirmeli miyim?"
+      "mesaj": "Demir, magnezyum, kalsiyum ve çinko, kinolon ve tetrasiklin grubu antibiyotiklerin emilimini azaltabilir. Aradaki süre için eczacınıza danışın.",
+      "soru": "Antibiyotiğimi kullandığım sürece mineral içeren ürünlerime ara vermeli miyim ya da saatlerini değiştirmeli miyim?",
+      "kaynaklar": ["nih_ods_magnezyum_hp", "nih_ods_cinko_hp", "nih_ods_kalsiyum_hp", "tetrasiklin_demir_emilim_1985", "siprofloksasin_fk_2024"]
     },
     {
       "id": "folik_asit_antiepileptik",
       "kosul": {"etken_madde": "folik_asit", "ilac_grubu": ["antiepileptik", "metotreksat"]},
       "seviye": "hekime_danis",
-      "mesaj": "Folik asit, bazı sara ilaçları ve metotreksat ile etkileşebilir. Kullanmadan önce hekiminize danışın.",
-      "soru": "Kullandığım ilaçla birlikte folik asit içeren bir ürün kullanabilir miyim?"
+      "mesaj": "Folik asit bazı sara ilaçlarının kandaki düzeyini düşürebilir ve kanser tedavisinde kullanılan metotreksatın etkisine karışabilir. Romatizmal hastalıklarda düşük doz metotreksatla birlikte kullanımda ise ilacın mide-bağırsak yan etkilerini azaltabileceği bildirilmiştir. Bu ilaçlardan birini kullanıyorsanız folik asit içeren ürüne başlamadan önce hekiminize danışın.",
+      "soru": "Kullandığım ilaçla birlikte folik asit içeren bir ürün kullanabilir miyim?",
+      "kaynaklar": ["nih_ods_folat_hp"]
     },
     {
       "id": "a_vitamini_gebelik",

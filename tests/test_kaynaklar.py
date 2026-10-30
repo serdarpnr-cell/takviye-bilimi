@@ -8,8 +8,9 @@ from server import araclar, veri
 # güvenlik uyarılarında dayanak olur, kanıt düzeyine katılmaz. "kurum_bilgi" kurumların halka yönelik bilgi
 # sayfasıdır (ör. NIH ODS); kanıt kartı hazırlanana kadar genel kılavuz bağlantısı olarak verilir.
 # "gozlemsel" yalnızca risk grubu bilgisinde kullanılır; kanıt düzeyi en fazla sınırlı olabilir.
-TURLER = {"kilavuz", "meta_analiz", "sistematik_derleme", "derleme", "kurum_bilgi", "rct", "gozlemsel", "duzenleyici",
-          "uretici_icerigi"}
+# "farmakokinetik" ilaç–takviye emilim çalışmasıdır; klinik sonuç ölçmez, yalnızca etkileşim kuralına dayanak olur.
+TURLER = {"kilavuz", "meta_analiz", "sistematik_derleme", "derleme", "kurum_bilgi", "rct", "gozlemsel", "farmakokinetik",
+          "duzenleyici", "uretici_icerigi"}
 YANIT_ALANLARI = {"baslik", "kurum_veya_dergi", "yil", "tur", "url", "pmid"}
 
 # Her aracın her dönüş yolu: soru, bulunamadı, belirsiz, tam sonuç.

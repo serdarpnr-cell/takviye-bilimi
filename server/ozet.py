@@ -118,7 +118,36 @@ def _yasam_karnesi(v: dict) -> list[str]:
 
 
 def _parti_analizi(v: dict) -> list[str]:
-    return [v["not"]]
+    if "sonuclar" not in v:
+        return [v["not"]]
+    return [
+        *([v["demo_notu"]] if v.get("demo") else []),
+        f"Laboratuvar: {v['laboratuvar']} · Tarih: {v['analiz_tarihi']}",
+        *_madde("Etiketteki ve ölçülen", [f"{r['etken_madde']}: {r['etiketteki']} → {r['olculen']} {r['birim']} (etiketin %{r['etikete_orani']}'i)"
+                                         for r in v["sonuclar"]]),
+        v["okuma_notu"],
+    ]
+
+
+def _urun_karsilastir(v: dict) -> list[str]:
+    if "urunler" not in v:
+        return [*_madde("Tanınmayan", v["taninmayan_urunler"]),
+                *_madde("Birden fazla eşleşen", [f"{k}: {', '.join(a)}" for k, a in v["birden_fazla_eslesen_urunler"].items()])]
+    satirlar = [f"{u['ad']}: {u['sunum_bicimi']}, {u['tek_ya_da_kombine']}, yaş {u['yas_siniri']}"
+                + (" [YAŞ SINIRI DIŞINDA]" if u.get("yas_siniri_disinda") else "")
+                + f", parti analizi {u['parti_analizi']}" + (f", {u['dogrulanamayan_satir']} satır doğrulanamadı" if u["dogrulanamayan_satir"] else "")
+                for u in v["urunler"]]
+    maddeler = [f"{r['etken_madde']}: " + " | ".join((h["etiketteki"] if h else "yok") for h in r["urunler"])
+                for r in v["etken_madde_karsilastirmasi"]]
+    return [*_madde("Ürünler", satirlar), *_madde("Etken madde (ürün sırasıyla)", maddeler), v["siralama_olcutu"]]
+
+
+def _tahlil_goster(v: dict) -> list[str]:
+    if "tahlil" not in v:
+        return [v["gizlilik"]]
+    return [f"Yaygın birimler: {', '.join(v['yaygin_birimler'])}. {v['birim_notu']}",
+            *_madde("Tahlil öncesi", v["tahlil_oncesi"]), *([v["tahlil_notu"]] if v.get("tahlil_notu") else []),
+            v["yorum_notu"], v["gizlilik"]]
 
 
 def _sikayet_yolu(v: dict) -> list[str]:
@@ -147,6 +176,8 @@ _OZETLEYICILER: dict[str, Callable[[dict], list[str]]] = {
     "yasam_karnesi": _yasam_karnesi,
     "parti_analizi": _parti_analizi,
     "sikayet_yolu": _sikayet_yolu,
+    "urun_karsilastir": _urun_karsilastir,
+    "tahlil_goster": _tahlil_goster,
 }
 
 

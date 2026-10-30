@@ -94,14 +94,17 @@ def test_kan_sulandirici_yoksa_etkilesim_notu_yok():
     assert y["etkilesim_ve_zamanlama"] == []
 
 
-def test_demir_ve_kalsiyum_arasinda_2_saat():
+def test_demir_ve_kalsiyum_farkli_saatlerde():
     y = kisisel_rutin(
         30, "kadin",
         mevcut_urunler=["Ocean Microfer Kapsül"],
         diger_urun_icerikleri=[{"ad": "Kalsiyum Tablet", "icerikler": [{"etken_madde": "Kalsiyum", "miktar": 600, "birim": "mg"}]}],
     )
     notlar = [e for e in y["etkilesim_ve_zamanlama"] if e["konu"] == "Demir + Kalsiyum"]
-    assert len(notlar) == 1 and "2 saat" in notlar[0]["mesaj"]
+    # Kaynak (NIH ODS) süre vermez, "günün farklı saatleri" der; kaynaksız "2 saat" ifadesi kaldırıldı.
+    assert len(notlar) == 1 and "günün farklı saatlerinde" in notlar[0]["mesaj"]
+    assert "2 saat" not in notlar[0]["mesaj"]
+    assert any("Iron (Fact Sheet for Health Professionals)" in k["baslik"] for k in y["kaynaklar"])
 
 
 def test_yas_siniri_ve_gebelik_sorulari():

@@ -27,6 +27,9 @@ KARNE_ARAYUZU = "ui://takviye-bilimi/karne"
 KANIT_ARAYUZU = "ui://takviye-bilimi/kanit"
 URUN_ARAYUZU = "ui://takviye-bilimi/urun"
 RUTIN_ARAYUZU = "ui://takviye-bilimi/rutin"
+KARSILASTIRMA_ARAYUZU = "ui://takviye-bilimi/karsilastirma"
+PARTI_ARAYUZU = "ui://takviye-bilimi/parti"
+TAHLIL_ARAYUZU = "ui://takviye-bilimi/tahlil"
 MCP_APP_MIME = "text/html;profile=mcp-app"
 
 # Sadece okuma yapan, dış dünyaya dokunmayan araçlar.
@@ -81,9 +84,10 @@ def urun_rehberi(
 
 @mcp.tool(
     title="Parti analizi",
+    meta={"ui": {"resourceUri": PARTI_ARAYUZU}},
     description=(
-        "Kutudaki karekod içeriğinden ya da parti numarasından yayımlanmış parti analizini arar. Katalogda şu an "
-        "yayımlanmış analiz yoktur; araç bunu bildirir. Kullanıcı karekod okuttuğunda veya bir partinin analizini sorduğunda kullan."
+        "Kutudaki karekod içeriğinden ya da parti numarasından yayımlanmış parti analizini arar. Şu an gerçek analiz "
+        "yoktur; yalnızca DEMO-0001 gösterim kaydı vardır. Kullanıcı karekod okuttuğunda veya bir partinin analizini sorduğunda kullan."
     ),
     annotations=SALT_OKUMA,
 )
@@ -177,6 +181,37 @@ def sikayet_yolu(
 
 
 @mcp.tool(
+    title="Ürün karşılaştırma",
+    meta={"ui": {"resourceUri": KARSILASTIRMA_ARAYUZU}},
+    description=(
+        "Kullanıcı 2–5 ürün arasında 'hangisi' diye sorduğunda ürünleri aynı ölçütlerle yan yana koyar: sunum biçimi, "
+        "miktar, tek ya da kombine, parti analizi, yaş sınırı. Sıralama ya da öneri yapmaz."
+    ),
+    annotations=SALT_OKUMA,
+)
+def urun_karsilastir(
+    urunler: Annotated[list[str], Field(min_length=2, max_length=5, description="Karşılaştırılacak 2–5 ürün adı")],
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş; yaş sınırına uygunluk işaretlenir")] = None,
+) -> CallToolResult:
+    return ozet.sonuc("urun_karsilastir", araclar.urun_karsilastir(urunler, yas))
+
+
+@mcp.tool(
+    title="Tahlil görünümü",
+    meta={"ui": {"resourceUri": TAHLIL_ARAYUZU}},
+    description=(
+        "Kullanıcı B12, ferritin ya da D vitamini tahlil sonucunu anlamak istediğinde kartı açar. Değer araca gönderilmez; "
+        "kullanıcı değerini ve raporundaki referans aralığını kartta, kendi cihazında girer. Tahmin ve doz vermez."
+    ),
+    annotations=SALT_OKUMA,
+)
+def tahlil_goster(
+    tahlil: Annotated[str, Field(description="Tahlil adı: 'B12', 'ferritin' ya da 'D vitamini'. Değer yazılmaz.")],
+) -> CallToolResult:
+    return ozet.sonuc("tahlil_goster", araclar.tahlil_goster(tahlil))
+
+
+@mcp.tool(
     title="Katalog sayfası (görsel kart)",
     description="Görsel kartın sayfalama için çağırdığı araçtır; modelden gizlidir. Kanıt kartı olmayan maddede ürün döndürmez.",
     annotations=SALT_OKUMA,
@@ -232,6 +267,39 @@ def urun_arayuzu() -> str:
 )
 def rutin_arayuzu() -> str:
     return arayuz.kart_html("rutin")
+
+
+@mcp.resource(
+    KARSILASTIRMA_ARAYUZU,
+    name="karsilastirma",
+    title="Karşılaştırma kartı",
+    description="2–5 ürünü kriter tablosunda yan yana gösterir; sıralama yoktur.",
+    mime_type=MCP_APP_MIME,
+)
+def karsilastirma_arayuzu() -> str:
+    return arayuz.kart_html("karsilastirma")
+
+
+@mcp.resource(
+    PARTI_ARAYUZU,
+    name="parti",
+    title="Parti kartı",
+    description="Parti analizinde etiketteki ve ölçülen miktarı, laboratuvarı ve tarihi gösterir; demo kayıtlar etiketlidir.",
+    mime_type=MCP_APP_MIME,
+)
+def parti_arayuzu() -> str:
+    return arayuz.kart_html("parti")
+
+
+@mcp.resource(
+    TAHLIL_ARAYUZU,
+    name="tahlil",
+    title="Tahlil kartı",
+    description="Kullanıcının kendi değerini kendi laboratuvarının referans aralığında gösterir; değer cihazda kalır.",
+    mime_type=MCP_APP_MIME,
+)
+def tahlil_arayuzu() -> str:
+    return arayuz.kart_html("tahlil")
 
 
 def main() -> None:

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tahlil görünümü</title>
+<style>
+__ORTAK_CSS__
+  .alanlar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 12px; }
+  .alanlar label { display: flex; flex-direction: column; font-size: 13px; color: var(--ikincil); gap: 4px; }
+  .alanlar input, .alanlar select { font: inherit; color: var(--metin); background: var(--zemin); border: 1px solid var(--cizgi);
+                                    border-radius: 8px; padding: 8px; min-width: 0; width: 100%; }
+  .eksen { position: relative; height: 28px; margin: 16px 0 4px; }
+  .eksen-cizgi { position: absolute; left: 0; right: 0; top: 12px; height: 4px; background: var(--nokta-bos); border-radius: 2px; }
+  .eksen-bant { position: absolute; top: 8px; height: 12px; background: var(--vurgu); opacity: .35; border-radius: 6px; }
+  .eksen-isaret { position: absolute; top: 2px; width: 4px; height: 24px; margin-left: -2px; background: var(--metin); border-radius: 2px; }
+  .eksen-etiketler { position: relative; height: 18px; font-size: 12px; color: var(--ikincil); }
+  .eksen-etiketler span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+</style>
+</head>
+<body>
+<main>
+  <section id="bilgi"><p class="ikincil">Tahlil kartı yükleniyor…</p></section>
+  <section id="giris" hidden>
+    <h2>Kendi sonucun</h2>
+    <p class="ikincil" id="gizlilik"></p>
+    <form id="form" class="kart" autocomplete="off">
+      <div class="alanlar">
+        <label>Değerin<input id="deger" type="number" step="any" inputmode="decimal" required></label>
+        <label>Birim<select id="birim"></select></label>
+        <label>Raporundaki alt sınır<input id="alt" type="number" step="any" inputmode="decimal"></label>
+        <label>Raporundaki üst sınır<input id="ust" type="number" step="any" inputmode="decimal"></label>
+      </div>
+      <p class="ikincil">Alt ya da üst sınırdan en az birini raporundan yaz; ikisi de aynı birimde olmalı.</p>
+      <p id="hata" class="hata" hidden></p>
+      <div class="eylemler"><button id="goster" type="button">Göster</button></div>
+    </form>
+    <section id="sonuc" hidden></section>
+  </section>
+</main>
+<script>
+__ORTAK_JS__
+// KVKK: tahlil değeri özel nitelikli kişisel veridir. Bu kart değeri hiçbir yere göndermez (tools/call, ui/message
+// ya da ağ isteği yok) ve saklamaz (localStorage/sessionStorage yok). Yalnızca bu sayfanın belleğinde çizilir.
+const { el } = TB;
+const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+const oku = (id) => { const d = document.getElementById(id).value.trim(); return d === "" ? null : Number(d.replace(",", ".")); };
+
+function bilgi(sonuc) {
+  const v = sonuc?.structuredContent;
+  if (!v || !v.kisa_ozet) return;
+  const b = document.getElementById("bilgi");
+  if (!v.tahlil) {
+    TB.doldur(b, el("h1", { textContent: "Tahlil görünümü" }), el("p", { textContent: v.kisa_ozet }), TB.kaynaklar(v.kaynaklar));
+    return;
+  }
+  TB.doldur(b,
+    el("h1", { textContent: v.tahlil }),
+    el("p", { textContent: v.ne_olcer }),
+    ...v.tahlil_oncesi.map((m) => el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Tahlilden önce" }), el("p", { textContent: m }))),
+    v.tahlil_notu ? el("p", { className: "ikincil", textContent: v.tahlil_notu }) : null);
+  document.getElementById("gizlilik").textContent = v.gizlilik;
+  const secim = document.getElementById("birim");
+  secim.replaceChildren(...v.yaygin_birimler.map((u) => el("option", { value: u, textContent: u })), el("option", { value: "", textContent: "Başka birim" }));
+  document.getElementById("giris").hidden = false;
+  document.getElementById("form").dataset.yorum = v.yorum_notu;
+  document.getElementById("giris").after(TB.kaynaklar(v.kaynaklar), el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+function ciz(deger, alt, ust, birim, yorum) {
+  const sinirlar = [alt, ust].filter((x) => x !== null);
+  const enAz = Math.min(deger, ...sinirlar), enCok = Math.max(deger, ...sinirlar);
+  const pay = (enCok - enAz) * 0.25 || Math.abs(enCok) * 0.25 || 1;
+  const bas = Math.max(0, enAz - pay), son = enCok + pay;
+  const konum = (x) => ((x - bas) / (son - bas)) * 100;
+  let durum;
+  if (alt !== null && deger < alt) durum = "raporundaki alt sınırın altında";
+  else if (ust !== null && deger > ust) durum = "raporundaki üst sınırın üstünde";
+  else durum = alt !== null && ust !== null ? "raporundaki referans aralığının içinde" : "raporundaki sınırın beklenen tarafında";
+  const bant = el("div", { className: "eksen-bant", style: `left:${konum(alt ?? bas)}%;width:${konum(ust ?? son) - konum(alt ?? bas)}%` });
+  return el("div", { className: "kart" },
+    el("strong", { textContent: `${sayi(deger)} ${birim}: ${durum}.` }),
+    el("div", { className: "eksen" }, el("div", { className: "eksen-cizgi" }), bant, el("div", { className: "eksen-isaret", style: `left:${konum(deger)}%` })),
+    el("div", { className: "eksen-etiketler" },
+      ...(alt !== null ? [el("span", { style: `left:${konum(alt)}%`, textContent: sayi(alt) })] : []),
+      ...(ust !== null ? [el("span", { style: `left:${konum(ust)}%`, textContent: sayi(ust) })] : [])),
+    el("p", { className: "ikincil", textContent: "Yeşil bant raporundaki referans aralığıdır; siyah çizgi senin değerin." }),
+    el("p", { textContent: "Sonucu, belirtilerinle birlikte hekiminle değerlendir." }),
+    el("p", { className: "ikincil", textContent: yorum }));
+}
+
+// Sandbox'lı iframe'de 'allow-forms' izni olmayabilir; form gönderimi yerine düğme tıklaması kullanılır.
+document.getElementById("form").addEventListener("submit", (o) => o.preventDefault());
+document.getElementById("goster").addEventListener("click", () => {
+  const form = document.getElementById("form");
+  const hata = document.getElementById("hata");
+  const deger = oku("deger"), alt = oku("alt"), ust = oku("ust");
+  const birim = document.getElementById("birim").value || "(raporundaki birim)";
+  hata.hidden = true;
+  let sorun = null;
+  if (deger === null || Number.isNaN(deger) || deger < 0) sorun = "Değerini sayı olarak yaz.";
+  else if (alt === null && ust === null) sorun = "Raporundaki alt ya da üst sınırdan en az birini yaz.";
+  else if ([alt, ust].some((x) => x !== null && (Number.isNaN(x) || x < 0))) sorun = "Sınırları sayı olarak yaz.";
+  else if (alt !== null && ust !== null && alt >= ust) sorun = "Alt sınır üst sınırdan küçük olmalı.";
+  if (sorun) { hata.textContent = sorun; hata.hidden = false; return; }
+  const s = document.getElementById("sonuc");
+  TB.doldur(s, ciz(deger, alt, ust, birim, form.dataset.yorum));
+  s.hidden = false;
+});
+
+TB.baslat("takviye-bilimi-tahlil", { sonuc: bilgi });
+</script>
+</body>
+</html>

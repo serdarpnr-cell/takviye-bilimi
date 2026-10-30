@@ -24,7 +24,7 @@ __ORTAK_CSS__
     <p class="ikincil">Altı soru. Her birinde sana en yakın seçeneği işaretle. Cevapların saklanmaz.</p>
     <form id="form"></form>
     <p id="form-hata" class="hata" hidden></p>
-    <div class="eylemler"><button id="gonder" type="submit" form="form" disabled>Karnemi çıkar</button></div>
+    <div class="eylemler"><button id="gonder" type="button" disabled>Karnemi çıkar</button></div>
   </section>
   <section id="sonuc-bolumu" hidden></section>
 </main>
@@ -68,8 +68,9 @@ function formuDoldur(c) {
   form.dispatchEvent(new Event("change"));
 }
 
-form.addEventListener("submit", async (olay) => {
-  olay.preventDefault();
+// Sandbox'lı iframe'de 'allow-forms' izni olmayabilir; form gönderimi yerine düğme tıklaması kullanılır.
+form.addEventListener("submit", (olay) => olay.preventDefault());
+gonder.addEventListener("click", async () => {
   const hata = document.getElementById("form-hata");
   hata.hidden = true;
   gonder.disabled = true;

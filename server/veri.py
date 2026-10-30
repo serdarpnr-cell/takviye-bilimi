@@ -195,6 +195,21 @@ def urun_saglik_beyanlari(u: dict) -> list[dict]:
 
 
 @lru_cache(maxsize=1)
+def parti_analizleri() -> list[dict]:
+    return _yukle("parti_analizleri.json")["partiler"]
+
+
+def parti_bul(parti_no: str) -> dict | None:
+    aranan = parti_no.strip().casefold()
+    return next((p for p in parti_analizleri() if p["parti_no"].casefold() == aranan), None)
+
+
+def gercek_parti_analizi_var(urun_id: str) -> bool:
+    """Demo kayıtlar sayılmaz."""
+    return any(p["urun_id"] == urun_id and not p["demo"] for p in parti_analizleri())
+
+
+@lru_cache(maxsize=1)
 def sikayet_yollari() -> dict:
     return _yukle("sikayet_yollari.json")["yollar"]
 

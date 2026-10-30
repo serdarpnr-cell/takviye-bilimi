@@ -28,6 +28,8 @@ os.environ.setdefault("TB_TASLAK_GOSTER", "1")
 from server import araclar, arayuz  # noqa: E402
 
 NODE_BETIGI = Path(__file__).resolve().parent / "kart_onizleme.mjs"
+# Tahlil senaryosunda girilen, mesajlarda aranacak ayırt edici değer.
+TAHLIL_DEGERI = 8.734
 
 
 def _sonuc(v: dict) -> dict:
@@ -43,6 +45,10 @@ def senaryolar() -> list[dict]:
          "beklenen": ["form fieldset", "#gonder"]},
         {"ad": "karne_sonuc", "html": arayuz.karne_html(), "girdi": {"cevaplar": karne_cevap},
          "sonuc": _sonuc(araclar.yasam_karnesi(karne_cevap, 45)), "beklenen": [".puan", "#kaynaklar"]},
+        # Karne formunu tıklayarak gönderir; host tools/call yasam_karnesi'ne gerçek sonuçla yanıt verir.
+        {"ad": "karne_gonder", "html": arayuz.karne_html(), "girdi": {"cevaplar": karne_cevap},
+         "sonuc": _sonuc(araclar.yasam_karnesi()), "cagrilar": {"yasam_karnesi": [_sonuc(araclar.yasam_karnesi(karne_cevap))]},
+         "tikla": "#gonder", "beklenen": [".puan"]},
         {"ad": "kanit_d_vitamini", "html": arayuz.kart_html("kanit"), "girdi": d_vitamini,
          "sonuc": _sonuc(araclar.etken_madde_rehberi(**d_vitamini)),
          "cagrilar": {"katalog_sayfasi": [_sonuc(araclar.katalog_sayfasi("D vitamini", n, 42)) for n in range(2, 8)]},
@@ -59,6 +65,17 @@ def senaryolar() -> list[dict]:
                                                diger_urun_icerikleri=[{"ad": "Multivitamin", "icerikler": [
                                                    {"etken_madde": "D vitamini", "miktar": 2000, "birim": "IU"}]}])),
          "beklenen": [".cubuk-dolgu span", ".cubuk-sinir", ".rozet"]},
+        {"ad": "karsilastirma_magnezyum", "html": arayuz.kart_html("karsilastirma"), "girdi": {},
+         "sonuc": _sonuc(araclar.urun_karsilastir(["Ocean ExtraMag Magnezyum Bisglisinat + P5P", "Ocean Magnezyum Complex",
+                                                    "Ocean ExtraMag Magnezyum Sitrat Saşe"], 40)),
+         "beklenen": ["table thead th", "tbody tr"]},
+        {"ad": "parti_demo", "html": arayuz.kart_html("parti"), "girdi": {"karekod_veya_parti_no": "DEMO-0001"},
+         "sonuc": _sonuc(araclar.parti_analizi("DEMO-0001")), "beklenen": [".demo", ".cubuk-sinir"]},
+        # Tahlil: kullanıcı değerini kartta girer; değer hiçbir mesajla dışarı çıkmamalı (testte denetlenir).
+        {"ad": "tahlil_ferritin", "html": arayuz.kart_html("tahlil"), "girdi": {"tahlil": "ferritin"},
+         "sonuc": _sonuc(araclar.tahlil_goster("ferritin")),
+         "doldur": {"#deger": TAHLIL_DEGERI, "#alt": 15, "#ust": 150}, "tikla": "#goster",
+         "beklenen": [".eksen-isaret", ".eksen-bant"]},
     ]
 
 
