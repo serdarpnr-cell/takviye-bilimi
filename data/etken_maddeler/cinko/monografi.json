@@ -1,0 +1,43 @@
+{
+  "id": "cinko",
+  "ad": "Çinko",
+  "katalog_kimlikleri": [
+    "cinko"
+  ],
+  "beyan_anahtarlari": [
+    "cinko"
+  ],
+  "kisa_ozet": "Çinko soğuk algınlığını önlemede az ya da hiç etki göstermedi. Algınlık başladıktan sonra kullanıldığında süreyi kısaltabilir, ancak kanıt düşük kesinlikte ve çalışmalar çok farklı. Tedavi amaçlı kullanımda ciddi olmayan yan etkiler daha sıktı.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Soğuk algınlığı başlamış kişiler",
+      "gerekce": "Cochrane derlemesinde süre kısalması görüldü; kanıt düşük kesinlikte ve çalışmalar arası farklılık büyük.",
+      "kaynaklar": [
+        "cochrane_cinko_soguk_2024"
+      ]
+    }
+  ],
+  "kimde_kanit_var_notu": "Kişisel karar ve miktar hekimle verilir.",
+  "dikkat_kurallari": [
+    {
+      "kosul": {},
+      "mesaj": "EFSA yetişkinler için çinko üst sınırını günde 25 mg olarak belirlemiştir; birden fazla çinko içeren ürün kullanılıyorsa toplam birlikte değerlendirilmelidir.",
+      "kaynaklar": [
+        "efsa_ul_ozet_2025"
+      ]
+    }
+  ],
+  "hekime_sorulacaklar": [
+    "Kullandığım ürünlerden gelen toplam çinko miktarı uygun mu?"
+  ],
+  "uretici_icerikleri": [],
+  "kaynaklar": [
+    "cochrane_cinko_soguk_2024",
+    "nih_ods_cinko_hp",
+    "efsa_ul_ozet_2025"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

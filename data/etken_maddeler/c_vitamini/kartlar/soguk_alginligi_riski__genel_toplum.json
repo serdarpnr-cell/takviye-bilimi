@@ -1,0 +1,29 @@
+{
+  "id": "c_vitamini__soguk_alginligi_riski__genel_toplum",
+  "etken_madde": "c_vitamini",
+  "sonuc_alani": "Soğuk algınlığı geçirme riski",
+  "populasyon": "Genel toplum; düzenli (her gün) C vitamini kullanımı",
+  "soru": "Düzenli C vitamini soğuk algınlığı geçirme riskini azaltır mı?",
+  "kanit_duzeyi": "guclu",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "Cochrane derlemesinde genel toplumdaki çalışmalarda (10.708 kişi) risk oranı 0,97 (%95 GA 0,94–1,00) bulundu: anlamlı azalma yok. Çalışmaların çoğu randomize ve çift kördü.",
+  "halk_ozeti": "Her gün C vitamini alan genel toplumdaki kişilerde soğuk algınlığı geçirme oranı, almayanlarla neredeyse aynıydı. Kısa süreli çok ağır egzersiz yapan küçük gruplarda risk daha düşüktü; bu sonuç genel topluma genellenemez.",
+  "mutlak_fark": {
+    "metin": "100 kişide kaç kişinin algınlık geçirdiği, kaynağın özetinde verilmediği için hesaplanamadı. Göreli olarak risk oranı 0,97: fark yok denecek kadar küçük.",
+    "hesap": "Kaynak: Cochrane 2013 özet metni (RR 0,97; %95 GA 0,94–1,00; 10.708 kişi). Olay oranları tam metindeki karşılaştırma tablolarındadır; kurul için açık soru: grup başına olay oranından 100 kişide mutlak fark."
+  },
+  "calisilan_dozlar": "Derlemeye günde en az 0,2 g C vitamini kullanılan plasebo kontrollü çalışmalar alındı.",
+  "ne_bilmiyoruz": "Ağır egzersiz yapanlardaki düşük risk (risk oranı 0,48) beş küçük çalışmaya (598 kişi) dayanıyor; bu bulgunun büyük çalışmalarla doğrulanması gerekiyor.",
+  "kaynaklar": [
+    "cochrane_c_vitamini_soguk_2013",
+    "nih_ods_c_vitamini"
+  ],
+  "kurul_acik_sorulari": [
+    "Grup başına olay oranları (tam metin karşılaştırma tablosu) ile 100 kişide mutlak fark",
+    "Kanıt düzeyi: özette GRADE yok; 'güçlü' derlemenin büyüklüğü ve tutarlılığından türetildi"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

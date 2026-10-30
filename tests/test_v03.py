@@ -74,10 +74,15 @@ def test_kis_sorusu_kopru_kanit_kartina(taslak):
     v = araclar.takviye_rehberi("Kış geldi, hangi vitaminleri almam gerek?")
     assert v["hedef"] == "kis_bagisiklik"
     assert [m["etken_madde"] for m in v["maddeler"]] == ["D vitamini", "C vitamini", "Çinko"]
-    assert v["kopru"]["evet_ise"] == [{"arac": "etken_madde_rehberi", "parametreler": {"etken_madde": "D vitamini"}}]
-    c = next(m for m in v["maddeler"] if m["etken_madde"] == "C vitamini")
-    assert c["kart_durumu"] == "hazirlaniyor" and c["genel_bilgi"].startswith("https://ods.od.nih.gov/")
-    assert "katalogdaki_urun_sayisi" not in c  # tek gösterim kuralı
+    assert [x["parametreler"]["etken_madde"] for x in v["kopru"]["evet_ise"]] == ["D vitamini", "C vitamini", "Çinko"]
+
+
+def test_karti_olmayan_madde_genel_bilgiyle_ve_sayisiz(taslak):
+    v = araclar.takviye_rehberi("kemiklerim için", hedef="kemik_kas")
+    k = next(m for m in v["maddeler"] if m["etken_madde"] == "Kalsiyum")
+    assert k["kart_durumu"] == "hazirlaniyor" and k["genel_bilgi"].startswith("https://ods.od.nih.gov/")
+    assert "katalogdaki_urun_sayisi" not in k  # tek gösterim kuralı
+    assert all(x["parametreler"]["etken_madde"] != "Kalsiyum" for x in v["kopru"]["evet_ise"])
 
 
 def test_tek_madde_sorusu(taslak):
@@ -137,7 +142,7 @@ def test_ek3_tek_icerikliler_once_dim_ultra_degil(taslak):
 
 
 def test_ek4_tek_gosterim_kurali(taslak):
-    for em in ["c_vitamini", "cinko"]:
+    for em in ["e_vitamini", "beta_karoten"]:
         assert veri.kart_durumu(em) == "hazirlaniyor"
         assert "katalogdaki_urunler" not in araclar.etken_madde_rehberi(veri.etken_madde_adi(em))
     assert veri.kart_durumu("d3") == "taslak" and araclar.etken_madde_rehberi("D vitamini")["katalogdaki_urunler"]
@@ -209,5 +214,5 @@ async def test_sayaclar_kisisel_veri_tutmaz(taslak):
         assert yasak not in metin, yasak
     assert r["sayaclar"]["arac"]["takviye_rehberi"] == 1
     assert r["sayaclar"]["yas_araligi"] == {"18–64": 1}
-    assert {"etken_madde": "c_vitamini", "sayi": 1} in r["karti_olmayan_en_cok_sorulan_5_madde"]
+    assert r["karti_olmayan_en_cok_sorulan_5_madde"] == [{"etken_madde": "tanimsiz", "sayi": 1}]
     assert r["sayaclar"]["kopru"]["soruldu"] >= 1

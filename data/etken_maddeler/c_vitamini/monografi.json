@@ -1,0 +1,51 @@
+{
+  "id": "c_vitamini",
+  "ad": "C vitamini",
+  "katalog_kimlikleri": [
+    "c_vitamini"
+  ],
+  "beyan_anahtarlari": [
+    "c vitamini"
+  ],
+  "kisa_ozet": "Düzenli C vitamini genel toplumda soğuk algınlığı geçirme riskini azaltmadı; algınlık süresini biraz kısalttı. Belirtiler başladıktan sonra alınan C vitamini tutarlı bir etki göstermedi. Ağır fiziksel egzersiz yapan küçük gruplarda risk daha düşüktü.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Kısa süreli ağır fiziksel egzersiz yapanlar (maraton koşucuları, kayakçılar, soğuk iklimde tatbikat yapan askerler)",
+      "gerekce": "Cochrane derlemesinde bu küçük gruplarda düzenli C vitamini alanlarda soğuk algınlığı riski daha düşüktü.",
+      "kaynaklar": [
+        "cochrane_c_vitamini_soguk_2013"
+      ]
+    },
+    {
+      "grup": "Genel toplum",
+      "gerekce": "Cochrane derlemesinde düzenli C vitamini soğuk algınlığı geçirme riskini azaltmadı; algınlık süresi biraz kısaldı.",
+      "kaynaklar": [
+        "cochrane_c_vitamini_soguk_2013"
+      ]
+    }
+  ],
+  "kimde_kanit_var_notu": "Kişisel karar ve miktar hekimle verilir.",
+  "dikkat_kurallari": [
+    {
+      "kosul": {},
+      "mesaj": "EFSA, C vitamini için üst sınır belirlemeye yeterli veri bulmamıştır; bu, her miktarın güvenli olduğu anlamına gelmez.",
+      "kaynaklar": [
+        "efsa_ul_ozet_2025"
+      ]
+    }
+  ],
+  "hekime_sorulacaklar": [
+    "Benim durumumda C vitamini kullanmamın bir yararı var mı?",
+    "Kullandığım ürünlerden gelen toplam C vitamini miktarı uygun mu?"
+  ],
+  "uretici_icerikleri": [],
+  "kaynaklar": [
+    "cochrane_c_vitamini_soguk_2013",
+    "nih_ods_c_vitamini",
+    "efsa_ul_ozet_2025"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "folik_asit__noral_tup_defekti__gebelik_oncesi",
+  "etken_madde": "folik_asit",
+  "sonuc_alani": "Bebekte nöral tüp defekti",
+  "populasyon": "Gebelik planlayan ya da gebe kalabilecek kişiler; MRC çalışmasında önceki gebeliği etkilenmiş kadınlar",
+  "soru": "Gebelik öncesinde başlanan folik asit bebekte nöral tüp defekti riskini azaltır mı?",
+  "kanit_duzeyi": "guclu",
+  "sonuc_yonu": "fayda",
+  "gerekce": "MRC Vitamin çalışmasında (1.817 yüksek riskli kadın) folik asit gruplarında nöral tüp defekti 6, diğer gruplarda 21 gebelikte görüldü: göreli risk 0,28 (%95 GA 0,12–0,71). USPSTF 2023 yeniden değerlendirmesi yüksek kesinlikte belirgin net fayda bildirir.",
+  "halk_ozeti": "Gebelikten önce folik asit kullanmaya başlamak, bebekte omurilik ve beyni etkileyen nöral tüp defekti riskini belirgin şekilde azaltır. Bu, takviyenin hastalık riskini azalttığı az sayıdaki güçlü kanıtlı örneklerden biridir.",
+  "mutlak_fark": {
+    "metin": "Tamamlanan 1.195 gebelikte 27 nöral tüp defekti görüldü: 6'sı folik asit gruplarında, 21'i diğer gruplarda. Grup başına gebelik sayısı özette verilmediği için 100 kişide fark hesaplanamadı.",
+    "hesap": "Kaynak: MRC 1991 özet metni (27 olay: 6 ve 21; göreli risk 0,28; %95 GA 0,12–0,71). Grup başına tamamlanan gebelik sayısı tam metnin sonuç tablosundadır; kurul için açık soru."
+  },
+  "calisilan_dozlar": "USPSTF günde 0,4–0,8 mg (400–800 µg) folik asit içeren takviyeyi önerir. MRC çalışmasının dozu özette yazmıyor.",
+  "ne_bilmiyoruz": "MRC çalışması daha önce etkilenmiş gebeliği olan yüksek riskli kadınlarda yapıldı; düşük riskli kişilerde mutlak fark daha küçüktür ve bu kartta hesaplanmadı.",
+  "kaynaklar": [
+    "mrc_folik_asit_1991",
+    "uspstf_folik_asit_2023"
+  ],
+  "kurul_acik_sorulari": [
+    "MRC tam metin tablosundan grup başına olay oranı ve 100 kişide mutlak fark",
+    "MRC dozu (tam metinden)",
+    "Türkiye Sağlık Bakanlığı gebe destek programı belgesinin eklenmesi (bulut ortamından erişilemedi)"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

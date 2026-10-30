@@ -1,0 +1,29 @@
+{
+  "id": "cinko__soguk_alginligi_suresi__baslamis_alginlik",
+  "etken_madde": "cinko",
+  "sonuc_alani": "Başlamış soğuk algınlığının süresi",
+  "populasyon": "Soğuk algınlığı başlamış çocuk ve yetişkinler",
+  "soru": "Algınlık başladığında çinko kullanmak süreyi kısaltır mı?",
+  "kanit_duzeyi": "zayif",
+  "sonuc_yonu": "fayda",
+  "gerekce": "Tedavi çalışmalarında (8 çalışma, 972 kişi) ortalama süre 2,37 gün kısaldı (%95 GA 4,21–0,53); kanıt düşük kesinlikte ve çalışmalar arası farklılık çok yüksek. Ciddi olmayan yan etkiler daha sıktı (risk oranı 1,34).",
+  "halk_ozeti": "Algınlık başladığında çinko kullananlarda algınlık ortalama 2,37 gün daha kısa sürdü; ama çalışmalar birbirinden çok farklı ve kanıt zayıf. Ağızda kötü tat ve mide bulantısı gibi ciddi olmayan yan etkiler daha sık görüldü.",
+  "mutlak_fark": {
+    "metin": "Süre farkı gün olarak verilir: ortalama 2,37 gün daha kısa. 100 kişide gösterim uygulanamaz.",
+    "hesap": "Kaynak: Cochrane 2024 özet metni (MD −2,37 gün; %95 GA −4,21 ile −0,53; 8 çalışma, 972 kişi; düşük kesinlik). Yan etki: RR 1,34 (%95 GA 1,15–1,55)."
+  },
+  "calisilan_dozlar": "Pastil çalışmalarında çinko glukonat günde 45 ile 276 mg arası, 4,5 ile 21 gün. Bu miktarlar EFSA'nın yetişkin üst sınırının üzerinde olabilir; kısa süreli kullanımdır.",
+  "ne_bilmiyoruz": "Hangi form ve miktarın etkili olduğu, çalışmalar çok farklı olduğu için belirsiz; ciddi yan etkiler tedavi çalışmalarında raporlanmadı.",
+  "kaynaklar": [
+    "cochrane_cinko_soguk_2024",
+    "nih_ods_cinko_hp",
+    "efsa_ul_ozet_2025"
+  ],
+  "kurul_acik_sorulari": [
+    "Çalışma dozları EFSA üst sınırını aştığı için kartta bu notun yeterli olup olmadığı"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

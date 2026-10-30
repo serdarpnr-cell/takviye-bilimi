@@ -1,0 +1,28 @@
+{
+  "id": "cinko__soguk_alginligi_onleme__cocuk_ve_yetiskin",
+  "etken_madde": "cinko",
+  "sonuc_alani": "Soğuk algınlığını önleme",
+  "populasyon": "Çocuk ve yetişkinler; plaseboyla karşılaştırılan tek başına çinko",
+  "soru": "Çinko kullanımı soğuk algınlığı geçirme riskini azaltır mı?",
+  "kanit_duzeyi": "zayif",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "Cochrane 2024 derlemesinde (9 çalışma, 1.449 kişi) risk oranı 0,93 (%95 GA 0,85–1,01); düşük kesinlikte kanıtla az ya da hiç azalma yok.",
+  "halk_ozeti": "Çinko alan ve almayanlar arasında soğuk algınlığı geçirme oranında belirgin bir fark bulunmadı. Kanıt düşük kesinlikte olduğu için yeni çalışmalarla değişebilir.",
+  "mutlak_fark": {
+    "metin": "100 kişide kaç kişinin algınlık geçirdiği özette verilmediği için hesaplanamadı. Göreli olarak risk oranı 0,93 ve fark anlamlı değil.",
+    "hesap": "Kaynak: Cochrane 2024 özet metni (RR 0,93; %95 GA 0,85–1,01; 9 çalışma, 1.449 kişi; düşük kesinlik). Olay oranları tam metindeki 'Summary of findings' tablosundadır; kurul için açık soru."
+  },
+  "calisilan_dozlar": "Pastil, tablet, şurup, toz ya da burun içi biçimler; pastil çalışmalarında çinko glukonat günde 45 ile 276 mg arası, 4,5 ile 21 gün.",
+  "ne_bilmiyoruz": "Çalışmalarda form, miktar ve süre çok farklı; hangi kullanımın işe yarayıp yaramadığı belirsiz.",
+  "kaynaklar": [
+    "cochrane_cinko_soguk_2024",
+    "nih_ods_cinko_hp"
+  ],
+  "kurul_acik_sorulari": [
+    "Summary of findings tablosundan 100 kişide olay sayıları"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

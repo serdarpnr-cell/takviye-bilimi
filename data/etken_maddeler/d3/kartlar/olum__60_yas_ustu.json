@@ -1,0 +1,41 @@
+{
+  "id": "d3__olum__60_yas_ustu",
+  "etken_madde": "d3",
+  "sonuc_alani": "Tüm nedenlere bağlı ölüm",
+  "populasyon": "60 yaş ve üstü, eksikliğe göre seçilmemiş Avustralyalı yetişkinler",
+  "soru": "D vitamini takviyesi ölüm riskini azaltır mı?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "etkisiz",
+  "gerekce": "D-Health çalışmasında (21.315 kişi, ayda 60.000 IU) ölüm 100 kişide yaklaşık 5'te iki grupta da görüldü (HR 1,04; %95 GA 0,93–1,18). Endocrine Society 2024 kılavuzu 75 yaş altı sağlıklı yetişkinlerde hastalık riskini azaltmak için referans alımın üzerinde kullanımı önermiyor.",
+  "halk_ozeti": "D vitamini eksikliği aranmadan seçilen 60 yaş üstü kişilerde ayda bir yüksek doz D vitamini ölüm riskini azaltmadı. İlk 2 yıl dışarıda bırakıldığında kansere bağlı ölümde artış yönünde bir sinyal görüldü; bu bulgu kesin değildir.",
+  "mutlak_fark": {
+    "metin": "100 kişiden yaklaşık 5'i iki grupta da öldü (plasebo %5,1; D vitamini %5,3).",
+    "hesap": "Kaynak: D-Health 2022 özet metni: 538 ölüm (%5,1, plasebo) ve 562 ölüm (%5,3, D vitamini); ikisi de 100 kişide yaklaşık 5.",
+    "yuz_kiside": {
+      "olay": "Ölüm (D-Health, yaklaşık 5 yıl)",
+      "gruplar": [
+        {
+          "etiket": "Plasebo",
+          "sayi": 5
+        },
+        {
+          "etiket": "D vitamini",
+          "sayi": 5
+        }
+      ]
+    }
+  },
+  "calisilan_dozlar": "Ayda bir kez 60.000 IU D3 vitamini.",
+  "ne_bilmiyoruz": "Keşif amaçlı analizde kansere bağlı ölümde artış sinyali (HR 1,24; %95 GA 1,01–1,54) önceden planlanan ana sonuç değildir. Günlük kullanımda sonuç farklı olabilir.",
+  "kaynaklar": [
+    "d_health_olum_2022",
+    "endocrine_d_2024"
+  ],
+  "kurul_acik_sorulari": [
+    "Güvenlik sinyali (kansere bağlı ölüm) kartta 'güvenlik sinyali' etiketiyle ayrı gösterilmeli mi?"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

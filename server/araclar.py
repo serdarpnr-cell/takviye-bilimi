@@ -1007,6 +1007,9 @@ def etken_madde_rehberi(
             **({"mutlak_fark_100": k["mutlak_fark"]["yuz_kiside"]} if k["mutlak_fark"].get("yuz_kiside") else {}),
             "calismalarda_kullanilan_dozlar": k["calisilan_dozlar"],
             "ne_bilmiyoruz": k["ne_bilmiyoruz"],
+            # STRENGTH, REDUCE-IT gibi reçeteli ilaç çalışmaları (v0.4 D2): kartta açık not.
+            **({"takviyeye_genellenemez": "Bu kart reçeteli, yüksek doz ilaç formülasyonlarıyla yapılan çalışmalara dayanır; "
+                                          "takviyeye genellenemez."} if k.get("takviyeye_genellenemez") else {}),
             "dayanak": [_kunye(i) for i in k["kaynaklar"]],
             **({"durum": TASLAK_NOTU} if k["durum"] == "taslak" else {}),
         })

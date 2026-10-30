@@ -47,6 +47,8 @@ function sonucKarti(k) {
     el("h3", { textContent: k.sonuc_alani }),
     el("div", { className: "populasyon", textContent: k.populasyon }),
     el("div", { className: "rozetler" }, rozet(dz, ds), rozet(yn, ys), k.durum ? rozet("Taslak", "uyari") : null),
+    k.takviyeye_genellenemez ? el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Takviyeye genellenemez" }),
+      el("p", { textContent: k.takviyeye_genellenemez })) : null,
     el("p", { textContent: k.halk_ozeti }),
     k.mutlak_fark_100 ? yuzKiside(k.mutlak_fark_100) : el("p", { className: "ikincil", textContent: k.mutlak_fark }),
     el("details", {}, el("summary", { textContent: "Ayrıntı" }),

@@ -958,6 +958,188 @@
       ],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_c_vitamini_soguk_2013": {
+      "tur": "meta_analiz",
+      "pmid": "23440782",
+      "baslik": "Vitamin C for preventing and treating the common cold",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2013,
+      "alintilar": [
+        "Twenty-nine trial comparisons involving 11,306 participants",
+        "In the general community trials involving 10,708 participants, the pooled RR was 0.97 (95% confidence interval (CI) 0.94 to 1.00).",
+        "Five trials involving a total of 598 marathon runners, skiers and soldiers on subarctic exercises yielded a pooled RR of 0.48 (95% CI 0.35 to 0.64).",
+        "In adults the duration of colds was reduced by 8% (3% to 12%) and in children by 14% (7% to 21%).",
+        "No consistent effect of vitamin C was seen on the duration or severity of colds in the therapeutic trials.",
+        "We excluded trials which used less than 0.2 g per day of vitamin C",
+        "In children, 1 to 2 g/day vitamin C shortened colds by 18%."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "cochrane_cinko_soguk_2024": {
+      "tur": "meta_analiz",
+      "pmid": "38719213",
+      "baslik": "Zinc for prevention and treatment of the common cold",
+      "kurum_veya_dergi": "Cochrane Database Syst Rev",
+      "yil": 2024,
+      "alintilar": [
+        "We included 34 studies (15 prevention, 19 treatment) involving 8526 participants.",
+        "There may be little or no reduction in the risk of developing a cold with zinc compared to placebo (risk ratio (RR) 0.93, 95% CI 0.85 to 1.01",
+        "9 studies, 1449 participants; low-certainty evidence",
+        "When zinc is used for cold treatment, there may be a reduction in the mean duration of the cold in days (MD -2.37, 95% CI -4.21 to -0.53",
+        "8 studies, 972 participants; low-certainty evidence",
+        "There is probably an increase in the risk of non-serious adverse events when zinc is used for cold treatment (RR 1.34, 95% CI 1.15 to 1.55",
+        "Zinc gluconate was given at doses between 45 and 276 mg/day for between 4.5 and 21 days."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "mrc_folik_asit_1991": {
+      "tur": "rct",
+      "pmid": "1677062",
+      "baslik": "Prevention of neural tube defects: results of the Medical Research Council Vitamin Study. MRC Vitamin Study Research Group",
+      "kurum_veya_dergi": "Lancet",
+      "yil": 1991,
+      "alintilar": [
+        "A total of 1817 women at high risk of having a pregnancy with a neural tube defect",
+        "1195 had a completed pregnancy in which the fetus or infant was known to have or not have a neural tube defect",
+        "27 of these had a known neural tube defect, 6 in the folic acid groups and 21 in the two other groups, a 72% protective effect (relative risk 0.28, 95% confidence interval 0.12-0.71)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "uspstf_folik_asit_2023": {
+      "tur": "kilavuz",
+      "pmid": "37526713",
+      "baslik": "Folic Acid Supplementation to Prevent Neural Tube Defects: US Preventive Services Task Force Reaffirmation Recommendation Statement",
+      "kurum_veya_dergi": "JAMA",
+      "yil": 2023,
+      "alintilar": [
+        "there is high certainty that folic acid supplementation has a substantial net benefit to prevent neural tube defects in their offspring",
+        "take a daily supplement containing 0.4 to 0.8 mg (400 to 800 μg) of folic acid"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "d_health_olum_2022": {
+      "tur": "rct",
+      "pmid": "35026158",
+      "baslik": "The D-Health Trial: a randomised controlled trial of the effect of vitamin D on mortality",
+      "kurum_veya_dergi": "Lancet Diabetes Endocrinol",
+      "yil": 2022,
+      "alintilar": [
+        "we randomly assigned 21 315 participants",
+        "60 000 IU per month",
+        "1100 deaths were recorded (placebo 538 [5·1%]; vitamin D 562 [5·3%])",
+        "The HR of vitamin D 3 effect on all-cause mortality was 1.04 [95% CI 0·93 to 1·18]",
+        "those randomly assigned to receive vitamin D had a numerically higher hazard of cancer mortality than those in the placebo group (HR 1·24 [95% CI 1·01-1·54]",
+        "in Australians 60 years or older",
+        "once a month for 5 years",
+        "In exploratory analyses excluding the first 2 years of follow-up"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "d_health_dusme_2021": {
+      "tur": "rct",
+      "pmid": "34337905",
+      "baslik": "Vitamin D supplementation and risk of falling: outcomes from the randomized, placebo-controlled D-Health Trial",
+      "kurum_veya_dergi": "J Cachexia Sarcopenia Muscle",
+      "yil": 2021,
+      "alintilar": [
+        "21 315 participants aged 60-84 years were randomized (1:1) to monthly doses of either 60 000 IU of colecalciferol or placebo",
+        "Vitamin D had no effect on falling in the past month (odds ratio [OR] 1.02, 95% confidence interval [CI] 0.95-1.10)",
+        "vitamin D increased risk in participants with BMI < 25 kg/m 2 (OR 1.25, 95% CI 1.09-1.43)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "uspstf_dusme_2018": {
+      "tur": "kilavuz",
+      "pmid": "29710141",
+      "baslik": "Interventions to Prevent Falls in Community-Dwelling Older Adults: US Preventive Services Task Force Recommendation Statement",
+      "kurum_veya_dergi": "JAMA",
+      "yil": 2018,
+      "alintilar": [
+        "The USPSTF found adequate evidence that vitamin D supplementation has no benefit in preventing falls in older adults.",
+        "The USPSTF recommends against vitamin D supplementation to prevent falls in community-dwelling adults 65 years or older. (D recommendation)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "vida_kvh_2017": {
+      "tur": "rct",
+      "pmid": "28384800",
+      "baslik": "Effect of Monthly High-Dose Vitamin D Supplementation on Cardiovascular Disease in the Vitamin D Assessment Study : A Randomized Clinical Trial",
+      "kurum_veya_dergi": "JAMA Cardiol",
+      "yil": 2017,
+      "alintilar": [
+        "5110 participants were randomized",
+        "Oral vitamin D3 in an initial dose of 200 000 IU, followed a month later by monthly doses of 100 000 IU",
+        "The primary outcome of CVD occurred in 303 participants (11.8%) in the vitamin D group and 293 participants (11.5%) in the placebo group, yielding an adjusted hazard ratio of 1.02 (95% CI, 0.87-1.20)."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "do_health_2020": {
+      "tur": "rct",
+      "pmid": "33170239",
+      "baslik": "Effect of Vitamin D Supplementation, Omega-3 Fatty Acid Supplementation, or a Strength-Training Exercise Program on Clinical Outcomes in Older Adults: The DO-HEALTH Randomized Clinical Trial",
+      "kurum_veya_dergi": "JAMA",
+      "yil": 2020,
+      "alintilar": [
+        "2157 adults aged 70 years or older",
+        "2000 IU/d of vitamin D3, 1 g/d of omega-3s",
+        "Overall, there were no statistically significant benefits of any intervention individually or in combination for the 6 end points at 3 years."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "ascend_omega3_2018": {
+      "tur": "rct",
+      "pmid": "30146932",
+      "baslik": "Effects of n-3 Fatty Acid Supplements in Diabetes Mellitus",
+      "kurum_veya_dergi": "N Engl J Med",
+      "yil": 2018,
+      "alintilar": [
+        "We randomly assigned 15,480 patients with diabetes but without evidence of atherosclerotic cardiovascular disease",
+        "During a mean follow-up of 7.4 years",
+        "a serious vascular event occurred in 689 patients (8.9%) in the fatty acid group and in 712 (9.2%) in the placebo group (rate ratio, 0.97; 95% confidence interval [CI], 0.87 to 1.08; P=0.55)"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "strength_omega3_2020": {
+      "tur": "rct",
+      "pmid": "33190147",
+      "baslik": "Effect of High-Dose Omega-3 Fatty Acids vs Corn Oil on Major Adverse Cardiovascular Events in Patients at High Cardiovascular Risk: The STRENGTH Randomized Clinical Trial",
+      "kurum_veya_dergi": "JAMA",
+      "yil": 2020,
+      "alintilar": [
+        "Participants were randomized to receive 4 g/d of omega-3 CA (n = 6539) or corn oil",
+        "The primary end point occurred in 785 patients (12.0%) treated with omega-3 CA vs 795 (12.2%) treated with corn oil (hazard ratio, 0.99 [95% CI, 0.90-1.09]; P = .84)",
+        "A greater rate of gastrointestinal adverse events was observed in the omega-3 CA group (24.7%) compared with corn oil-treated patients (14.7%).",
+        "A total of 13 078 patients were randomized"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "reduce_it_2019": {
+      "tur": "rct",
+      "pmid": "30415628",
+      "baslik": "Cardiovascular Risk Reduction with Icosapent Ethyl for Hypertriglyceridemia",
+      "kurum_veya_dergi": "N Engl J Med",
+      "yil": 2019,
+      "alintilar": [
+        "A total of 8179 patients were enrolled",
+        "receive 2 g of icosapent ethyl twice daily (total daily dose, 4 g) or placebo",
+        "A primary end-point event occurred in 17.2% of the patients in the icosapent ethyl group, as compared with 22.0% of the patients in the placebo group (hazard ratio, 0.75; 95% confidence interval [CI], 0.68 to 0.83; P<0.001)",
+        "hospitalized for atrial fibrillation or flutter (3.1% vs. 2.1%, P=0.004)",
+        "Funded by Amarin Pharma"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }

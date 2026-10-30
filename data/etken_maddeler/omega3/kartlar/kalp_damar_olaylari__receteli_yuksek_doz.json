@@ -1,0 +1,31 @@
+{
+  "id": "omega3__kalp_damar_olaylari__receteli_yuksek_doz",
+  "etken_madde": "omega3",
+  "sonuc_alani": "Kalp-damar olayları: reçeteli yüksek doz ilaç formülasyonları",
+  "populasyon": "Statin kullanan, trigliseridi yüksek, kalp-damar riski yüksek hastalar; takviye kullanıcıları değil",
+  "soru": "Reçeteli yüksek doz omega-3 ilaçları kalp-damar olaylarını azaltır mı ve bu sonuç takviyeye genellenebilir mi?",
+  "kanit_duzeyi": "orta",
+  "sonuc_yonu": "belirsiz",
+  "gerekce": "REDUCE-IT'te (8.179 hasta, günde 4 g saflaştırılmış EPA ilacı) olaylar azaldı (%17,2 ve %22,0; HR 0,75). STRENGTH'te (13.078 hasta, günde 4 g EPA+DHA ilacı) fark yoktu (%12,0 ve %12,2; HR 0,99). Sonuçlar birbiriyle çelişiyor. İkisi de reçeteli ilaç çalışmasıdır, takviyeye genellenemez.",
+  "halk_ozeti": "Bu iki büyük çalışma reçeteyle verilen, takviyelerden çok daha yüksek dozlu omega-3 ilaçlarıyla yapıldı ve sonuçları çelişti. Takviye kullanan biri için bu sonuçlar geçerli değildir: takviyeye genellenemez.",
+  "mutlak_fark": {
+    "metin": "REDUCE-IT: 100 hastadan 22'si (plasebo) ve 17'si (ilaç). STRENGTH: 100 hastadan 12'si, iki grupta da.",
+    "hesap": "Kaynak: özet metinleri. REDUCE-IT %22,0 ve %17,2 → 100 kişide yaklaşık 22 ve 17. STRENGTH 795/6.539 = %12,2 ve 785/6.539 = %12,0 → ikisi de yaklaşık 12. REDUCE-IT'in plasebo olarak kullandığı yağın sonucu etkileyip etkilemediği tartışmalıdır (kurul için açık soru)."
+  },
+  "calisilan_dozlar": "Günde 4 g reçeteli formülasyon: REDUCE-IT'te ikosapent etil (2 g günde iki kez), STRENGTH'te karboksilik asit formunda EPA+DHA. Takviye dozları değildir.",
+  "ne_bilmiyoruz": "İki çalışmanın neden farklı sonuç verdiği bilinmiyor. REDUCE-IT'te atriyal fibrilasyon nedeniyle hastaneye yatış daha sıktı (%3,1 ve %2,1); STRENGTH'te mide-bağırsak yan etkileri daha sıktı (%24,7 ve %14,7). REDUCE-IT ilaç üreticisi Amarin tarafından finanse edildi.",
+  "kaynaklar": [
+    "reduce_it_2019",
+    "strength_omega3_2020",
+    "cochrane_omega3_kvh_2020"
+  ],
+  "takviyeye_genellenemez": true,
+  "kurul_acik_sorulari": [
+    "REDUCE-IT plasebo yağı tartışması kaynakla birlikte eklenmeli mi?",
+    "Bu kart takviye sorularında hiç gösterilmemeli mi, yoksa 'takviyeye genellenemez' notuyla mı?"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

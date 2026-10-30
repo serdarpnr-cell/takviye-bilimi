@@ -1,0 +1,63 @@
+{
+  "id": "folik_asit",
+  "ad": "Folik asit",
+  "katalog_kimlikleri": [
+    "folik_asit"
+  ],
+  "beyan_anahtarlari": [
+    "folik asit",
+    "folat"
+  ],
+  "kisa_ozet": "Gebelik öncesinde başlanan folik asit, bebekte nöral tüp defekti (spina bifida gibi) riskini azaltır. USPSTF, gebelik planlayan ya da gebe kalabilecek herkes için yüksek kesinlikte belirgin net fayda olduğunu belirtir.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Gebelik planlayanlar ve gebe kalabilecek olanlar",
+      "gerekce": "USPSTF, folik asit takviyesinin nöral tüp defektini önlemede yüksek kesinlikte belirgin net fayda sağladığını belirtir (A önerisi).",
+      "kaynaklar": [
+        "uspstf_folik_asit_2023"
+      ],
+      "kosul": {
+        "evre": [
+          "gebelik_planliyor",
+          "gebe"
+        ]
+      }
+    },
+    {
+      "grup": "Daha önce nöral tüp defektli gebeliği olanlar",
+      "gerekce": "MRC Vitamin çalışmasında gebelik öncesi folik asit riski belirgin azalttı.",
+      "kaynaklar": [
+        "mrc_folik_asit_1991"
+      ]
+    }
+  ],
+  "kimde_kanit_var_notu": "Öneriler ABD USPSTF'tendir; kişisel karar ve miktar hekimle verilir.",
+  "dikkat_kurallari": [
+    {
+      "kosul": {
+        "evre": [
+          "gebelik_planliyor",
+          "gebe"
+        ]
+      },
+      "mesaj": "USPSTF gebelik planlayanlar için folik asit içeren günlük takviyeyi önerir; miktarı hekiminiz belirler.",
+      "kaynaklar": [
+        "uspstf_folik_asit_2023"
+      ]
+    }
+  ],
+  "hekime_sorulacaklar": [
+    "Gebelik planlıyorum; folik asite ne zaman başlamalıyım?",
+    "Daha önce etkilenmiş bir gebeliğim oldu; benim için farklı bir miktar gerekir mi?"
+  ],
+  "uretici_icerikleri": [],
+  "kaynaklar": [
+    "uspstf_folik_asit_2023",
+    "mrc_folik_asit_1991",
+    "nih_ods_folat"
+  ],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}
