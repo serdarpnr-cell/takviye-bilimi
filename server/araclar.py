@@ -45,6 +45,12 @@ def _urun_karti(u: dict) -> dict:
                 "standart_birimde": None if std is None else f"{_sayi(std)} {veri.kurallar()['etken_maddeler'][em_id]['birim']}",
                 "yetiskin_ust_siniri": _sinir_metni(em_id, sinir) if em_id else None,
             },
+            # Görsel kartın EFSA göstergesi için sayılar (standart birimde); metin alanları modelde kalır.
+            "olcek": {
+                "miktar": std,
+                "birim": veri.kurallar()["etken_maddeler"][em_id]["birim"] if em_id else None,
+                "ust_sinir": sinir["deger"] if sinir else None,
+            },
             **({"okuma_notu": " ".join(em["okuma_notlari"])} if em["okuma_notlari"] else {}),
             **({"dogrulanamadi": _karantina_metni(em)} if em.get("karantina") else {}),
         })
@@ -309,6 +315,11 @@ def kisisel_rutin(
             "efsa_degeri": _sinir_metni(em_id, sinir),
             "asiyor": True if asiyor else (None if eksikler else False),
             "kontrol": "eksik" if eksikler else "tam",
+            # Görsel kartın yığılmış çubuğu için: ürün başına katkı ve sınır (standart birimde).
+            "katkilar": [{"urun": ad, "miktar": round(m, 3)} for ad, m in gecerli],
+            "toplam_deger": round(toplam, 3),
+            "sinir_degeri": sinir["deger"],
+            "birim": sinir["birim"],
             # TB-27: sınıra yakınlık bilgi notudur; doz önerisi değildir.
             **({"sinira_yakinlik": (
                 f"Takviyelerden gelen toplam, EFSA değerinin yaklaşık %{round(oran * 100)}'i. Besinlerden gelen miktar "
@@ -869,6 +880,7 @@ def etken_madde_rehberi(
             "gerekce": k["gerekce"],
             "halk_ozeti": k["halk_ozeti"],
             "mutlak_fark": k["mutlak_fark"]["metin"],
+            **({"mutlak_fark_100": k["mutlak_fark"]["yuz_kiside"]} if k["mutlak_fark"].get("yuz_kiside") else {}),
             "calismalarda_kullanilan_dozlar": k["calisilan_dozlar"],
             "ne_bilmiyoruz": k["ne_bilmiyoruz"],
             "dayanak": [_kunye(i) for i in k["kaynaklar"]],
@@ -929,7 +941,8 @@ def etken_madde_rehberi(
         beyanlar = _madde_beyanlari(u, em_id)
         if len(katalog) < KATALOG_SINIRI:
             katalog.append(_katalog_ogesi(u, em_id, beyanlar))
-        if em_id != "multivitamin" and beyanlar:
+        # Madde düzeyindeki beyan listesi yalnızca bu maddeyi tek başına içeren ürünlerden derlenir.
+        if em_id != "multivitamin" and beyanlar and _tek_icerikli(u, em_id):
             for b in beyanlar:
                 anahtar = _beyan_anahtari(b, anahtarlar)
                 onceki = next((i for i, x in enumerate(beyan_metinleri) if _beyan_anahtari(x, anahtarlar) == anahtar), None)
@@ -967,6 +980,9 @@ def etken_madde_rehberi(
     return veri.zarf({
         "kisa_ozet": on_ek + (f"Senin grubun: {senin_grubun['grup']}. {senin_grubun['gerekce']} " if senin_grubun else "")
                      + m["kisa_ozet"],
+        "etken_madde_adi": ad,
+        # Görsel kart için öneksiz özet: uyarı ve grup kartta ayrı kutularda durur.
+        "genel_ozet": m["kisa_ozet"],
         **({"senin_grubun": senin_grubun} if senin_grubun else {}),
         "zorunlu_uyarilar": zorunlu,
         **({"kanit_durumu": TASLAK_NOTU} if m["durum"] == "taslak" else {}),
@@ -1015,6 +1031,8 @@ def _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorula
             "Kanıt kartı hazır olana kadar ürün listesi gösterilmez."
             + (" Genel bilgi için kurum sayfasına bakılabilir." if kilavuz else "")
         ),
+        "etken_madde_adi": ad,
+        "genel_ozet": f"{ad} için kanıt kartı hazırlanıyor ya da medikal kurul onayı bekliyor.",
         "zorunlu_uyarilar": zorunlu,
         "kanit_durumu": "Kanıt kartı hazırlanıyor.",
         "genel_kilavuz": kilavuz,

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ürün kartı</title>
+<style>
+__ORTAK_CSS__
+  .icerik-satiri { padding: 8px 0; border-bottom: 1px solid var(--cizgi); }
+  .icerik-satiri:last-child { border-bottom: 0; }
+  .ust-satir { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main>
+  <section id="icerik"><p class="ikincil">Ürün kartı yükleniyor…</p></section>
+</main>
+<script>
+__ORTAK_JS__
+const { el, rozet } = TB;
+const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+
+// EFSA göstergesi: çubuk ürünün porsiyondaki miktarı, kırmızı çizgi yetişkin üst sınırı. Yorum yok, yalnızca oran.
+function gosterge(o) {
+  if (o?.miktar == null || o?.ust_sinir == null) return null;
+  const eksen = Math.max(o.ust_sinir, o.miktar) * 1.1;
+  const yuzde = Math.round((o.miktar / o.ust_sinir) * 100);
+  return el("div", {},
+    el("div", { className: "cubuk" },
+      el("div", { className: "cubuk-dolgu" }, el("span", { style: `width:${(o.miktar / eksen) * 100}%` })),
+      el("div", { className: "cubuk-sinir", style: `left:${(o.ust_sinir / eksen) * 100}%` })),
+    el("div", { className: "ikincil", textContent: `Porsiyonda ${sayi(o.miktar)} ${o.birim}; EFSA yetişkin üst sınırının yaklaşık %${yuzde}'i (çizgi).` }));
+}
+
+function icerikSatiri(e) {
+  const m = e.bu_urundeki_miktar;
+  return el("div", { className: "icerik-satiri" },
+    el("div", { className: "ust-satir" }, el("strong", { textContent: e.etken_madde }), el("span", { textContent: m.etiketteki_miktar })),
+    el("div", { className: "rozetler" }, m.beslenme_referans_degeri ? rozet(`BRD ${m.beslenme_referans_degeri}`) : null,
+      e.dogrulanamadi ? rozet("Doğrulanamadı", "uyari") : null),
+    e.dogrulanamadi ? el("p", { className: "ikincil", textContent: e.dogrulanamadi }) : gosterge(e.olcek),
+    !e.dogrulanamadi && e.olcek?.ust_sinir == null && m.yetiskin_ust_siniri ? el("p", { className: "ikincil", textContent: m.yetiskin_ust_siniri }) : null,
+    e.okuma_notu ? el("p", { className: "ikincil", textContent: e.okuma_notu }) : null);
+}
+
+function ciz(sonuc) {
+  const v = sonuc?.structuredContent;
+  if (!v || !v.kisa_ozet) return;
+  const b = document.getElementById("icerik");
+  if (!v.urun) {
+    const adlar = v.adaylar || v.benzer_adli_urunler || [];
+    TB.doldur(b, el("h1", { textContent: "Ürün" }), el("p", { textContent: v.kisa_ozet }),
+      adlar.length ? el("ul", {}, ...adlar.map((a) => el("li", { textContent: a }))) : null,
+      el("p", { className: "ikincil", textContent: v.siralama_olcutu || "" }), TB.kaynaklar(v.kaynaklar));
+    return;
+  }
+  const u = v.urun;
+  TB.doldur(b, 
+    el("h1", { textContent: u.ad }),
+    el("div", { className: "rozetler" }, rozet(u.marka), rozet(u.seri), rozet(`Yaş: ${u.yas_siniri}`),
+      rozet(u.parti_analizi.includes("bulunmuyor") ? "Yayımlanmış parti analizi yok" : "Parti analizi var")),
+    v.yas_uyarisi ? el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Yaş sınırı" }), el("p", { textContent: v.yas_uyarisi })) : null,
+    el("p", { className: "ikincil", textContent: `Etiketteki kullanım: ${u.etiketteki_kullanim}` }),
+    el("section", {}, el("h2", { textContent: `İçerik (${u.porsiyon || "porsiyon"})` }),
+      el("div", { className: "kart" }, ...u.etken_maddeler.map(icerikSatiri))),
+    u.urun_sayfasi_beyanlari.length ? el("section", {}, el("h2", { textContent: "Ürün sayfası beyanları" }),
+      el("div", { className: "kart" },
+        el("ul", {}, ...u.urun_sayfasi_beyanlari.map((x) => el("li", {}, x.metin,
+          el("span", { className: "ikincil", textContent: ` · ${Array.isArray(x.ilgili_etken_madde) ? x.ilgili_etken_madde.join(", ") : x.ilgili_etken_madde}` })))),
+        el("p", { className: "ikincil", textContent: `${u.beyan_aciklamasi} ${u.beyan_notu}` }))) : null,
+    el("section", {}, el("h2", { textContent: "Bileşim" }), el("p", { className: "ikincil", textContent: u.bilesim })),
+    el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Etiket uyarıları" }), el("p", { textContent: u.etiket_uyarilari })),
+    el("p", {}, TB.baglanti(u.urun_sayfasi, "Ürün sayfası"), el("span", { className: "ikincil", textContent: ` · erişim ${u.erisim_tarihi}` })),
+    TB.kaynaklar(v.kaynaklar),
+    el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+TB.baslat("takviye-bilimi-urun", { sonuc: ciz });
+</script>
+</body>
+</html>

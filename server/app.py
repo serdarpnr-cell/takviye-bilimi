@@ -24,6 +24,9 @@ TALIMATLAR = (
 # Görsel kartın kendi çağırdığı, modelden gizlenen araçlar (MCP Apps).
 YALNIZCA_KART = {"ui": {"visibility": ["app"]}}
 KARNE_ARAYUZU = "ui://takviye-bilimi/karne"
+KANIT_ARAYUZU = "ui://takviye-bilimi/kanit"
+URUN_ARAYUZU = "ui://takviye-bilimi/urun"
+RUTIN_ARAYUZU = "ui://takviye-bilimi/rutin"
 MCP_APP_MIME = "text/html;profile=mcp-app"
 
 # Sadece okuma yapan, dış dünyaya dokunmayan araçlar.
@@ -61,6 +64,7 @@ mcp = FastMCP(
 
 @mcp.tool(
     title="Ürün rehberi",
+    meta={"ui": {"resourceUri": URUN_ARAYUZU}},
     description=(
         "Katalogdaki bir takviye ürününün etiket bilgisini verir: etken madde miktarları, beslenme referans değeri, "
         "bileşim, etiketteki kullanım, yaş sınırı ve ürün sayfasındaki sağlık beyanları. Katalog şu an yalnızca Orzax "
@@ -91,6 +95,7 @@ def parti_analizi(
 
 @mcp.tool(
     title="Kişisel rutin kontrolü",
+    meta={"ui": {"resourceUri": RUTIN_ARAYUZU}},
     description=(
         "Kullanıcının kullandığı takviyeleri birlikte kontrol eder: tekrar eden etken madde, EFSA üst sınırı aşımı, "
         "etiket uyarıları, ilaç grubu etkileşimleri ve hekime sorulacak sorular. Doz önermez. "
@@ -135,6 +140,7 @@ def yasam_karnesi(
 
 @mcp.tool(
     title="Etken madde rehberi",
+    meta={"ui": {"resourceUri": KANIT_ARAYUZU}},
     description=(
         "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, güvenlik uyarılarını, EFSA üst sınırını ve "
         "etkileşimlerini kaynaklarıyla verir; kanıt kartı yoksa ürün listelemez. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
@@ -193,6 +199,39 @@ def katalog_sayfasi(
 )
 def karne_arayuzu() -> str:
     return arayuz.karne_html()
+
+
+@mcp.resource(
+    KANIT_ARAYUZU,
+    name="kanit",
+    title="Kanıt kartı",
+    description="Etken maddenin kanıt düzeyini, 100 kişilik ikon dizisini, güvenlik uyarılarını ve katalogu kart olarak gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def kanit_arayuzu() -> str:
+    return arayuz.kart_html("kanit")
+
+
+@mcp.resource(
+    URUN_ARAYUZU,
+    name="urun",
+    title="Ürün kartı",
+    description="Ürünün etiket bilgisini, EFSA sınır göstergesini ve ürün sayfası beyanlarını kart olarak gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def urun_arayuzu() -> str:
+    return arayuz.kart_html("urun")
+
+
+@mcp.resource(
+    RUTIN_ARAYUZU,
+    name="rutin",
+    title="Rutin kartı",
+    description="Takviyelerden toplam alımı ürün başına yığılmış çubuk ve EFSA çizgisiyle, uyarıları rozetlerle gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def rutin_arayuzu() -> str:
+    return arayuz.kart_html("rutin")
 
 
 def main() -> None:

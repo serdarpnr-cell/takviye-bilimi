@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutin kartı</title>
+<style>
+__ORTAK_CSS__
+  .madde { padding: 10px 0; border-bottom: 1px solid var(--cizgi); }
+  .madde:last-child { border-bottom: 0; }
+  .ust-satir { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main>
+  <section id="icerik"><p class="ikincil">Rutin kontrolü yükleniyor…</p></section>
+</main>
+<script>
+__ORTAK_JS__
+const { el, rozet } = TB;
+const sayi = (x) => Number(x).toLocaleString("tr-TR", { maximumFractionDigits: 2 });
+
+function durumRozeti(k) {
+  if (k.asiyor === true) return rozet("EFSA değerini aşıyor", "kotu");
+  if (k.asiyor === null) return rozet("Eksik veri: kontrol tamamlanamadı", "uyari");
+  if (k.sinira_yakinlik) return rozet("Sınıra yakın", "orta");
+  return rozet("Aşmıyor", "iyi");
+}
+
+// Madde başına ürünlerden yığılmış çubuk; kırmızı çizgi EFSA değeri. Doz önerisi değildir.
+function yiginCubuk(k) {
+  const eksen = Math.max(k.sinir_degeri, k.toplam_deger) * 1.1 || 1;
+  const sinir = k.sinir_degeri / eksen * 100;
+  return el("div", {},
+    el("div", { className: "cubuk" },
+      el("div", { className: "cubuk-dolgu" }, ...k.katkilar.map((c) => el("span", { title: `${c.urun}: ${sayi(c.miktar)} ${k.birim}`, style: `width:${(c.miktar / eksen) * 100}%` }))),
+      el("div", { className: "cubuk-sinir", style: `left:${sinir}%` })),
+    el("div", { className: "lejant" }, ...k.katkilar.map((c, i) => el("span", {},
+      el("i", { style: `background:var(${["--vurgu", "--orta", "--ikincil"][i % 3]})` }),
+      `${c.urun}: ${sayi(c.miktar)} ${k.birim}`))));
+}
+
+function madde(k) {
+  return el("div", { className: "madde" },
+    el("div", { className: "ust-satir" }, el("strong", { textContent: k.etken_madde }), durumRozeti(k)),
+    k.katkilar.length ? yiginCubuk(k) : null,
+    el("p", { className: "ikincil", textContent: `Takviyelerden toplam ${k.takviyelerden_toplam} · ${k.efsa_degeri}` }),
+    k.dogrulanamayan_urunler ? el("p", { className: "ikincil", textContent: `Doğrulanamayan: ${k.dogrulanamayan_urunler.join(", ")}` }) : null,
+    k.sinira_yakinlik ? el("p", { className: "ikincil", textContent: k.sinira_yakinlik }) : null);
+}
+
+function liste(baslik, ogeler, sinif = "") {
+  if (!ogeler || !ogeler.length) return null;
+  return el("section", {}, el("h2", { textContent: baslik }),
+    el("div", { className: `kart ${sinif}`.trim() }, el("ul", {}, ...ogeler.map((o) => el("li", { textContent: o })))));
+}
+
+function ciz(sonuc) {
+  const v = sonuc?.structuredContent;
+  if (!v || !v.ust_sinir_kontrolu) return;
+  const b = document.getElementById("icerik");
+  TB.doldur(b, 
+    el("h1", { textContent: "Rutin kontrolü" }),
+    el("p", { textContent: v.kisa_ozet }),
+    liste("Etkileşim ve zamanlama", v.etkilesim_ve_zamanlama.map((e) => `${e.konu}: ${e.mesaj}`), "guvenlik"),
+    v.dogrulanamayan_icerikler.length ? el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Doğrulanamayan içerikler" }),
+      el("p", { textContent: v.dogrulanamayan_icerikler.join(", ") }), el("p", { className: "ikincil", textContent: v.dogrulanamayan_notu })) : null,
+    v.ust_sinir_kontrolu.length ? el("section", {}, el("h2", { textContent: "Toplam alım ve EFSA değeri" }),
+      el("div", { className: "kart" }, ...v.ust_sinir_kontrolu.map(madde)),
+      el("p", { className: "ikincil", textContent: v.ust_sinir_notu })) : null,
+    liste("Tekrar eden etken maddeler", v.tekrar_eden_etken_maddeler.map((t) => `${t.etken_madde}: ${t.urunler.join(", ")}`)),
+    liste("Etiket yaş sınırı dışında", v.etiket_bilgileri.filter((e) => e.yas_siniri_disinda).map((e) => `${e.urun} (${e.yas_siniri})`), "guvenlik"),
+    liste("Hekime sorulacaklar", v.hekime_sorulacak_sorular),
+    liste("Tanınmayan ürünler", v.taninmayan_urunler),
+    el("p", { className: "ikincil", textContent: v.gizlilik }),
+    TB.kaynaklar(v.kaynaklar),
+    el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+TB.baslat("takviye-bilimi-rutin", { sonuc: ciz });
+</script>
+</body>
+</html>

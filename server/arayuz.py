@@ -23,8 +23,10 @@ _ALT_BILGI = (
 
 
 def _sayfa(ad: str, **yer_tutucular: str) -> str:
-    """ui:// sayfasını okur, yer tutucuları doldurur ve sabit alt bilgiyi <main> sonrasına ekler."""
+    """ui:// sayfasını okur; ortak stil ve köprüyü gömer, yer tutucuları doldurur, sabit alt bilgiyi <main> sonrasına ekler."""
     html = (DIZIN / ad).read_text(encoding="utf-8")
+    html = html.replace("__ORTAK_CSS__", (DIZIN / "ortak.css").read_text(encoding="utf-8"))
+    html = html.replace("__ORTAK_JS__", (DIZIN / "ortak.js").read_text(encoding="utf-8"))
     for anahtar, deger in yer_tutucular.items():
         html = html.replace(f"__{anahtar}__", deger)
     return html.replace("</head>", _ALT_BILGI_STILI + "\n</head>", 1).replace("</main>", "</main>\n" + _ALT_BILGI, 1)
@@ -35,3 +37,9 @@ def karne_html() -> str:
     """Karne formu. Sorular ve seçenek kodları sunucudaki SORULAR listesinden gömülür."""
     sorular = json.dumps(SORULAR, ensure_ascii=False).replace("</", "<\\/")
     return _sayfa("karne.html", SORULAR=sorular)
+
+
+@lru_cache(maxsize=None)
+def kart_html(ad: str) -> str:
+    """Kanıt, ürün ve rutin kartları: veriyi yalnızca araç sonucundan (structuredContent) alır."""
+    return _sayfa(f"{ad}.html")

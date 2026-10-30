@@ -55,6 +55,19 @@ Betik DOI'yi Crossref'ten, PMID'yi PubMed'den, kurum belgelerini URL'den kontrol
 
 Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dışarıya istek atmaz.
 
+### Görsel kartlar (MCP Apps)
+
+| Kart | Araç | `ui://` kaynağı | Görsel |
+|---|---|---|---|
+| Karne | `yasam_karnesi` | `ui://takviye-bilimi/karne` | Seçenekli form, alan başına seviye, hedef kartları |
+| Kanıt | `etken_madde_rehberi` | `ui://takviye-bilimi/kanit` | Zorunlu uyarı kutusu, "Senin grubun", sonuç alanı başına düzey ve yön rozetleri, 100 kişilik ikon dizisi (ör. 62'ye karşı 61), en fazla 5 ürün ve "Diğer ürünler" (modelden gizli `katalog_sayfasi` ile sayfalama) |
+| Ürün | `urun_rehberi` | `ui://takviye-bilimi/urun` | Etken madde başına miktar çubuğu ve EFSA üst sınır çizgisi, "doğrulanamadı" ve parti rozetleri, yaş sınırı uyarısı, beyanlar ve ilgili madde |
+| Rutin | `kisisel_rutin` | `ui://takviye-bilimi/rutin` | Madde başına ürünlerden yığılmış çubuk ve EFSA çizgisi; aşım, eksik veri ve sınıra yakınlık rozetleri |
+
+Kartlar veriyi yalnızca araç sonucundan (`structuredContent`) alır, dış kaynak yüklemez; ortak stil ve köprü `server/arayuz/ortak.css` ve `ortak.js` dosyalarındadır ve her sayfaya satır içi gömülür. Ambalaj görseli yoktur (katalogda görsel adresi tutulmuyor; dış ağ kapalı). Kişisel projeksiyon ("değerin şöyle yükselir") çizilmez; ikon dizisi yalnızca çalışma sonuçlarını gösterir.
+
+Tarayıcıda denetim (Node.js ve Playwright gerekir): `NODE_PATH=$(npm root -g) .venv/bin/python scripts/kart_onizleme.py --cikti <dizin> --goruntu`. Betik MCP Apps host'unu taklit eder (initialize, tool-input, tool-result, tools/call), her kartı açık ve koyu temada çizer; konsol hatası, eksik öğe, "null" metni ve alt bilgi görünürlüğünü raporlar. `tests/test_kart_cizimi.py` aynı denetimi testte çalıştırır.
+
 ### Karne formu (MCP Apps)
 
 `yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. Her ui:// sayfasının altında sabit "Takviye Bilimi · Orzax tarafından geliştirildi · Kaynaklar · Prototip" alt bilgisi bulunur (`server/arayuz.py`). MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.

@@ -5,30 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yaşam karnesi</title>
 <style>
-  :root {
-    --zemin: #ffffff; --yuzey: #f6f7f9; --metin: #1c1f24; --ikincil: #5b6470; --cizgi: #dfe3e8;
-    --vurgu: #1f6f5c; --vurgu-metin: #ffffff; --uyari: #8a4b00; --uyari-zemin: #fff4e5;
-    --iyi: #1f6f5c; --orta: #8a6d00; --gelismeli: #a33a2c;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --zemin: #16181c; --yuzey: #1f2227; --metin: #e8eaed; --ikincil: #a3abb5; --cizgi: #343941;
-      --vurgu: #5cc3a6; --vurgu-metin: #0d1512; --uyari: #ffc06b; --uyari-zemin: #2d2414;
-      --iyi: #5cc3a6; --orta: #e3c35a; --gelismeli: #f08a7b;
-    }
-  }
-  :root[data-theme="dark"] {
-    --zemin: #16181c; --yuzey: #1f2227; --metin: #e8eaed; --ikincil: #a3abb5; --cizgi: #343941;
-    --vurgu: #5cc3a6; --vurgu-metin: #0d1512; --uyari: #ffc06b; --uyari-zemin: #2d2414;
-    --iyi: #5cc3a6; --orta: #e3c35a; --gelismeli: #f08a7b;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; padding: 16px; background: var(--zemin); color: var(--metin);
-         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  h1 { font-size: 18px; margin: 0 0 4px; }
-  h2 { font-size: 15px; margin: 20px 0 8px; }
-  p { margin: 0 0 8px; }
-  .ikincil { color: var(--ikincil); font-size: 13px; }
+__ORTAK_CSS__
   fieldset { border: 1px solid var(--cizgi); border-radius: 10px; margin: 0 0 12px; padding: 12px; }
   legend { font-weight: 600; padding: 0 4px; }
   .secenekler { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
@@ -36,23 +13,8 @@
                       border-radius: 999px; cursor: pointer; background: var(--yuzey); }
   .secenekler input { accent-color: var(--vurgu); margin: 0; }
   .secenekler label:has(input:checked) { border-color: var(--vurgu); }
-  button { font: inherit; border: 0; border-radius: 8px; padding: 10px 16px; cursor: pointer;
-           background: var(--vurgu); color: var(--vurgu-metin); font-weight: 600; }
-  button.ikinci { background: transparent; color: var(--vurgu); border: 1px solid var(--vurgu); }
-  button:disabled { opacity: .5; cursor: default; }
-  .kart { border: 1px solid var(--cizgi); border-radius: 10px; padding: 12px; margin: 0 0 8px; background: var(--yuzey); }
   .puan { font-size: 28px; font-weight: 700; }
   .seviye-iyi { color: var(--iyi); } .seviye-orta { color: var(--orta); } .seviye-gelişmeli { color: var(--gelismeli); }
-  table { width: 100%; border-collapse: collapse; }
-  td { padding: 4px 0; border-bottom: 1px solid var(--cizgi); vertical-align: top; }
-  td:last-child { text-align: right; white-space: nowrap; padding-left: 8px; }
-  .guvenlik { background: var(--uyari-zemin); border-color: var(--uyari); }
-  .guvenlik strong { color: var(--uyari); }
-  ul { margin: 0; padding-left: 18px; }
-  a { color: var(--vurgu); }
-  .hata { color: var(--gelismeli); }
-  .eylemler { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -69,41 +31,8 @@
 <script>
 // Sorular sunucudaki SORULAR listesinden enjekte edilir; seçenek kodları sunucuyla aynıdır.
 const SORULAR = __SORULAR__;
-const PROTOKOL = "2026-01-26";
-
-// ---- MCP Apps köprüsü: üst pencereyle JSON-RPC 2.0 (postMessage) ----
-let sonId = 0;
-const bekleyenler = new Map();
-function istek(method, params) {
-  const id = ++sonId;
-  window.parent.postMessage({ jsonrpc: "2.0", id, method, params }, "*");
-  return new Promise((coz, reddet) => bekleyenler.set(id, { coz, reddet }));
-}
-function bildirim(method, params) {
-  window.parent.postMessage({ jsonrpc: "2.0", method, params }, "*");
-}
-window.addEventListener("message", (olay) => {
-  const m = olay.data;
-  if (!m || m.jsonrpc !== "2.0") return;
-  if (m.id !== undefined && bekleyenler.has(m.id)) {
-    const { coz, reddet } = bekleyenler.get(m.id);
-    bekleyenler.delete(m.id);
-    m.error ? reddet(m.error) : coz(m.result);
-    return;
-  }
-  if (m.method === "ui/notifications/tool-input") formuDoldur(m.params?.arguments?.cevaplar || {});
-  else if (m.method === "ui/notifications/tool-result") sonucuIsle(m.params);
-  else if (m.method === "ui/notifications/host-context-changed") temaUygula(m.params);
-});
-
-function temaUygula(baglam) {
-  if (baglam?.theme) document.documentElement.dataset.theme = baglam.theme;
-}
-
-// Yüksekliği üst pencereye bildir (iframe boyutu).
-new ResizeObserver(() => {
-  bildirim("ui/notifications/size-changed", { height: Math.ceil(document.documentElement.scrollHeight) });
-}).observe(document.body);
+__ORTAK_JS__
+const { istek, el } = TB;
 
 // ---- Form ----
 const form = document.getElementById("form");
@@ -159,13 +88,6 @@ form.addEventListener("submit", async (olay) => {
 });
 
 // ---- Sonuç kartı ----
-const el = (etiket, ozellik = {}, ...cocuklar) => {
-  const e = document.createElement(etiket);
-  Object.assign(e, ozellik);
-  e.append(...cocuklar);
-  return e;
-};
-
 let sonVeri = null;
 function sonucuIsle(sonuc) {
   const v = sonuc?.structuredContent;
@@ -195,12 +117,7 @@ function sonucuIsle(sonuc) {
       el("strong", { textContent: `${t.tetikleyici} → ${t.etken_madde}` }), el("p", { textContent: t.mesaj })));
     b.append(el("p", { className: "ikincil", textContent: v.kopru_notu }));
   }
-  b.append(el("h2", { id: "kaynaklar", textContent: "Kaynaklar" }),
-    el("ul", {}, ...v.kaynaklar.map((k) => {
-      const a = el("a", { href: k.url, textContent: `${k.baslik} (${k.kurum_veya_dergi}${k.yil ? ", " + k.yil : ""})` });
-      a.addEventListener("click", (o) => { o.preventDefault(); istek("ui/open-link", { url: k.url }).catch(() => {}); });
-      return el("li", {}, a);
-    })));
+  b.append(TB.kaynaklar(v.kaynaklar));
   b.append(el("p", { className: "ikincil", textContent: `${v.uyari} ${v.esik_notu}` }));
   const sohbet = el("button", { className: "ikinci", type: "button", textContent: "Sonucu sohbette konuş" });
   sohbet.addEventListener("click", sohbeteGonder);
@@ -222,14 +139,7 @@ function sohbeteGonder() {
 }
 
 // ---- Başlatma ----
-istek("ui/initialize", {
-  appInfo: { name: "takviye-bilimi-karne", version: "0.1.0" },
-  appCapabilities: {},
-  protocolVersion: PROTOKOL,
-}).then((sonuc) => {
-  temaUygula(sonuc?.hostContext);
-  bildirim("ui/notifications/initialized", {});
-}).catch(() => {});
+TB.baslat("takviye-bilimi-karne", { sonuc: sonucuIsle, girdi: (a) => formuDoldur(a.cevaplar || {}) });
 </script>
 </body>
 </html>

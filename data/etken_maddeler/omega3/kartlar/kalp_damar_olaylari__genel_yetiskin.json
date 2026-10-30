@@ -10,7 +10,8 @@
   "halk_ozeti": "Kalp hastalığı olmayan yetişkinlerde yapılan büyük bir çalışmada ve 86 çalışmayı birleştiren bir derlemede, omega-3 takviyesi kalp-damar olaylarını anlamlı azaltmadı. Koroner kalp hastalığı olaylarında çok küçük bir azalma olabilir; bu kanıt zayıf. Reçeteyle kullanılan yüksek doz omega-3 ilaçları bu kartın konusu değildir.",
   "mutlak_fark": {
     "metin": "VITAL'de 5,3 yılda 100 kişiden yaklaşık 3'ünde büyük kalp-damar olayı görüldü; omega-3 ve plasebo gruplarında aynı.",
-    "hesap": "386 (omega-3) ve 419 (plasebo) olay; 25.871 kişi iki gruba yaklaşık eşit bölündü (her biri yaklaşık 12.935): 386 / 12.935 ≈ %3,0; 419 / 12.935 ≈ %3,2; ikisi de 100 kişide yaklaşık 3."
+    "hesap": "386 (omega-3) ve 419 (plasebo) olay; 25.871 kişi iki gruba yaklaşık eşit bölündü (her biri yaklaşık 12.935): 386 / 12.935 ≈ %3,0; 419 / 12.935 ≈ %3,2; ikisi de 100 kişide yaklaşık 3.",
+    "yuz_kiside": {"olay": "Büyük kalp-damar olayı (VITAL, 5,3 yıl)", "gruplar": [{"etiket": "Plasebo", "sayi": 3}, {"etiket": "Omega-3", "sayi": 3}]}
   },
   "calisilan_dozlar": "VITAL'de günde 1 g deniz kaynaklı omega-3; Cochrane derlemesindeki çalışmalarda günde 0,5 g ile 5 g'ın üzeri arası.",
   "ne_bilmiyoruz": "Koroner kalp hastalığı olaylarında görülen küçük azalmanın (yaklaşık 167 kişiden 1'inde) gerçek olup olmadığı belirsiz; bu kanıtın kesinliği düşük.",

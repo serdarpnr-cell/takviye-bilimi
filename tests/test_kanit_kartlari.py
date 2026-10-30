@@ -132,3 +132,16 @@ def test_sunucu_yalnizca_onayli_kayitlari_sunar(monkeypatch):
 def test_taslak_bayragi_acikken_taslaklar_sunulur(monkeypatch):
     monkeypatch.setenv("TB_TASLAK_GOSTER", "1")
     assert veri.monografi("d3")["kartlar"]
+
+
+@pytest.mark.parametrize("yol", KARTLAR, ids=lambda p: p.stem)
+def test_yuz_kiside_gosterimi_mutlak_farkla_tutarli(yol):
+    # Görsel kartın 100 kişilik ikon dizisi: sayılar mutlak fark metninde ya da hesabında geçmelidir.
+    y = _yukle(yol)["mutlak_fark"].get("yuz_kiside")
+    if not y:
+        return
+    izinli = _rakamlar(_yukle(yol)["mutlak_fark"]["metin"]) | _rakamlar(_yukle(yol)["mutlak_fark"]["hesap"])
+    assert y["olay"] and len(y["gruplar"]) == 2
+    for g in y["gruplar"]:
+        assert 0 <= g["sayi"] <= 100 and g["etiket"]
+        assert str(g["sayi"]) in izinli, (g, izinli)
