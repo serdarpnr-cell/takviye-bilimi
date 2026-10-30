@@ -56,14 +56,19 @@ def test_kart_semasi(yol):
     assert _kelime_sayisi(k["halk_ozeti"]) <= 60
 
 
+def _katman_1(kayit: dict) -> bool:
+    """Kanıt protokolü Katman 1: otoriter kurum kılavuzu, düzenleyici belge ya da Cochrane sistematik derlemesi."""
+    return kayit["tur"] in ("kilavuz", "duzenleyici") or kayit["kurum_veya_dergi"] == "Cochrane Database Syst Rev"
+
+
 @pytest.mark.parametrize("yol", KARTLAR, ids=lambda p: p.stem)
-def test_kartta_en_az_iki_kaynak_biri_kilavuz_veya_duzenleyici(yol):
+def test_kartta_en_az_iki_kaynak_biri_katman_1(yol):
     k = _yukle(yol)
     kayitlar = veri.kaynak_kayitlari()
     assert len(set(k["kaynaklar"])) >= 2
     for kid in k["kaynaklar"]:
         assert kayitlar[kid]["dogrulandi"] is True, kid
-    assert any(kayitlar[kid]["tur"] in ("kilavuz", "duzenleyici") for kid in k["kaynaklar"])
+    assert any(_katman_1(kayitlar[kid]) for kid in k["kaynaklar"])
 
 
 @pytest.mark.parametrize("yol", KARTLAR, ids=lambda p: p.stem)
@@ -93,13 +98,13 @@ def test_monografi_semasi_ve_kaynaklari(yol):
     kimlikler = list(m["kaynaklar"]) + list(m["uretici_icerikleri"])
     kimlikler += [i for g in m["kimde_kanit_var"] for i in g["kaynaklar"]]
     kimlikler += [i for r in m["dikkat_kurallari"] for i in r["kaynaklar"]]
-    for alan in ("besinle_karsilama", "tahlil_notu"):
+    for alan in ("besinle_karsilama", "tahlil_notu", "formlar"):
         kimlikler += m.get(alan, {}).get("kaynaklar", [])
     for kid in kimlikler:
         assert kayitlar[kid]["dogrulandi"] is True, kid
     for kid in m["uretici_icerikleri"]:
         assert kayitlar[kid]["tur"] == "uretici_icerigi"
-    for r in m["dikkat_kurallari"]:
+    for r in m["dikkat_kurallari"] + [g for g in m["kimde_kanit_var"] if "kosul" in g]:
         assert set(r["kosul"]) <= KOSUL_ALANLARI, r["kosul"]
 
 
@@ -127,3 +132,16 @@ def test_sunucu_yalnizca_onayli_kayitlari_sunar(monkeypatch):
 def test_taslak_bayragi_acikken_taslaklar_sunulur(monkeypatch):
     monkeypatch.setenv("TB_TASLAK_GOSTER", "1")
     assert veri.monografi("d3")["kartlar"]
+
+
+@pytest.mark.parametrize("yol", KARTLAR, ids=lambda p: p.stem)
+def test_yuz_kiside_gosterimi_mutlak_farkla_tutarli(yol):
+    # Görsel kartın 100 kişilik ikon dizisi: sayılar mutlak fark metninde ya da hesabında geçmelidir.
+    y = _yukle(yol)["mutlak_fark"].get("yuz_kiside")
+    if not y:
+        return
+    izinli = _rakamlar(_yukle(yol)["mutlak_fark"]["metin"]) | _rakamlar(_yukle(yol)["mutlak_fark"]["hesap"])
+    assert y["olay"] and len(y["gruplar"]) == 2
+    for g in y["gruplar"]:
+        assert 0 <= g["sayi"] <= 100 and g["etiket"]
+        assert str(g["sayi"]) in izinli, (g, izinli)

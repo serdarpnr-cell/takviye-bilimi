@@ -30,17 +30,22 @@ Bilmen gerekenler:
 
 | Araç | Girdi | Ne döndürür |
 |---|---|---|
-| `urun_rehberi` | `urun` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı, beslenme referans değeri ve EFSA değeri, yorum yok), bileşim, etiketteki kullanım, yaş sınırı, ürün sayfasındaki sağlık beyanları, ürün sayfası bağlantısı. Belirsiz adda adayları, bulunamazsa benzer adlı ürünleri alfabetik döndürür. |
+| `urun_rehberi` | `urun`, isteğe bağlı `yas` | Etken madde miktarları ("bu üründeki miktar" bloğu: etiket miktarı, beslenme referans değeri ve EFSA değeri, yorum yok), bileşim, etiketteki kullanım, yaş sınırı (yaş verilirse sınır dışı kullanım uyarısı), `urun_sayfasi_beyanlari` (her beyan ilgili etken maddeye eşlenir; adı geçmeyen beyan çok içerikli üründe "Sayfada belirtilmemiş" olur) ve beyan açıklaması, ürün sayfası bağlantısı. Belirsiz adda adayları, bulunamazsa benzer adlı ürünleri alfabetik döndürür. |
 | `parti_analizi` | `karekod_veya_parti_no` | Karekod URL'si, GS1 metni (`(10)` alanı) ya da parti numarasını çözer. Katalogda yayımlanmış parti analizi olmadığı için analiz bulunamadığını bildirir; uydurma sonuç döndürmez. |
-| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Doz önermez. |
-| `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), ürün sayfalarındaki beyanlar, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, alfabetik katalog ürünleri. Kanıt kartı olmayan maddede bunu söyler ve kataloğu gösterir. |
-| `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten) ve `tahlil_onerisi` (D vitamini, B12, ferritin). Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile döndürür. |
+| `kisisel_rutin` | `yas`, `cinsiyet`, `evre`, `ilac_grubu[]`, `mevcut_urunler[]`, `diger_urun_icerikleri[]` | Tekrar eden etken madde, EFSA üst sınırı karşılaştırması (etiketteki en yüksek günlük kullanıma göre), etiketteki kullanım ve yaş sınırı, etkileşim/zamanlama notları, hekime sorulacak sorular. Toplam EFSA değerinin %75'ine ulaşırsa `sinira_yakinlik` bilgi notu eklenir. Gebelikte A vitamini gibi duruma bağlı kurallar `evre` koşuluyla tetiklenir. Miktarı doğrulanamayan içerik özette "N içerik doğrulanamadı" olarak yazılır; o maddenin üst sınır satırı `kontrol: "eksik"` ve `asiyor: null` olur. Doz önermez. |
+| `etken_madde_rehberi` | `etken_madde`; isteğe bağlı `yas`, `cinsiyet`, `evre`, `sigara`, `ilac_grubu[]` | Kısa özet, kimde kanıt var, sonuç alanı bazında kanıt düzeyi (`guclu` / `orta` / `zayif` / `yetersiz` ve `sonuc_yonu`), `senin_grubun` (profil verilirse ilk satırda), `urun_sayfasi_beyanlari`, besinle karşılama, EFSA üst sınırı (güvenlik tavanı), etkileşimler, profile göre dikkat edilecekler, hekime sorulacaklar, en fazla 5 katalog ürünü (yaş sınırına uyanlar; yalnızca bu maddeyi içerenler önce, sonra alfabetik; kalanı `katalog_ozeti` içinde sayıyla). Demir, B12 ve D vitamininde `zorunlu_uyarilar` (tahlilsiz kullanma, tahlilden önce başlama) kart olsun olmasın en üsttedir. Kanıt kartı olmayan maddede ürün listesi dönmez: "kanıt kartı hazırlanıyor", kurum bilgi sayfası (`genel_kilavuz`) ve yalnızca ürün sayısı döner. |
+| `sikayet_yolu` | `sikayet` (ör. "hep yorgunum"), isteğe bağlı `yas`, `cinsiyet` | Şikâyetten yola çıkan giriş: kırmızı bayraklar (yaşa ve cinsiyete göre), hekimin isteyebileceği ilk basamak tahliller, tahlil öncesi takviye uyarıları, yaşam karnesi önerisi ve ilgili kanıt kartları. Ürün listesi döndürmez. Yollar `data/sikayet_yollari.json` dosyasındadır; şu an yalnızca yorgunluk. |
+| `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten). Takviye bağlantısı yalnızca kanıt kartı hazır maddelere kurulur. Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile (her soruda en fazla 4 seçenek, 4 + 2 soru akışı) döndürür. Hedeflerin `ilk_adim` alanı mevcut seviyeye göre değişir. |
 
-Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+### Model katmanı ve görsel kart (mimari v2)
+
+Her araç iki parça döner: modele en fazla 4.500 karakterlik (≈ 1.500 token) kısa metin özeti (`server/ozet.py`; en fazla 5 ürün, 5 kaynak, sonda `uyari` cümlesi) ve görsel karta tam veri (`structuredContent`). MCP Apps desteklemeyen istemci de anlamlı metin özeti alır. Sabit veri notu sunucu talimatındadır. `katalog_sayfasi` görsel kartın sayfalama için çağırdığı araçtır; `_meta.ui.visibility: ["app"]` ile modelden gizlenir ve kanıt kartı olmayan maddede ürün döndürmez. Ölçüm: `.venv/bin/python scripts/olcum.py --etiket <ad>` (`docs/olcumler/`).
+
+`structuredContent` her yanıtta şu alanları taşır: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
 
 ### Kaynaklar
 
-`kaynaklar[]` her öğede `baslik`, `kurum_veya_dergi`, `yil`, `tur` (`kilavuz` | `meta_analiz` | `rct` | `duzenleyici` | `uretici_icerigi`), `url` ve varsa `pmid` taşır. Kayıtlar `data/kaynaklar.json` dosyasındadır ve `scripts/kaynak_dogrula.py` ile doğrulanır:
+`kaynaklar[]` her öğede `baslik`, `kurum_veya_dergi`, `yil`, `tur` (`kilavuz` | `meta_analiz` | `sistematik_derleme` | `derleme` | `kurum_bilgi` | `rct` | `duzenleyici` | `uretici_icerigi`), `url` ve varsa `pmid` taşır. Kayıtlar `data/kaynaklar.json` dosyasındadır ve `scripts/kaynak_dogrula.py` ile doğrulanır:
 
 ```bash
 .venv/bin/python scripts/kaynak_dogrula.py
@@ -50,9 +55,22 @@ Betik DOI'yi Crossref'ten, PMID'yi PubMed'den, kurum belgelerini URL'den kontrol
 
 Tüm araçlar `readOnlyHint: true` olarak işaretlidir; hiçbir şey yazmaz, dışarıya istek atmaz.
 
+### Görsel kartlar (MCP Apps)
+
+| Kart | Araç | `ui://` kaynağı | Görsel |
+|---|---|---|---|
+| Karne | `yasam_karnesi` | `ui://takviye-bilimi/karne` | Seçenekli form, alan başına seviye, hedef kartları |
+| Kanıt | `etken_madde_rehberi` | `ui://takviye-bilimi/kanit` | Zorunlu uyarı kutusu, "Senin grubun", sonuç alanı başına düzey ve yön rozetleri, 100 kişilik ikon dizisi (ör. 62'ye karşı 61), en fazla 5 ürün ve "Diğer ürünler" (modelden gizli `katalog_sayfasi` ile sayfalama) |
+| Ürün | `urun_rehberi` | `ui://takviye-bilimi/urun` | Etken madde başına miktar çubuğu ve EFSA üst sınır çizgisi, "doğrulanamadı" ve parti rozetleri, yaş sınırı uyarısı, beyanlar ve ilgili madde |
+| Rutin | `kisisel_rutin` | `ui://takviye-bilimi/rutin` | Madde başına ürünlerden yığılmış çubuk ve EFSA çizgisi; aşım, eksik veri ve sınıra yakınlık rozetleri |
+
+Kartlar veriyi yalnızca araç sonucundan (`structuredContent`) alır, dış kaynak yüklemez; ortak stil ve köprü `server/arayuz/ortak.css` ve `ortak.js` dosyalarındadır ve her sayfaya satır içi gömülür. Ambalaj görseli yoktur (katalogda görsel adresi tutulmuyor; dış ağ kapalı). Kişisel projeksiyon ("değerin şöyle yükselir") çizilmez; ikon dizisi yalnızca çalışma sonuçlarını gösterir.
+
+Tarayıcıda denetim (Node.js ve Playwright gerekir): `NODE_PATH=$(npm root -g) .venv/bin/python scripts/kart_onizleme.py --cikti <dizin> --goruntu`. Betik MCP Apps host'unu taklit eder (initialize, tool-input, tool-result, tools/call), her kartı açık ve koyu temada çizer; konsol hatası, eksik öğe, "null" metni ve alt bilgi görünürlüğünü raporlar. `tests/test_kart_cizimi.py` aynı denetimi testte çalıştırır.
+
 ### Karne formu (MCP Apps)
 
-`yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.
+`yasam_karnesi` aracı `_meta.ui.resourceUri: "ui://takviye-bilimi/karne"` taşır. Her ui:// sayfasının altında sabit "Takviye Bilimi · Orzax tarafından geliştirildi · Kaynaklar · Prototip" alt bilgisi bulunur (`server/arayuz.py`). MCP Apps destekleyen istemci (`text/html;profile=mcp-app`) bu kaynağı seçenekli form olarak açar. Gönderimde form, `tools/call` ile `yasam_karnesi` aracını seçenek kodlarıyla çağırır ve sonucu kart olarak gösterir: puan, hedefler, güvenlik uyarıları, kanıt bağlantıları, tahlil önerisi ve kaynaklar. "Sonucu sohbette konuş" düğmesi kısa bir özeti `ui/message` ile sohbete gönderir. Form, sorularını ve seçenek kodlarını sunucudaki `SORULAR` listesinden alır; dış kaynak yüklemez. Widget desteklemeyen istemci, aracın döndürdüğü metin seçenekleriyle devam eder. Mesaj adları `@modelcontextprotocol/ext-apps` 2.0.4 tip tanımlarına göre yazılmıştır.
 
 ### Gizlilik
 
@@ -68,6 +86,7 @@ data/
   kurallar.json                 # etken maddeler, EFSA üst sınırları, etkileşim kuralları, ilaç grupları
   kaynaklar.json                # doğrulanmış kaynak kayıtları (DOI, PMID veya URL + erişim tarihi)
   karne_kurallari.json          # karneden takviye kanıtına, güvenlik uyarısına ve tahlile köprü kuralları
+  zorunlu_uyarilar.json         # kanıt kartından bağımsız güvenlik uyarıları (demir, B12, D vitamini)
   beyanlar/urun_beyanlari.json  # ürün sayfalarındaki sağlık ve beslenme beyanları (kelimesi kelimesine)
   beyanlar/beyanlar.json        # etken madde düzeyindeki beyan metinleri (regülasyon onayı bekliyor)
   ham/                          # indirilen sayfaların önbelleği (git'e girmez)
@@ -75,6 +94,8 @@ scripts/
   orzax_katalog.py              # katalog indirme ve ayrıştırma
   kaynak_dogrula.py             # kaynakları Crossref, PubMed ve URL'den doğrular
   json_yaz.py                   # veri dosyalarını okunur biçimde yazar
+  katalog_bulgulari.py          # karantinadaki katalog satırlarını kurul/katalog_bulgulari.md dosyasına yazar
+  olcum.py                      # yanıt süresi ve modele dönen yanıt boyutu ölçümü (docs/olcumler/)
 server/
   veri.py                 # veri yükleme, birim çevirme, arama
   araclar.py              # araçların iş mantığı (saf fonksiyonlar)
@@ -92,7 +113,7 @@ docs/KANIT_PROTOKOLU.md
 
 Sunucu yalnızca `durum: "onaylandi"` kayıtları sunar. Deneme sunucusunda `TB_TASLAK_GOSTER=1` verilirse kurul onayı bekleyen taslaklar "taslak" notuyla gösterilir (`render.yaml` bu ayarla gelir; yayın sunucusunda kaldırılır).
 
-İlk set: D vitamini (pilot, taslak). Omega-3, B12, folat, demir, magnezyum, C vitamini, çinko, multivitamin, beta-karoten, E vitamini ve probiyotik için araç EFSA değeri, ürün beyanları ve kataloğu verir; kanıt kartları pilot onaylandıktan sonra eklenecek.
+İlk set: D vitamini (pilot, taslak). Omega-3, B12, folat, demir, magnezyum, C vitamini, çinko, multivitamin, beta-karoten, E vitamini ve probiyotik için araç zorunlu uyarıları, EFSA değerini, etkileşimleri ve NIH ODS bilgi sayfasını verir; ürün listesi kanıt kartı yazılınca gösterilir.
 
 ### Kataloğu güncelleme
 
@@ -101,7 +122,9 @@ Sunucu yalnızca `durum: "onaylandi"` kayıtları sunar. Deneme sunucusunda `TB_
 .venv/bin/python scripts/orzax_katalog.py ayristir
 ```
 
-`indir` sitemap'teki Türkçe ürün sayfalarını saniyede bir istekle `data/ham/orzax/` altına indirir (var olan sayfaları yeniden indirmez). `ayristir` içerik tablosu, bileşim, beyanlar ve kullanım şeklini okur. Sitedeki tablo hataları (boş miktar hücresi, birimsiz sayı vb.) tahmin edilmez; `okuma_notlari` alanına yazılır. Reçeteli ürünler ve içerik miktarı yazmayan ürünler atlanır, nedenleri `atlanan_sayfalar` alanında listelenir.
+`indir` sitemap'teki Türkçe ürün sayfalarını saniyede bir istekle `data/ham/orzax/` altına indirir (var olan sayfaları yeniden indirmez). `ayristir` içerik tablosu, bileşim, beyanlar ve kullanım şeklini okur. Sitedeki tablo hataları (boş miktar hücresi, birimsiz sayı vb.) tahmin edilmez; `okuma_notlari` alanına yazılır.
+
+Sunucu yüklemede her içerik satırını doğrular (`veri.katalog_dogrula`): birimsiz ya da okunamayan miktarlar ve etiketteki miktarı BRD yüzdesiyle tutmayan satırlar (maddenin katalogdaki ortanca BRD'sinin yarısı ile iki katı dışı) karantinaya alınır. Karantinadaki satır ürün kartında "doğrulanamadı" notuyla görünür, toplam ve üst sınır hesaplarına katılmaz; değer düzeltilmez. Bildirim dosyası için `.venv/bin/python scripts/katalog_bulgulari.py` çalıştırılır. Reçeteli ürünler ve içerik miktarı yazmayan ürünler atlanır, nedenleri `atlanan_sayfalar` alanında listelenir.
 
 ## Kurulum
 

@@ -63,3 +63,34 @@ def test_gecersiz_cevap_reddedilir():
         yasam_karnesi({**TAM, "hareket_gun": 9})
     with pytest.raises(ValidationError):
         yasam_karnesi({**TAM, "sigara": "bazen"})
+
+
+def test_cevapsiz_cagri_sorulari_bir_kez_tasir():
+    # TB-25: tum_sorular ile eksik_sorular aynı içeriği iki kez taşımaz.
+    assert "tum_sorular" not in yasam_karnesi()
+
+
+def test_ilk_adim_mevcut_seviyeden_bir_basamak_yukari():
+    # TB-09: 3–4 gün hareket edene "2 güne 20 dk yürüyüş" denmez.
+    hic = next(h for h in yasam_karnesi({**TAM, "hareket_gun": 0})["hedefler"] if h["alan"] == "Hareket")
+    orta = next(h for h in yasam_karnesi({**TAM, "hareket_gun": "3_4_gun"})["hedefler"] if h["alan"] == "Hareket")
+    assert "2 güne" in hic["ilk_adim"]
+    assert "bir gün daha" in orta["ilk_adim"] and "2 güne" not in orta["ilk_adim"]
+
+
+def test_haftada_bir_balik_iyi_sayilir():
+    # TB-10: AHA'nın haftada 1–2 kez önerisiyle hizalı.
+    balik = next(k for k in yasam_karnesi({**TAM, "balik_haftalik": "haftada_1"})["karne"] if k["alan"] == "Balık")
+    assert balik["seviye"] == "iyi"
+
+
+def test_stres_alani_sorusuyla_ayni_adi_tasir():
+    # TB-28
+    alanlar = [k["alan"] for k in yasam_karnesi(TAM)["karne"]]
+    assert "Stres" in alanlar and "Dinlenme" not in alanlar
+
+
+def test_dokuz_saatten_uzun_uyku_orta_ve_on_saat_ustu_not():
+    y = yasam_karnesi({**TAM, "uyku_saat": "9_saatten_fazla"})
+    assert next(k for k in y["karne"] if k["alan"] == "Uyku")["seviye"] == "orta"
+    assert any("10 saatten uzun" in n for n in yasam_karnesi({**TAM, "uyku_saat": 11})["notlar"])

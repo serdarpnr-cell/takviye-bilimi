@@ -132,7 +132,7 @@ def test_taninmayan_ve_belirsiz_girdiler():
     assert y["taninmayan_urunler"] == ["Bilinmeyen Ürün"]
     assert "Ocean D3K2" in y["birden_fazla_eslesen_urunler"]
     assert y["taninmayan_icerikler"] == ["X: ashwagandha"]
-    assert y["birimi_cevrilemeyen_icerikler"] == ["X: Magnezyum"]
+    assert y["dogrulanamayan_icerikler"] == ["X: Magnezyum"]
 
 
 def test_doz_onermez_ve_urun_tavsiye_etmez():
@@ -153,8 +153,62 @@ def test_kisisel_veri_loglanmaz(caplog):
     assert "gebe" not in caplog.text
 
 
-def test_sitedeki_hatali_birim_toplamlara_katilmaz():
-    # Ürün sayfası D3 vitaminini "25 mg" yazıyor (µg olmalı). Değer tahmin edilmez, toplamlara katılmaz.
+def test_sitedeki_hatali_birim_toplamlara_katilmaz_ama_ozette_gorunur():
+    # TB-01: Ürün sayfası D3 vitaminini "25 mg", selenyumu "55 mg" yazıyor. Değer tahmin edilmez, toplamlara
+    # katılmaz; ama madde üst sınır tablosundan sessizce düşmez ve özet "0 aşım" deyip geçmez.
     y = kisisel_rutin(40, "kadin", mevcut_urunler=["Day2Day The Collagen Mag Plus"])
-    assert all(k["etken_madde"] != "D3 vitamini" for k in y["ust_sinir_kontrolu"])
-    assert "Day2Day The Collagen Mag Plus: D3 vitamini" in y["birimi_cevrilemeyen_icerikler"]
+    d3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+    assert d3["kontrol"] == "eksik"
+    assert d3["asiyor"] is None
+    assert d3["takviyelerden_toplam"] == "Hesaplanamadı"
+    assert d3["dogrulanamayan_urunler"] == ["Day2Day The Collagen Mag Plus"]
+    assert "Day2Day The Collagen Mag Plus: D3 vitamini" in y["dogrulanamayan_icerikler"]
+    assert "Day2Day The Collagen Mag Plus: Selenyum" in y["dogrulanamayan_icerikler"]
+    assert "4 içerik doğrulanamadı" in y["kisa_ozet"]
+    assert "üst sınır kontrolü eksik" in y["kisa_ozet"] and "D3 vitamini" in y["kisa_ozet"]
+
+
+def test_dogrulanan_kisim_siniri_asiyorsa_asim_kesindir():
+    # Doğrulanamayan içerik varken bile doğrulanan toplam sınırı geçiyorsa aşım "bilinmiyor" değil, kesindir.
+    y = kisisel_rutin(40, "kadin", mevcut_urunler=["Day2Day The Collagen Mag Plus"], diger_urun_icerikleri=[
+        {"ad": "Yüksek D", "icerikler": [{"etken_madde": "D vitamini", "miktar": 150, "birim": "µg"}]}])
+    d3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+    assert d3["asiyor"] is True and d3["kontrol"] == "eksik"
+    assert "yalnızca doğrulanan" in d3["takviyelerden_toplam"]
+
+
+def test_collagen_mag_plus_ve_d3k2_birlikte():
+    # Kabul ölçütü: "Collagen Mag Plus ile D3K2 damlayı birlikte kullanır mıyım?" → doğrulanamayan içerik özette.
+    y = kisisel_rutin(40, "kadin", mevcut_urunler=["Day2Day The Collagen Mag Plus", "Ocean D3K2 Damla"])
+    assert "doğrulanamadı" in y["kisa_ozet"]
+    d3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+    assert d3["kontrol"] == "eksik" and d3["asiyor"] is None
+    assert "yalnızca doğrulanan" in d3["takviyelerden_toplam"]
+
+
+def test_tum_icerikler_dogrulandiysa_ozet_temizdir():
+    y = kisisel_rutin(40, "kadin", mevcut_urunler=["Ocean D3K2 Damla"])
+    assert "doğrulanamadı" not in y["kisa_ozet"]
+    assert y["dogrulanamayan_icerikler"] == []
+    assert all(k["kontrol"] == "tam" for k in y["ust_sinir_kontrolu"])
+
+
+def test_ust_sinira_yakinlik_notu():
+    # TB-27: D3 toplamı 75 µg = sınırın %75'i → bilgi notu; doz önerisi değil.
+    y = kisisel_rutin(58, "kadin", ilac_grubu=["kan_sulandirici_varfarin"], mevcut_urunler=["Ocean D3K2 Damla"],
+                      diger_urun_icerikleri=[{"ad": "Multivitamin", "icerikler": [
+                          {"etken_madde": "D vitamini", "miktar": 2000, "birim": "IU"}]}])
+    d3 = next(k for k in y["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+    assert d3["asiyor"] is False
+    assert "%75" in d3["sinira_yakinlik"] and "doz önerisi değildir" in d3["sinira_yakinlik"]
+    dusuk = kisisel_rutin(58, "kadin", mevcut_urunler=["Ocean D3K2 Damla"])
+    assert "sinira_yakinlik" not in next(k for k in dusuk["ust_sinir_kontrolu"] if k["etken_madde"] == "D3 vitamini")
+
+
+def test_gebelikte_a_vitamini_uyarisi():
+    # Kabul ölçütü: "Gebeyim, A vitamini içeren multivitamin kullanıyorum" → gebelik uyarısı.
+    urun = [{"ad": "Multivitamin", "icerikler": [{"etken_madde": "A vitamini", "miktar": 800, "birim": "µg"}]}]
+    gebe = kisisel_rutin(30, "kadin", evre="gebe", diger_urun_icerikleri=urun)
+    assert any("A vitamini" in e["konu"] and "gebe" in e["mesaj"] for e in gebe["etkilesim_ve_zamanlama"])
+    assert any("teratogenicity" not in k["baslik"].casefold() and "vitamin A" in k["baslik"] for k in gebe["kaynaklar"])
+    assert not kisisel_rutin(30, "kadin", evre="yok", diger_urun_icerikleri=urun)["etkilesim_ve_zamanlama"]

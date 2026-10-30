@@ -15,6 +15,11 @@ from . import veri
 
 
 ETIKET_UYARISI_NOTU = "Etiket uyarıları ürün sayfasında yayımlanmıyor; ambalajdaki uyarıları okuyun."
+# TB-22: "katkıda bulunur" beyanlarının ne anlama geldiği.
+BEYAN_ACIKLAMASI = (
+    "Bu ifadeler ürün sayfasındaki sağlık beyanlarıdır; maddenin vücudun normal işleyişine katkısını anlatan yasal "
+    "kalıplardır. Eksikliği olmayan birinde yorgunluğu gidereceğini ya da ek fayda sağlayacağını göstermez."
+)
 PARTI_ANALIZI_NOTU = "Katalogdaki ürünler için yayımlanmış parti analizi bulunmuyor."
 
 
@@ -29,7 +34,7 @@ def _urun_karti(u: dict) -> dict:
     etkenler = []
     for em in u["etken_maddeler"]:
         em_id = em["etken_madde"]
-        std = veri.standart_miktar(em_id, em["miktar"], em["birim"]) if em_id else None
+        std = veri.satir_miktari(em)
         sinir = veri.ust_sinir(em_id, 18) if em_id else None
         etkenler.append({
             "etken_madde": em["etiketteki_ad"],
@@ -40,7 +45,14 @@ def _urun_karti(u: dict) -> dict:
                 "standart_birimde": None if std is None else f"{_sayi(std)} {veri.kurallar()['etken_maddeler'][em_id]['birim']}",
                 "yetiskin_ust_siniri": _sinir_metni(em_id, sinir) if em_id else None,
             },
+            # Görsel kartın EFSA göstergesi için sayılar (standart birimde); metin alanları modelde kalır.
+            "olcek": {
+                "miktar": std,
+                "birim": veri.kurallar()["etken_maddeler"][em_id]["birim"] if em_id else None,
+                "ust_sinir": sinir["deger"] if sinir else None,
+            },
             **({"okuma_notu": " ".join(em["okuma_notlari"])} if em["okuma_notlari"] else {}),
+            **({"dogrulanamadi": _karantina_metni(em)} if em.get("karantina") else {}),
         })
     beyan = veri.urun_beyanlari().get(u["id"], {})
     return {
@@ -52,15 +64,25 @@ def _urun_karti(u: dict) -> dict:
         "bilesim": u["bilesim"],
         "etiketteki_kullanim": u["etiketteki_kullanim"],
         "yas_siniri": _yas_metni(u["yas_siniri"]),
-        "saglik_beyanlari": beyan.get("saglik", []),
+        "urun_sayfasi_beyanlari": [
+            {"metin": b["metin"], "ilgili_etken_madde": [veri.etken_madde_adi(e) for e in b["etken_maddeler"]]
+             or "Sayfada belirtilmemiş"}
+            for b in veri.urun_saglik_beyanlari(u)
+        ],
         "beslenme_beyanlari": beyan.get("beslenme", []),
         "beyan_kullanim_kosullari": beyan.get("kullanim_kosullari", []),
-        "beyan_notu": "Beyanlar ürün sayfasındaki metinlerdir; ürüne ait etki ifadesi yalnızca bunlardır.",
+        "beyan_notu": "Ürüne ait etki ifadesi yalnızca ürün sayfasındaki bu beyanlardır; regülasyon onayı ayrıca doğrulanmadı.",
+        "beyan_aciklamasi": BEYAN_ACIKLAMASI,
         "etiket_uyarilari": ETIKET_UYARISI_NOTU,
         "parti_analizi": PARTI_ANALIZI_NOTU,
         "urun_sayfasi": u["kaynak"]["url"],
         "erisim_tarihi": u["kaynak"]["erisim_tarihi"],
     }
+
+
+def _karantina_metni(em: dict) -> str:
+    k = em["karantina"]
+    return f"Bu satır doğrulanamadı ve hesaplamalara katılmadı. {k['gerekce']}"
 
 
 def _urun_kaynaklari(u: dict) -> list[dict]:
@@ -72,12 +94,23 @@ def _urun_kaynaklari(u: dict) -> list[dict]:
     return [veri.urun_kaynagi(u), *veri.kaynaklar(sinir_kaynaklari or ["efsa_ul_ozet_2025"])]
 
 
-def urun_rehberi(urun: str) -> dict:
+def _yas_disinda(ys: dict, yas: float) -> bool:
+    return ys["min"] is not None and (yas < ys["min"] or (ys["max"] is not None and yas > ys["max"]))
+
+
+def urun_rehberi(urun: str, yas: int | None = None) -> dict:
     adaylar = veri.urun_ara(urun)
     if len(adaylar) == 1:
         u = adaylar[0]
+        ozet = f"{u['ad']} ({u['marka']}) için etiket bilgileri. Ürün düzeyindeki etki ifadeleri yalnızca ürün sayfasındaki beyanlardan gelir."
+        yas_uyarisi = None
+        if yas is not None and _yas_disinda(u["yas_siniri"], yas):
+            yas_uyarisi = (f"Bu ürün etikette {_yas_metni(u['yas_siniri'])} için. {yas} yaş bu aralığın dışında; "
+                           "bu yaşta kullanımı hekime danışılmalıdır.")
+            ozet = yas_uyarisi + " " + ozet
         return veri.zarf({
-            "kisa_ozet": f"{u['ad']} ({u['marka']}) için etiket bilgileri. Ürün düzeyindeki etki ifadeleri yalnızca ürün sayfasındaki beyanlardan gelir.",
+            "kisa_ozet": ozet,
+            **({"yas_uyarisi": yas_uyarisi} if yas_uyarisi else {}),
             "urun": _urun_karti(u),
         }, _urun_kaynaklari(u))
     if len(adaylar) > 1:
@@ -148,6 +181,7 @@ IlacGrubu = Literal[
     "diger",
 ]
 Evre = Literal["yok", "gebelik_planliyor", "gebe", "emziriyor"]
+_EVRE_ADLARI = {"gebelik_planliyor": "Gebelik planlama", "gebe": "Gebelik", "emziriyor": "Emzirme"}
 Cinsiyet = Literal["kadin", "erkek", "belirtmek_istemiyor"]
 
 
@@ -182,6 +216,10 @@ def _yas_metni(ys: dict) -> str:
     return f"{ys['min']}–{ys['max']} yaş"
 
 
+# Üst sınırın bu oranına ulaşan toplam için bilgi notu verilir (TB-27).
+YAKINLIK_ESIGI = 0.75
+
+
 def kisisel_rutin(
     yas: int,
     cinsiyet: str,
@@ -211,7 +249,7 @@ def kisisel_rutin(
                 if em["etken_madde"] is None:
                     kurali_olmayan.append(f"{u['ad']}: {em['etiketteki_ad']}")
                     continue
-                std = veri.standart_miktar(em["etken_madde"], em["miktar"], em["birim"])
+                std = veri.satir_miktari(em)
                 # Etiketteki en yüksek günlük kullanım esas alınır; hesaplanamazsa porsiyon başına miktar kullanılır.
                 carpan = em.get("gunluk_carpan")
                 if carpan is None:
@@ -252,34 +290,53 @@ def kisisel_rutin(
         if len(urun_adlari) > 1:
             tekrar_edenler.append({"etken_madde": veri.etken_madde_adi(em_id), "urunler": urun_adlari})
 
-    # Üst sınır karşılaştırması: yalnızca rakam, yorum yok.
+    # Üst sınır karşılaştırması: yalnızca rakam, yorum yok. Miktarı doğrulanamayan içerik sessizce düşmez:
+    # o maddenin satırı "eksik" işaretlenir, aşım ancak doğrulanan kısım bile sınırı geçiyorsa kesin sayılır.
     ust_sinir_kontrolu = []
     sinir_kaynaklari: list[str] = []
-    birim_cevrilemeyen = []
+    dogrulanamayan = []
     for em_id, liste in icerik_kaynaklari.items():
         gecerli = [(ad, m) for ad, m in liste if m is not None]
-        birim_cevrilemeyen += [f"{ad}: {veri.etken_madde_adi(em_id)}" for ad, m in liste if m is None]
-        if not gecerli:
-            continue
+        eksikler = sorted({ad for ad, m in liste if m is None}, key=veri.normalize)
+        if em_id not in parca_idleri:
+            dogrulanamayan += [f"{ad}: {veri.etken_madde_adi(em_id)}" for ad in eksikler]
         sinir = veri.ust_sinir(em_id, yas)
         if sinir is None:
             continue
         toplam = sum(m for _, m in gecerli)
+        asiyor = toplam > sinir["deger"]
+        oran = toplam / sinir["deger"] if sinir["deger"] else 0
         ust_sinir_kontrolu.append({
             "etken_madde": veri.etken_madde_adi(em_id),
-            "takviyelerden_toplam": f"{_sayi(toplam)} {sinir['birim']} / gün",
+            "takviyelerden_toplam": (
+                f"{_sayi(toplam)} {sinir['birim']} / gün" + (" (yalnızca doğrulanan içerikler)" if eksikler else "")
+                if gecerli else "Hesaplanamadı"
+            ),
             "efsa_degeri": _sinir_metni(em_id, sinir),
-            "asiyor": toplam > sinir["deger"],
+            "asiyor": True if asiyor else (None if eksikler else False),
+            "kontrol": "eksik" if eksikler else "tam",
+            # Görsel kartın yığılmış çubuğu için: ürün başına katkı ve sınır (standart birimde).
+            "katkilar": [{"urun": ad, "miktar": round(m, 3)} for ad, m in gecerli],
+            "toplam_deger": round(toplam, 3),
+            "sinir_degeri": sinir["deger"],
+            "birim": sinir["birim"],
+            # TB-27: sınıra yakınlık bilgi notudur; doz önerisi değildir.
+            **({"sinira_yakinlik": (
+                f"Takviyelerden gelen toplam, EFSA değerinin yaklaşık %{round(oran * 100)}'i. Besinlerden gelen miktar "
+                "bu toplama dahil değil. Bu bir doz önerisi değildir."
+            )} if not asiyor and oran >= YAKINLIK_ESIGI else {}),
+            **({"dogrulanamayan_urunler": eksikler} if eksikler else {}),
             "kapsam": sinir["kapsam"],
         })
         sinir_kaynaklari += sinir["kaynaklar"]
     asimlar = [k for k in ust_sinir_kontrolu if k["asiyor"]]
+    eksik_kontroller = [k for k in ust_sinir_kontrolu if k["kontrol"] == "eksik"]
 
     # Etiketteki kullanım ve yaş sınırı.
     etiket_bilgileri = []
     for u in bulunan_urunler:
         ys = u["yas_siniri"]
-        yas_disi = ys["min"] is not None and (yas < ys["min"] or (ys["max"] is not None and yas > ys["max"]))
+        yas_disi = _yas_disinda(ys, yas)
         etiket_bilgileri.append({
             "urun": u["ad"],
             "etiketteki_kullanim": u["etiketteki_kullanim"],
@@ -301,16 +358,20 @@ def kisisel_rutin(
             continue
         if "diger_etken_madde" in kosul and kosul["diger_etken_madde"] not in icerik_kaynaklari:
             continue
+        if "evre" in kosul and evre not in kosul["evre"]:
+            continue
         etkilesimler.append({
             "konu": " + ".join(
                 [veri.etken_madde_adi(e) for e in mevcut_em]
                 + ([kurallar["ilac_gruplari"][i] for i in _liste(kosul.get("ilac_grubu", [])) if i in ilaclar])
                 + ([veri.etken_madde_adi(kosul["diger_etken_madde"])] if "diger_etken_madde" in kosul else [])
+                + ([_EVRE_ADLARI[evre]] if "evre" in kosul else [])
             ),
             "seviye": kural["seviye"],
             "mesaj": kural["mesaj"],
         })
         sorular.append(kural["soru"])
+        sinir_kaynaklari += kural.get("kaynaklar", [])
 
     for s in kurallar["ilac_sorulari"]:
         if s["ilac_grubu"] in ilaclar:
@@ -336,13 +397,26 @@ def kisisel_rutin(
     if "d3" in icerik_kaynaklari:
         sorular.append("D vitamini düzeyimin ölçülmesi gerekir mi?")
 
+    dogrulanamayan = sorted(set(dogrulanamayan), key=veri.normalize)
     ozet_parcalari = [
         f"{len(tekrar_edenler)} tekrar eden etken madde",
         f"{len(asimlar)} EFSA değeri aşımı",
         f"{len(etkilesimler)} etkileşim veya zamanlama notu",
     ]
+    eksik_metni = ""
+    if dogrulanamayan:
+        eksik_metni = f" {len(dogrulanamayan)} içerik doğrulanamadı ve hesaba katılmadı"
+        if eksik_kontroller:
+            eksik_metni += (
+                "; şu maddelerde üst sınır kontrolü eksik: "
+                + ", ".join(k["etken_madde"] for k in eksik_kontroller)
+            )
+        eksik_metni += "."
     return veri.zarf({
-        "kisa_ozet": "Rutin kontrolü: " + ", ".join(ozet_parcalari) + ". Bu bir değerlendirme değildir; sonuçları hekiminiz veya eczacınızla konuşun.",
+        "kisa_ozet": (
+            "Rutin kontrolü: " + ", ".join(ozet_parcalari) + "." + eksik_metni
+            + " Bu bir değerlendirme değildir; sonuçları hekiminiz veya eczacınızla konuşun."
+        ),
         "tekrar_eden_etken_maddeler": tekrar_edenler,
         "ust_sinir_kontrolu": ust_sinir_kontrolu,
         "ust_sinir_notu": (
@@ -357,7 +431,11 @@ def kisisel_rutin(
         "taninmayan_urunler": tanimsiz_urunler,
         "birden_fazla_eslesen_urunler": belirsiz_urunler,
         "taninmayan_icerikler": tanimsiz_icerikler,
-        "birimi_cevrilemeyen_icerikler": sorted(set(birim_cevrilemeyen)),
+        "dogrulanamayan_icerikler": dogrulanamayan,
+        **({"dogrulanamayan_notu": (
+            "Bu içeriklerin miktarı ürün sayfasında hatalı ya da okunamaz görünüyor veya birimi çevrilemedi. "
+            "Toplamlar ve üst sınır karşılaştırması bu içerikler olmadan hesaplandı; ambalajdaki etiketi kontrol edin."
+        )} if dogrulanamayan else {}),
         "gizlilik": "Girilen bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, veri.kaynaklar(["efsa_ul_ozet_2025", *sinir_kaynaklari], [veri.urun_kaynagi(u) for u in bulunan_urunler]))
 
@@ -376,17 +454,17 @@ _SECENEKLER: dict[str, list[tuple]] = {
     "hareket_gun": [
         ("Hiç", "0_gun", 0, 0), ("1–2 gün", "1_2_gun", 1, 2), ("3–4 gün", "3_4_gun", 3, 4), ("5–7 gün", "5_7_gun", 5, 7),
     ],
+    # Tıklanabilir soru kartı en fazla 4 seçenek alır (TB-08): 9 saatin üstü tek seçenektir.
     "uyku_saat": [
         ("6 saatten az", "6_saatten_az", 0, 5.99), ("6 ile 7 saat arası", "6_7_saat", 6, 6.99),
-        ("7–9 saat", "7_9_saat", 7, 9), ("9 saatten fazla, en çok 10", "9_10_saat", 9.01, 10),
-        ("10 saatten fazla", "10_saatten_fazla", 10.01, 24),
+        ("7–9 saat", "7_9_saat", 7, 9), ("9 saatten fazla", "9_saatten_fazla", 9.01, 24),
     ],
     "sebze_meyve_porsiyon": [
         ("0–2 porsiyon", "0_2_porsiyon", 0, 2.99), ("3–4 porsiyon", "3_4_porsiyon", 3, 4.99),
         ("5 porsiyon ya da daha fazla", "5_ve_uzeri", 5, 30),
     ],
     "balik_haftalik": [
-        ("Hiç", "hic", 0, 0), ("Ayda 1–3 kez", "ayda_1_3", 0.25, 0.75), ("Haftada 1 kez", "haftada_1", 1, 1.99),
+        ("Hiç", "hic", 0, 0), ("Ayda 1–3 kez", "ayda_1_3", 0.25, 0.99), ("Haftada 1 kez", "haftada_1", 1, 1.99),
         ("Haftada 2 kez ya da daha sık", "haftada_2_ve_uzeri", 2, 21),
     ],
     "sigara": [("Hayır", "hayir"), ("Ara sıra", "ara_sira"), ("Her gün", "her_gun")],
@@ -407,14 +485,16 @@ for _s in SORULAR:
     _s["secenekler"] = [{"etiket": x[0], "deger": x[1]} for x in _SECENEKLER[_s["anahtar"]]]
 
 SORU_YONERGESI = (
-    "Altı soruyu tek mesajda, seçenekleriyle birlikte sorun. Kullanıcı bir seçenek ya da aralık seçerse seçenek "
-    "kodunu (ör. '1_2_gun'), tam sayı verirse sayıyı iletin."
+    "Soruları iki adımda, seçenekleriyle sorun: önce ilk dört soru (hareket, uyku, sebze-meyve, balık), sonra kalan "
+    "iki soru (tütün, stres). Her soruda en fazla 4 seçenek vardır. Kullanıcı bir seçenek seçerse seçenek kodunu "
+    "(ör. '1_2_gun'), sayı verirse sayıyı iletin."
 )
 
 ESIK_NOTU = (
     "Eşikler yetişkinler için genel halk sağlığı önerilerinden sadeleştirilmiştir: haftada en az 150 dakika "
     "orta yoğunlukta hareket (WHO), gecede 7–9 saat uyku (National Sleep Foundation), günde en az 400 g sebze-meyve "
-    "(WHO; karnede 5 porsiyon olarak sadeleştirildi), haftada 1–2 kez deniz ürünü (American Heart Association). "
+    "(WHO; karnede 5 porsiyon olarak sadeleştirildi), haftada 1–2 kez deniz ürünü (American Heart Association; "
+    "karnede haftada 1 kez ve üzeri iyi sayılır). Gecede 9 saatten uzun uyku 'orta' sayılır. "
     "Prototiptir; medikal kurul onayı bekler."
 )
 KARNE_KAYNAKLARI = [
@@ -424,36 +504,55 @@ KARNE_KAYNAKLARI = [
 # Puan: 2 = iyi, 1 = orta, 0 = gelişmeli
 _SEVIYE = {2: "iyi", 1: "orta", 0: "gelişmeli"}
 
+# ilk_adim mevcut seviyeye göre bir basamak yukarıyı hedefler (TB-09): anahtar cevabın puanıdır (0 ya da 1).
 _HEDEFLER = {
     "sigara": {
         "alan": "Tütün",
         "hedef": "Bırakmak için bir tarih belirle.",
-        "ilk_adim": "ALO 171 Sigara Bırakma Danışma Hattı'nı ara ya da aile hekiminden sigara bırakma desteği iste.",
+        "ilk_adim": {
+            0: "ALO 171 Sigara Bırakma Danışma Hattı'nı ara ya da aile hekiminden sigara bırakma desteği iste.",
+            1: "Ara sıra içtiğin durumları not et; ALO 171 ya da aile hekiminden bırakma desteği iste.",
+        },
     },
     "hareket_gun": {
         "alan": "Hareket",
         "hedef": "Haftada 5 gün 30 dakika tempolu hareket.",
-        "ilk_adim": "Bu hafta 2 güne birer 20 dakikalık yürüyüş koy; günü ve saati takvime yaz.",
+        "ilk_adim": {
+            0: "Bu hafta 2 güne birer 20 dakikalık yürüyüş koy; günü ve saati takvime yaz.",
+            1: "Hareket ettiğin günlere bu hafta bir gün daha ekle; günü ve saati takvime yaz.",
+        },
     },
     "uyku_saat": {
         "alan": "Uyku",
         "hedef": "Gecede 7–9 saat uyku.",
-        "ilk_adim": "Bu hafta yatış saatini 30 dakika öne al ve her gün aynı saatte kalk.",
+        "ilk_adim": {
+            0: "Bu hafta yatış saatini 30 dakika öne al ve her gün aynı saatte kalk.",
+            1: "Her gün aynı saatte yat ve kalk; hafta sonu da bu saatleri koru.",
+        },
     },
     "sebze_meyve_porsiyon": {
         "alan": "Sebze ve meyve",
         "hedef": "Günde en az 5 porsiyon sebze ve meyve.",
-        "ilk_adim": "Her ana öğüne bir porsiyon sebze ya da salata ekle.",
+        "ilk_adim": {
+            0: "Her ana öğüne bir porsiyon sebze ya da salata ekle.",
+            1: "Bir ara öğünü bir porsiyon meyve ya da çiğ sebzeyle değiştir.",
+        },
     },
     "balik_haftalik": {
         "alan": "Balık",
-        "hedef": "Haftada 2 kez balık.",
-        "ilk_adim": "Haftalık menüye bir balık günü koy; balık yemiyorsan bunu hekiminle ya da diyetisyenle konuş.",
+        "hedef": "Haftada 1–2 kez balık.",
+        "ilk_adim": {
+            0: "Bu ay menüye iki balık günü koy; balık yemiyorsan bunu hekiminle ya da diyetisyenle konuş.",
+            1: "Haftalık menüye sabit bir balık günü koy.",
+        },
     },
     "stres": {
-        "alan": "Dinlenme",
+        "alan": "Stres",
         "hedef": "Her gün kendine ayrılmış kısa bir dinlenme zamanı.",
-        "ilk_adim": "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla.",
+        "ilk_adim": {
+            0: "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla; bu his sürüyorsa hekimle konuş.",
+            1: "Günde 10 dakika ekransız yürüyüş ya da sessiz bir mola planla.",
+        },
     },
 }
 _ONCELIK = ["sigara", "hareket_gun", "uyku_saat", "sebze_meyve_porsiyon", "balik_haftalik", "stres"]
@@ -482,11 +581,12 @@ def _puanla(anahtar: str, deger) -> int:
     if anahtar == "hareket_gun":
         return 2 if deger >= 5 else 1 if deger >= 3 else 0
     if anahtar == "uyku_saat":
-        return 2 if 7 <= deger <= 9 else 1 if 6 <= deger < 7 or 9 < deger <= 10 else 0
+        return 2 if 7 <= deger <= 9 else 1 if 6 <= deger < 7 or deger > 9 else 0
     if anahtar == "sebze_meyve_porsiyon":
         return 2 if deger >= 5 else 1 if deger >= 3 else 0
     if anahtar == "balik_haftalik":
-        return 2 if deger >= 2 else 1 if deger >= 1 else 0
+        # AHA haftada 1–2 kez deniz ürünü önerir (TB-10): haftada 1 kez iyi, ayda birkaç kez orta.
+        return 2 if deger >= 1 else 1 if deger > 0 else 0
     if anahtar == "sigara":
         return {"hayir": 2, "ara_sira": 1, "her_gun": 0}[deger]
     if anahtar == "stres":
@@ -520,29 +620,26 @@ def _kural_saglanir(kosul: dict, cevaplar: dict) -> bool:
 
 
 def _kopruler(girilen: dict) -> tuple[dict, list[str]]:
-    """Karne cevaplarından takviye bağlantıları, güvenlik uyarıları ve tahlil önerisi üretir."""
-    baglantilar, uyarilar, tahliller, kaynak_idleri = [], [], [], []
+    """Karne cevaplarından takviye bağlantıları ve güvenlik uyarıları üretir.
+
+    Takviye bağlantısı yalnızca hedef maddenin sunulabilir kanıt kartı varsa kurulur (TB-12): boş karta köprü yok.
+    Tahlil önerisi karneden çıkarıldı (TB-11): cevaplara bağlı değildi; tahliller şikâyet yolunda ele alınır.
+    """
+    baglantilar, uyarilar, kaynak_idleri = [], [], []
     for k in veri.karne_kurallari():
         if not _kural_saglanir(k["kosul"], girilen):
             continue
+        if k["tur"] == "takviye_baglantisi" and veri.monografi(k["etken_madde"]) is None:
+            continue
         kaynak_idleri += k["kaynaklar"]
-        if k["tur"] == "takviye_baglantisi":
-            baglantilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
-                                "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
-        elif k["tur"] == "guvenlik":
-            uyarilar.append({"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
-                             "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]})
-        else:
-            tahliller.append({"etken_madde": _rehber_adi(k["etken_madde"]), "mesaj": k["mesaj"]})
+        kayit = {"tetikleyici": k["tetikleyici"], "etken_madde": _rehber_adi(k["etken_madde"]),
+                 "mesaj": k["mesaj"], "onerilen_sonraki_arac": k["onerilen_sonraki_arac"]}
+        (baglantilar if k["tur"] == "takviye_baglantisi" else uyarilar).append(kayit)
     return {
         "takviye_baglantilari": baglantilar,
         "guvenlik_uyarilari": uyarilar,
-        "tahlil_onerisi": {
-            "maddeler": tahliller,
-            "not": "Bu maddelerde ihtiyaç karneyle değil, hekimin gerekli gördüğü kan tahliliyle değerlendirilir.",
-        },
         "kopru_notu": ("Bağlantılar takviye önerisi değildir; ilgili kanıtı incelemek için yönlendirmedir. "
-                       "Kurallar medikal kurul onayı bekler."),
+                       "Yalnızca kanıt kartı hazır olan maddelere bağlantı verilir. Kurallar medikal kurul onayı bekler."),
     }, kaynak_idleri
 
 
@@ -557,7 +654,6 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
             "kisa_ozet": f"Karne için 6 sorunun hepsi gerekli; {len(eksik)} soru cevaplanmadı.",
             "soru_yonergesi": SORU_YONERGESI,
             "eksik_sorular": eksik,
-            "tum_sorular": SORULAR,
         }, veri.kaynaklar(KARNE_KAYNAKLARI))
 
     karne = []
@@ -575,11 +671,13 @@ def yasam_karnesi(cevaplar: KarneCevaplari | dict | None = None, yas: int | None
         (s["anahtar"] for s, k in zip(SORULAR, karne) if k["puan"] < 2),
         key=lambda a: (_puan(a, girilen[a]), _ONCELIK.index(a)),
     )
-    hedefler = [{**_HEDEFLER[a]} for a in gelismeli[:3]]
+    hedefler = [{**_HEDEFLER[a], "ilk_adim": _HEDEFLER[a]["ilk_adim"][_puan(a, girilen[a])]} for a in gelismeli[:3]]
 
     notlar = []
     if girilen["stres"] == "neredeyse_her_gun":
         notlar.append("Neredeyse her gün gergin ya da tükenmiş hissetmek bir hekim veya ruh sağlığı uzmanıyla konuşmaya değer.")
+    if isinstance(girilen["uyku_saat"], (int, float)) and girilen["uyku_saat"] > 10:
+        notlar.append("Düzenli olarak gecede 10 saatten uzun uyumak, nedeni hekimle konuşulmaya değer bir durumdur.")
     if yas is not None and yas < 18:
         notlar.append("Bu karnenin eşikleri yetişkinler içindir; çocuk ve gençlerde uyku ve hareket ihtiyacı farklıdır.")
 
@@ -618,7 +716,32 @@ _VITAMIN_MINERAL = {
 }
 # Omega-3 rehberi EPA ve DHA'yı ayrı satır olarak yazan ürünleri de kapsar.
 _KATALOG_KIMLIKLERI = {"omega3": {"omega3", "epa", "dha", "toplam_omega3"}}
+# Kanıt kartı olan maddede modele dönen en fazla ürün sayısı (TB-14); kalanı sayıyla verilir.
+KATALOG_SINIRI = 5
 TASLAK_NOTU = "Taslak: bu kanıt kartı medikal kurul onayı bekliyor."
+TASLAK_UYARI_NOTU = "Taslak: bu güvenlik uyarısı medikal kurul onayı bekliyor; onay beklerken de gösterilir."
+
+
+# Kanıt kartı hazırlanana kadar yönlendirilen genel bilgi sayfası (kurum belgesi, doğrulanmış).
+GENEL_KILAVUZ = {
+    "d3": "nih_ods_d_vitamini", "omega3": "nih_ods_omega3", "b12": "nih_ods_b12", "folik_asit": "nih_ods_folat",
+    "demir": "nih_ods_demir", "magnezyum": "nih_ods_magnezyum", "c_vitamini": "nih_ods_c_vitamini",
+    "cinko": "nih_ods_cinko", "multivitamin": "nih_ods_multivitamin", "beta_karoten": "nih_ods_a_vitamini_karotenoidler",
+    "e_vitamini": "nih_ods_e_vitamini", "probiyotik": "nih_ods_probiyotik",
+}
+
+
+def _katalog_sayisi_metni(sayi: int) -> str:
+    return (f"Katalogda bu maddeyi içeren {sayi} ürün var. Katalog şu an yalnızca Orzax ürünlerini içerir. "
+            "Belirli bir ürünün etiket bilgisi için ürün adıyla sorulabilir.")
+
+
+def _genel_kilavuz(em_id: str) -> dict | None:
+    kid = GENEL_KILAVUZ.get(em_id)
+    if not kid or not veri.kaynaklar([kid]):
+        return None
+    k = veri.kaynaklar([kid])[0]
+    return {"baslik": k["baslik"], "kurum": k["kurum_veya_dergi"], "url": k["url"], "dil": "İngilizce"}
 
 
 def _rehber_id(ad: str) -> str | None:
@@ -640,12 +763,31 @@ def _katalog_eslesmesi(em_id: str, u: dict) -> list[dict]:
     return [e for e in u["etken_maddeler"] if e["etken_madde"] in kimlikler]
 
 
-def _urun_beyanlari(u: dict, anahtarlar: list[str], tek_icerik: bool) -> list[str]:
-    """Ürün sayfasındaki sağlık beyanlarından bu etken maddeyi anlatanlar (tek içerikli üründe hepsi)."""
-    beyanlar = veri.urun_beyanlari().get(u["id"], {}).get("saglik", [])
-    if tek_icerik or not anahtarlar:
-        return beyanlar
-    return [b for b in beyanlar if any(a in veri.normalize(b) for a in anahtarlar)]
+def _katalog_urunleri(em_id: str, yas: int | None) -> tuple[list[dict], list[dict], list[dict]]:
+    """(eşleşen, yaşa uygun ve sıralı, yaş sınırı dışında) ürünler. Sıra: yalnızca bu maddeyi içerenler önce, sonra alfabetik."""
+    eslesen = [u for u in veri.urunler() if _katalog_eslesmesi(em_id, u)]
+    yas_disi = [u for u in eslesen if yas is not None and _yas_disinda(u["yas_siniri"], yas)]
+    uygun = sorted((u for u in eslesen if u not in yas_disi),
+                   key=lambda x: (not _tek_icerikli(x, em_id), veri.normalize(x["ad"])))
+    return eslesen, uygun, yas_disi
+
+
+def _madde_beyanlari(u: dict, em_id: str) -> list[str]:
+    """Ürün sayfası beyanlarından bu maddeye eşlenenler; ürün rehberiyle aynı kaynak (TB-15)."""
+    hedef = veri.KATALOG_GRUBU.get(em_id, em_id)
+    return [b["metin"] for b in veri.urun_saglik_beyanlari(u) if em_id == "multivitamin" or hedef in b["etken_maddeler"]]
+
+
+def _katalog_ogesi(u: dict, em_id: str, beyanlar: list[str]) -> dict:
+    return {
+        "ad": u["ad"],
+        "marka": u["marka"],
+        "tek_icerikli": _tek_icerikli(u, em_id),
+        "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in _katalog_eslesmesi(em_id, u)],
+        "yas_siniri": _yas_metni(u["yas_siniri"]),
+        "urun_sayfasi_beyanlari": beyanlar,
+        "parti_analizi_var": False,
+    }
 
 
 def _beyan_anahtari(beyan: str, anahtarlar: list[str]) -> str:
@@ -697,14 +839,14 @@ def etken_madde_rehberi(
              if aranan and any(aranan in veri.normalize(e["etiketteki_ad"]) for e in u["etken_maddeler"])),
             key=veri.normalize,
         )
+        # Kanıt kartı olmayan maddede ürün listesi dönmez (TB-05); yalnızca katalog kapsamı sayıyla yazılır.
         return veri.zarf({
             "kisa_ozet": (
-                f"'{etken_madde}' için kanıt kartı yok."
-                + (" Katalogda bu adı içeren ürünler aşağıda." if urunler else " Adı farklı yazmayı deneyin (ör. 'D vitamini', 'omega-3').")
+                f"'{etken_madde}' için kanıt kartı yok; kanıt kartı olmayan maddede ürün listesi gösterilmez."
+                + ("" if urunler else " Adı farklı yazmayı deneyin (ör. 'D vitamini', 'omega-3').")
             ),
             "kanit_karti_hazirlanan_maddeler": [_rehber_adi(i) for i in REHBER_KAPSAMI],
-            "katalogda_bu_adi_iceren_urunler": urunler,
-            "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
+            "katalog_kapsami": _katalog_sayisi_metni(len(urunler)),
         }, veri.kaynaklar(["orzax_urunler"]))
 
     profil = {"yas": yas, "cinsiyet": cinsiyet, "evre": evre, "sigara": sigara,
@@ -712,6 +854,20 @@ def etken_madde_rehberi(
     m = veri.monografi(em_id)
     ad = m["ad"] if m else _rehber_adi(em_id)
     kaynak_idleri: list[str] = []
+
+    # Zorunlu güvenlik uyarıları (TB-03, TB-04): kanıt kartı olsa da olmasa da, en üstte.
+    zorunlu = []
+    for u in veri.zorunlu_uyarilar(em_id):
+        if _kosul_saglanir(u["kosul"], profil):
+            zorunlu.append({
+                "mesaj": u["mesaj"],
+                "dayanak": [_kunye(i) for i in u["kaynaklar"]],
+                **({"durum": TASLAK_UYARI_NOTU} if u["durum"] == "taslak" else {}),
+            })
+            kaynak_idleri += u["kaynaklar"]
+    # "Tahlilsiz kullanma" uyarısının ilk cümlesi özetin ilk cümlesi olur.
+    on_ek = next((u["mesaj"].split(". ")[0] + ". " for u in veri.zorunlu_uyarilar(em_id)
+                  if u["tur"] == "tahlilsiz_kullanma" and _kosul_saglanir(u["kosul"], profil)), "")
 
     # Kanıt düzeyi: sonuç alanı bazında.
     kanit = []
@@ -724,12 +880,22 @@ def etken_madde_rehberi(
             "gerekce": k["gerekce"],
             "halk_ozeti": k["halk_ozeti"],
             "mutlak_fark": k["mutlak_fark"]["metin"],
+            **({"mutlak_fark_100": k["mutlak_fark"]["yuz_kiside"]} if k["mutlak_fark"].get("yuz_kiside") else {}),
             "calismalarda_kullanilan_dozlar": k["calisilan_dozlar"],
             "ne_bilmiyoruz": k["ne_bilmiyoruz"],
             "dayanak": [_kunye(i) for i in k["kaynaklar"]],
             **({"durum": TASLAK_NOTU} if k["durum"] == "taslak" else {}),
         })
         kaynak_idleri += k["kaynaklar"]
+
+    # TB-18: profil verildiyse kullanıcının grubu ilk satıra çıkar. Gruplar listedeki sırayla denenir (ör. gebelik
+    # yetişkin grubundan önce); koşulu olmayan grup (ör. prediyabet) profilden çıkarılamaz, otomatik seçilmez.
+    profil_verildi = any(profil[a] for a in ("yas", "cinsiyet", "evre", "ilac_grubu"))
+    senin_grubun = None
+    if m and profil_verildi:
+        g = next((g for g in m.get("kimde_kanit_var", []) if "kosul" in g and _kosul_saglanir(g["kosul"], profil)), None)
+        senin_grubun = {"grup": g["grup"], "gerekce": g["gerekce"]} if g else {
+            "grup": "Eşleşen ayrı grup yok", "gerekce": "Verdiğin bilgilerle kanıt özetindeki gruplardan biri eşleşmedi."}
 
     # Profile göre dikkat edilecekler ve hekime sorulacaklar.
     dikkat, sorular = [], list((m or {}).get("hekime_sorulacaklar", []))
@@ -748,8 +914,9 @@ def etken_madde_rehberi(
         karsi = [kurallar["ilac_gruplari"][i] for i in _liste(kosul.get("ilac_grubu", []))]
         if "diger_etken_madde" in kosul:
             karsi.append(veri.etken_madde_adi(kosul["diger_etken_madde"]))
+        karsi += [_EVRE_ADLARI[e] for e in kosul.get("evre", [])]
         etkilesimler.append({"ile": karsi, "seviye": kural["seviye"], "mesaj": kural["mesaj"]})
-        if set(_liste(kosul.get("ilac_grubu", []))) & set(profil["ilac_grubu"]):
+        if (set(_liste(kosul.get("ilac_grubu", []))) & set(profil["ilac_grubu"])) or profil["evre"] in kosul.get("evre", []):
             dikkat.append(kural["mesaj"])
             sorular.append(kural["soru"])
 
@@ -766,24 +933,16 @@ def etken_madde_rehberi(
         }
         kaynak_idleri += sinir_kaydi["kaynaklar"]
 
-    # Katalog: nötr ve belgelenmiş sıra (alfabetik).
+    # Katalog (TB-14): yaş sınırına uyanlar; tek içerikliler önce, sonra alfabetik; en fazla KATALOG_SINIRI ürün.
     anahtarlar = [veri.normalize(a) for a in (m or {}).get("beyan_anahtarlari", [])]
+    eslesen, uygun, yas_disi = _katalog_urunleri(em_id, yas)
     katalog, beyan_metinleri, beyan_urunleri = [], [], []
-    for u in sorted(veri.urunler(), key=lambda x: veri.normalize(x["ad"])):
-        satirlar = _katalog_eslesmesi(em_id, u)
-        if not satirlar:
-            continue
-        tek = _tek_icerikli(u, em_id)
-        beyanlar = _urun_beyanlari(u, anahtarlar, tek)
-        katalog.append({
-            "ad": u["ad"],
-            "marka": u["marka"],
-            "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in satirlar],
-            "onayli_beyanlar": beyanlar,
-            "parti_analizi_var": False,
-            "urun_sayfasi": u["kaynak"]["url"],
-        })
-        if tek and em_id != "multivitamin":
+    for u in uygun:
+        beyanlar = _madde_beyanlari(u, em_id)
+        if len(katalog) < KATALOG_SINIRI:
+            katalog.append(_katalog_ogesi(u, em_id, beyanlar))
+        # Madde düzeyindeki beyan listesi yalnızca bu maddeyi tek başına içeren ürünlerden derlenir.
+        if em_id != "multivitamin" and beyanlar and _tek_icerikli(u, em_id):
             for b in beyanlar:
                 anahtar = _beyan_anahtari(b, anahtarlar)
                 onceki = next((i for i, x in enumerate(beyan_metinleri) if _beyan_anahtari(x, anahtarlar) == anahtar), None)
@@ -792,48 +951,62 @@ def etken_madde_rehberi(
                 elif veri.normalize(b) != anahtar and veri.normalize(beyan_metinleri[onceki]) == anahtar:
                     beyan_metinleri[onceki] = b  # Etken madde adını içeren yazım tercih edilir.
             beyan_urunleri.append(u)
+    katalog_ozeti = {
+        "gosterilen": len(katalog),
+        "kalan_urun_sayisi": len(uygun) - len(katalog),
+        **({"yas_siniri_disinda_kalan": len(yas_disi)} if yas_disi else {}),
+        "kapsam": "Katalog şu an yalnızca Orzax ürünlerini içerir.",
+        "siralama_olcutu": ("Yalnızca bu maddeyi içeren ürünler önce, sonra alfabetik. "
+                            "Sponsorlu veya öncelikli sıralama yoktur; sıra bir öneri değildir."),
+    }
 
     if m is None:
-        durum_metni = (f"{ad} için kanıt kartı henüz hazırlanmadı ya da medikal kurul onayı bekliyor. "
-                       "Aşağıda yalnızca EFSA değeri, ürün sayfalarındaki beyanlar ve katalog bilgisi var.")
-    kaynak_idleri += (m or {}).get("kaynaklar", []) + (m or {}).get("uretici_icerikleri", [])
-    for alan in ("besinle_karsilama", "tahlil_notu"):
-        kaynak_idleri += (m or {}).get(alan, {}).get("kaynaklar", [])
-    for g in (m or {}).get("kimde_kanit_var", []):
+        return _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorular, len(eslesen), kaynak_idleri)
+    kaynak_idleri += m.get("kaynaklar", []) + m.get("uretici_icerikleri", [])
+    for alan in ("besinle_karsilama", "tahlil_notu", "formlar"):
+        kaynak_idleri += m.get(alan, {}).get("kaynaklar", [])
+    for g in m.get("kimde_kanit_var", []):
         kaynak_idleri += g["kaynaklar"]
-    if not kaynak_idleri:
-        kaynak_idleri = ["orzax_urunler"]
     # Bağımsız kaynaklar önce, üretici içerikleri sonra.
     kayitlar = veri.kaynak_kayitlari()
     sirali = sorted(dict.fromkeys(kaynak_idleri), key=lambda i: kayitlar[i]["tur"] == "uretici_icerigi")
     kaynak_listesi = veri.kaynaklar(sirali)
     kaynak_listesi = (
         [k for k in kaynak_listesi if k["tur"] != "uretici_icerigi"]
-        + [veri.urun_kaynagi(u) for u in beyan_urunleri]
+        + [veri.urun_kaynagi(u) for u in beyan_urunleri[:KATALOG_SINIRI]]
         + [k for k in kaynak_listesi if k["tur"] == "uretici_icerigi"]
     )
 
     return veri.zarf({
-        "kisa_ozet": m["kisa_ozet"] if m else durum_metni,
-        **({"kanit_durumu": TASLAK_NOTU} if m and m["durum"] == "taslak" else {}),
-        "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in (m or {}).get("kimde_kanit_var", [])],
-        **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m and m.get("kimde_kanit_var_notu") else {}),
+        "kisa_ozet": on_ek + (f"Senin grubun: {senin_grubun['grup']}. {senin_grubun['gerekce']} " if senin_grubun else "")
+                     + m["kisa_ozet"],
+        "etken_madde_adi": ad,
+        # Görsel kart için öneksiz özet: uyarı ve grup kartta ayrı kutularda durur.
+        "genel_ozet": m["kisa_ozet"],
+        **({"senin_grubun": senin_grubun} if senin_grubun else {}),
+        "zorunlu_uyarilar": zorunlu,
+        **({"kanit_durumu": TASLAK_NOTU} if m["durum"] == "taslak" else {}),
+        "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in m.get("kimde_kanit_var", [])],
+        **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m.get("kimde_kanit_var_notu") else {}),
         "kanit_duzeyi": kanit,
         "kanit_duzeyi_olcegi": (
             "guclu: birden fazla yüksek kaliteli çalışmada tutarlı; orta: tutarlı ama sınırlı ya da kalite sorunlu; "
             "zayif: küçük ya da çelişkili çalışmalar; yetersiz: anlamlı insan çalışması yok. "
             "sonuc_yonu ayrıca fayda, etkisiz, zarar ya da belirsiz olabilir."
         ),
-        "onayli_saglik_beyanlari": {
+        # TB-16: ürün sayfası metnidir; regülasyon onayı ayrıca doğrulanmadı.
+        "urun_sayfasi_beyanlari": {
             "metinler": beyan_metinleri,
             "not": (
-                "Yalnızca bu maddeyi içeren katalog ürünlerinin sayfalarındaki, TGK Beslenme ve Sağlık Beyanları "
-                "Yönetmeliği'ne atıf yapan beyanlardır." if beyan_metinleri else
-                "Katalogda yalnızca bu maddeyi içeren ürün olmadığı için etken madde düzeyinde beyan listelenmedi."
+                "Bu maddeye eşlenen, katalog ürünlerinin sayfalarındaki beyanlardır. " + BEYAN_ACIKLAMASI
+                if beyan_metinleri else
+                "Katalogdaki ürün sayfalarında bu maddeye açıkça eşlenebilen beyan bulunmadı."
             ),
         },
-        "besinle_karsilama": (m or {}).get("besinle_karsilama", {}).get("metin"),
-        **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m and m.get("tahlil_notu") else {}),
+        "besinle_karsilama": m.get("besinle_karsilama", {}).get("metin"),
+        **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m.get("tahlil_notu") else {}),
+        # TB-21: form karşılaştırması (ör. B12'de ağızdan–iğne, metil–siyano).
+        **({"formlar": {k: v for k, v in m["formlar"].items() if k != "kaynaklar"}} if m.get("formlar") else {}),
         "efsa_ust_sinir": efsa,
         "etkilesimler": etkilesimler,
         "etkilesim_notu": (
@@ -843,7 +1016,119 @@ def etken_madde_rehberi(
         "dikkat_edecekler": dikkat,
         "hekime_sorulacaklar": list(dict.fromkeys(sorular)),
         "katalogdaki_urunler": katalog,
-        "katalog_kapsami": "Katalog şu an yalnızca Orzax ürünlerini içerir.",
-        "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
+        "katalog_ozeti": katalog_ozeti,
         "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, kaynak_listesi)
+
+
+def _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorular, urun_sayisi, kaynak_idleri) -> dict:
+    """Kanıt kartı yoksa ürün listesi ve ürün sayfası beyanları dönmez (TB-05); güvenlik bilgisi kalır."""
+    kilavuz = _genel_kilavuz(em_id)
+    kaynak_idleri = list(kaynak_idleri) + ([GENEL_KILAVUZ[em_id]] if kilavuz else []) or ["orzax_urunler"]
+    return veri.zarf({
+        "kisa_ozet": (
+            on_ek + f"{ad} için kanıt kartı hazırlanıyor ya da medikal kurul onayı bekliyor. "
+            "Kanıt kartı hazır olana kadar ürün listesi gösterilmez."
+            + (" Genel bilgi için kurum sayfasına bakılabilir." if kilavuz else "")
+        ),
+        "etken_madde_adi": ad,
+        "genel_ozet": f"{ad} için kanıt kartı hazırlanıyor ya da medikal kurul onayı bekliyor.",
+        "zorunlu_uyarilar": zorunlu,
+        "kanit_durumu": "Kanıt kartı hazırlanıyor.",
+        "genel_kilavuz": kilavuz,
+        "efsa_ust_sinir": efsa,
+        "etkilesimler": etkilesimler,
+        "etkilesim_notu": (
+            None if etkilesimler else
+            "Kural tablosunda bu madde için tanımlı etkileşim yok; bu, etkileşim olmadığı anlamına gelmez."
+        ),
+        "dikkat_edecekler": dikkat,
+        "hekime_sorulacaklar": list(dict.fromkeys(sorular)),
+        "katalog_kapsami": _katalog_sayisi_metni(urun_sayisi),
+        "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
+    }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
+
+
+# --------------------------------------------------------------------------- #
+# 6. sikayet_yolu (TB-19)
+# --------------------------------------------------------------------------- #
+
+
+def sikayet_yolu(sikayet: str, yas: int | None = None, cinsiyet: str | None = None) -> dict:
+    """Şikâyetten yola çıkar: kırmızı bayrak, hekimin isteyebileceği tahliller, karne ve ilgili kanıt kartları.
+
+    Ürün listesi ve ürün önerisi döndürmez; kanıt kartı olmayan maddede bunu söyler.
+    """
+    sid = veri.sikayet_id(sikayet)
+    if sid is None:
+        return veri.zarf({
+            "kisa_ozet": (f"'{sikayet}' için şikâyet yolu henüz hazırlanmadı. Hazır yollar: "
+                          + ", ".join(y["ad"] for y in veri.sikayet_yollari().values()) + ". "
+                          "Süren ya da yeni başlayan bir yakınma hekimle değerlendirilmelidir."),
+            "hazir_yollar": [y["ad"] for y in veri.sikayet_yollari().values()],
+        }, veri.kaynaklar(["orzax_urunler"]))
+
+    yol = veri.sikayet_yollari()[sid]
+    profil = {"yas": yas, "cinsiyet": cinsiyet}
+    kaynak_idleri: list[str] = []
+    bayraklar = []
+    for b in yol["kirmizi_bayraklar"]:
+        if _kosul_saglanir(b["kosul"], profil):
+            bayraklar.append({"mesaj": b["mesaj"], "dayanak": [_kunye(i) for i in b["kaynaklar"]]})
+            kaynak_idleri += b["kaynaklar"]
+    kaynak_idleri += yol["tahliller"]["kaynaklar"]
+
+    uyarilar = {u["id"]: u for em in yol["ilgili_maddeler"] for u in veri.zorunlu_uyarilar(em)}
+    tahlil_oncesi = []
+    for uid in yol["tahlil_oncesi_uyarilari"]:
+        tahlil_oncesi.append(uyarilar[uid]["mesaj"])
+        kaynak_idleri += uyarilar[uid]["kaynaklar"]
+
+    kartlar = []
+    for em_id in yol["ilgili_maddeler"]:
+        m = veri.monografi(em_id)
+        if m is None:
+            kartlar.append({"etken_madde": _rehber_adi(em_id), "durum": "Kanıt kartı hazırlanıyor."})
+            continue
+        for k in m["kartlar"]:
+            kartlar.append({
+                "etken_madde": m["ad"], "sonuc_alani": k["sonuc_alani"], "populasyon": k["populasyon"],
+                "duzey": k["kanit_duzeyi"], "sonuc_yonu": k["sonuc_yonu"],
+                **({"durum": TASLAK_NOTU} if k["durum"] == "taslak" else {}),
+            })
+            kaynak_idleri += k["kaynaklar"]
+
+    return veri.zarf({
+        "kisa_ozet": (bayraklar[-1]["mesaj"] + " " if len(bayraklar) > 2 else "") + yol["giris"],
+        **({"durum": "Taslak: bu şikâyet yolu medikal kurul onayı bekliyor."} if yol["durum"] == "taslak" else {}),
+        "kirmizi_bayraklar": bayraklar,
+        "hekimin_isteyebilecegi_tahliller": {"liste": yol["tahliller"]["liste"], "not": yol["tahliller"]["not"]},
+        "tahlil_oncesi": tahlil_oncesi,
+        "yasam_karnesi": {"oneri": yol["karne"], "arac": "yasam_karnesi"},
+        "ilgili_kanit_kartlari": kartlar,
+        "kanit_karti_araci": "etken_madde_rehberi",
+        "beyan_aciklamasi": BEYAN_ACIKLAMASI,
+        "urun_notu": "Bu yol ürün önermez. Belirli bir ürünün etiket bilgisi için ürün adıyla sorulabilir.",
+        "gizlilik": "Bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
+    }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
+
+
+def katalog_sayfasi(etken_madde: str, sayfa: int = 1, yas: int | None = None) -> dict:
+    """Görsel kartın sayfalama aracı (modelden gizli). Kanıt kartı sunulamayan maddede ürün döndürmez (TB-05)."""
+    em_id = _rehber_id(etken_madde)
+    if em_id is None or veri.monografi(em_id) is None:
+        return veri.zarf({
+            "kisa_ozet": "Kanıt kartı olmayan maddede ürün listesi gösterilmez.",
+            "urunler": [], "sayfa": sayfa, "toplam_sayfa": 0,
+        }, veri.kaynaklar(["orzax_urunler"]))
+    _, uygun, yas_disi = _katalog_urunleri(em_id, yas)
+    toplam_sayfa = max(1, -(-len(uygun) // KATALOG_SINIRI))
+    secilen = uygun[(sayfa - 1) * KATALOG_SINIRI: sayfa * KATALOG_SINIRI]
+    return veri.zarf({
+        "kisa_ozet": f"{_rehber_adi(em_id)}: {len(uygun)} ürünün {sayfa}. sayfası.",
+        "urunler": [_katalog_ogesi(u, em_id, _madde_beyanlari(u, em_id)) for u in secilen],
+        "sayfa": sayfa, "toplam_sayfa": toplam_sayfa, "toplam_urun": len(uygun),
+        **({"yas_siniri_disinda_kalan": len(yas_disi)} if yas_disi else {}),
+        "siralama_olcutu": ("Yalnızca bu maddeyi içeren ürünler önce, sonra alfabetik. "
+                            "Sponsorlu veya öncelikli sıralama yoktur; sıra bir öneri değildir."),
+    }, [veri.urun_kaynagi(u) for u in secilen] or veri.kaynaklar(["orzax_urunler"]))

@@ -1,0 +1,43 @@
+{
+  "id": "demir",
+  "ad": "Demir",
+  "katalog_kimlikleri": ["demir"],
+  "beyan_anahtarlari": ["demir"],
+  "kisa_ozet": "Demir, kanda oksijen taşıyan hemoglobin için gereklidir. Adet gören kadınlarda günlük demir anemi ve demir eksikliğini azalttı, mide-bağırsak yakınmalarını artırdı. Anemisi olmayan demir eksikliğinde yorgunlukta küçük bir azalma görüldü. Demire, eksiklik kan tahliliyle doğrulanmadan başlanmaz.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Erkekler",
+      "kosul": {"cinsiyet": ["erkek"]},
+      "gerekce": "Erkeklerde demir eksikliği çıkarsa önce nedeni araştırılır; kılavuzlar bu grupta sindirim sisteminin incelenmesini önerir.",
+      "kaynaklar": ["bsg_demir_eksikligi_2021", "pasricha_demir_eksikligi_2021"]
+    },
+    {
+      "grup": "Adet gören kadınlar",
+      "kosul": {"cinsiyet": ["kadin"], "yas_min": 12, "yas_max": 50},
+      "gerekce": "Cochrane derlemesinde günlük demir, anemi ve demir eksikliği sıklığını azalttı (orta kalite kanıt); mide-bağırsak yakınmaları arttı.",
+      "kaynaklar": ["cochrane_demir_kadin_2016"]
+    },
+    {
+      "grup": "Anemisi olmayan, tahlilde demir eksikliği saptanmış yetişkinler",
+      "gerekce": "Kişilerin bildirdiği yorgunlukta küçük bir azalma görüldü; kanıt sınırlı.",
+      "kaynaklar": ["houston_demir_yorgunluk_2018"]
+    }
+  ],
+  "kimde_kanit_var_notu": "Gebelikte demir kullanımı bu sürümde kartlanmadı; gebelikte demir hekimle planlanır.",
+  "tahlil_notu": {
+    "metin": "Demir eksikliği kan tahliliyle değerlendirilir; ferritin en yararlı göstergedir ve sonuç laboratuvarın referans aralığına göre yorumlanır.",
+    "kaynaklar": ["bsg_demir_eksikligi_2021"]
+  },
+  "dikkat_kurallari": [],
+  "hekime_sorulacaklar": [
+    "Demir eksikliğim olup olmadığını anlamak için hangi tahlil gerekir?",
+    "Eksiklik varsa nedeninin araştırılması gerekir mi?",
+    "Mide-bağırsak yakınması olursa ne yapmalıyım?"
+  ],
+  "uretici_icerikleri": [],
+  "kaynaklar": ["nih_ods_demir", "bsg_demir_eksikligi_2021", "cochrane_demir_kadin_2016"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

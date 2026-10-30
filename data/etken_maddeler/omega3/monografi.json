@@ -1,0 +1,31 @@
+{
+  "id": "omega3",
+  "ad": "Omega-3 (EPA + DHA)",
+  "katalog_kimlikleri": ["omega3", "epa", "dha", "toplam_omega3"],
+  "beyan_anahtarlari": ["epa ve dha", "epa", "dha", "omega 3"],
+  "kisa_ozet": "EPA ve DHA, yağlı balıkta bulunan omega-3 yağ asitleridir. Kalp hastalığı olmayan yetişkinlerde omega-3 takviyesi kalp-damar olaylarını anlamlı azaltmadı. Gebelikte erken doğum üzerindeki etkisi belirsiz: bir derleme azalma bulurken sonraki büyük bir çalışma fark bulmadı.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Gebeler",
+      "kosul": {"evre": ["gebe"]},
+      "gerekce": "Erken doğumda derleme azalma buldu, sonraki büyük çalışma bulmadı; fayda yalnızca omega-3 düzeyi düşük gebelerde olabilir.",
+      "kaynaklar": ["cochrane_omega3_gebelik_2018", "orip_omega3_gebelik_2019", "adore_dha_gebelik_2021"]
+    },
+    {
+      "grup": "Kalp-damar hastalığı olmayan yetişkinler",
+      "kosul": {"yas_min": 18},
+      "gerekce": "Büyük bir çalışma ve geniş bir derlemede kalp-damar olaylarında anlamlı azalma görülmedi.",
+      "kaynaklar": ["vital_omega3_2019", "cochrane_omega3_kvh_2020"]
+    }
+  ],
+  "kimde_kanit_var_notu": "Reçeteyle kullanılan yüksek doz omega-3 ilaçları ve kalp hastalığı olanlardaki sonuçlar bu sürümde kartlanmadı.",
+  "besinle_karsilama": {"metin": "American Heart Association haftada 1–2 kez deniz ürünü yemeyi önerir; omega-3 önce besinle karşılanır.", "kaynaklar": ["aha_deniz_urunleri_2018"]},
+  "dikkat_kurallari": [],
+  "hekime_sorulacaklar": ["Balık tüketimim yeterli mi, takviyeye ihtiyacım var mı?", "Kullandığım ilaçlarla omega-3 arasında etkileşim var mı?"],
+  "uretici_icerikleri": [],
+  "kaynaklar": ["nih_ods_omega3", "vital_omega3_2019", "cochrane_omega3_kvh_2020", "efsa_ul_omega3_2012"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

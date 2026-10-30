@@ -10,7 +10,8 @@
   "halk_ozeti": "D vitamini alanlarda soğuk algınlığı gibi akut solunum yolu enfeksiyonu geçirme oranı biraz daha düşüktü. Fark küçüktür: 100 kişiden yaklaşık 1 kişi. Etki en çok her gün düzenli kullanılan çalışmalarda ve çocuklarda görüldü.",
   "mutlak_fark": {
     "metin": "100 kişiden 61'i (D vitamini) ve 62'si (plasebo) en az bir enfeksiyon geçirdi.",
-    "hesap": "14.332 / 23.364 = %61,3 (100 kişide yaklaşık 61); 14.217 / 22.802 = %62,3 (100 kişide yaklaşık 62); fark yaklaşık 1/100. OR 0,92 (%95 GA 0,86–0,99)."
+    "hesap": "14.332 / 23.364 = %61,3 (100 kişide yaklaşık 61); 14.217 / 22.802 = %62,3 (100 kişide yaklaşık 62); fark yaklaşık 1/100. OR 0,92 (%95 GA 0,86–0,99).",
+    "yuz_kiside": {"olay": "En az bir solunum yolu enfeksiyonu", "gruplar": [{"etiket": "Plasebo", "sayi": 62}, {"etiket": "D vitamini", "sayi": 61}]}
   },
   "calisilan_dozlar": "Etki en çok günlük 400–1000 IU eşdeğeri kullanılan çalışmalarda görüldü.",
   "ne_bilmiyoruz": "Başlangıçtaki D vitamini düzeyine göre etki farkı bulunamadı; kimin daha çok yarar gördüğü net değil.",

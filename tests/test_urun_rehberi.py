@@ -18,7 +18,11 @@ def test_tek_urun_karti(uyari_var):
     k2 = u["etken_maddeler"][1]["bu_urundeki_miktar"]
     assert k2["standart_birimde"] == "11,25 µg"
     assert u["yas_siniri"] == "11 yaş ve üzeri"
-    assert "Normal kemiklerin korunmasında katkıda bulunur." in u["saglik_beyanlari"]
+    metinler = [b["metin"] for b in u["urun_sayfasi_beyanlari"]]
+    assert "Normal kemiklerin korunmasında katkıda bulunur." in metinler
+    # D3 ve K2 içeren üründe adı geçmeyen beyanın hangi maddeye ait olduğu sayfadan anlaşılmaz.
+    assert all(b["ilgili_etken_madde"] == "Sayfada belirtilmemiş" for b in u["urun_sayfasi_beyanlari"])
+    assert "yorgunluğu gidereceğini" in u["beyan_aciklamasi"]
     assert u["urun_sayfasi"].startswith("https://www.orzax.com.tr/")
     assert "yayımlanmış parti analizi bulunmuyor" in u["parti_analizi"]
 
@@ -26,7 +30,7 @@ def test_tek_urun_karti(uyari_var):
 def test_beyan_kosulu_ayri_alanda():
     u = urun_rehberi("Ocean Limon Aromalı Balık Yağı 150 mL")["urun"]
     assert u["beslenme_beyanlari"] == ["Bu gıda omega 3 yağ asidi EPA ve DHA içerir."]
-    assert all("alınmalıdır" not in b for b in u["saglik_beyanlari"])
+    assert all("alınmalıdır" not in b["metin"] for b in u["urun_sayfasi_beyanlari"])
     assert any("250 mg EPA ve DHA" in k for k in u["beyan_kullanim_kosullari"])
 
 
@@ -62,3 +66,21 @@ def test_tum_urunler_kart_uretir_ve_fiyat_icermez():
         kart = urun_rehberi(u["ad"])["urun"]
         assert kart["ad"] == u["ad"]
         assert "₺" not in json.dumps(kart, ensure_ascii=False)
+
+
+def test_parca_beyan_satirlari_birlesir():
+    # TB-15: "B12 vitamini" / "Normal enerji …," / "… katkıda bulunur." tek beyandır.
+    u = urun_rehberi("Ocean Methyl B12 1000 µg 5 ml Sprey")["urun"]
+    metinler = [b["metin"] for b in u["urun_sayfasi_beyanlari"]]
+    assert all(len(m.split()) > 3 for m in metinler), metinler
+    assert any(m.startswith("B12 vitamini Normal enerji oluşum metabolizmasına,") and m.endswith("katkıda bulunur.")
+               for m in metinler)
+    assert all(b["ilgili_etken_madde"] == ["B12 vitamini"] for b in u["urun_sayfasi_beyanlari"])
+
+
+def test_yas_siniri_disindaki_kullanim_uyarisi():
+    # Kabul ölçütü: "8 yaşındaki kızıma D3K2 damla verebilir miyim?" → 11 yaş sınırı uyarısı ve hekime yönlendirme.
+    y = urun_rehberi("Ocean D3K2 Damla", yas=8)
+    assert y["kisa_ozet"].startswith("Bu ürün etikette 11 yaş ve üzeri için.")
+    assert "hekime danışılmalıdır" in y["yas_uyarisi"]
+    assert "yas_uyarisi" not in urun_rehberi("Ocean D3K2 Damla", yas=30)

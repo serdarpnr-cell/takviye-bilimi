@@ -1,0 +1,51 @@
+{
+  "_not": "Kanıt kartından bağımsız, her zaman gösterilen güvenlik uyarıları (TB-03, TB-04). Kurul onayı beklerken 'taslak' etiketiyle sunulur; uyarının yokluğu onaysız uyarıdan daha risklidir. kosul alanı etken_madde_rehberi profiliyle eşleşir (boş: herkese).",
+  "uyarilar": {
+    "demir": [
+      {
+        "id": "demir_tahlilsiz_kullanma",
+        "tur": "tahlilsiz_kullanma",
+        "kosul": {},
+        "mesaj": "Demir takviyesine, eksiklik kan tahliliyle doğrulanmadan başlanmamalıdır. Kılavuzlar eksikliğin tahlille doğrulanmasını ve her eksiklikte nedeninin araştırılmasını önerir; neden, sindirim sisteminde ciddi bir hastalık da olabilir. Anemisi olmayan kişilerde demir kullanımının yararına dair kanıt sınırlıdır.",
+        "kaynaklar": ["bsg_demir_eksikligi_2021", "pasricha_demir_eksikligi_2021", "aust_prescr_demir_2021"],
+        "durum": "taslak"
+      },
+      {
+        "id": "demir_erkek",
+        "tur": "grup_notu",
+        "kosul": {"cinsiyet": ["erkek"]},
+        "mesaj": "Erkeklerde demir eksikliği çıkarsa nedeni hekimle araştırılmalıdır: demir eksikliği anemisi olan erkeklerin ve menopoz sonrası kadınların yaklaşık üçte birinde, çoğunlukla sindirim sisteminde olan altta yatan bir neden bulunur.",
+        "kaynaklar": ["bsg_demir_eksikligi_2021", "pasricha_demir_eksikligi_2021"],
+        "durum": "taslak"
+      },
+      {
+        "id": "demir_tahlil_oncesi",
+        "tur": "tahlil_oncesi",
+        "kosul": {},
+        "mesaj": "Demir takviyesi kandaki demir değerini etkiler. Tahlil olacaksanız kullandığınız takviyeyi hekiminize söyleyin; serum demiri en doğru, demir takviyesine en az 24 saat ara verildikten sonra sabah aç karnına alınan kanda ölçülür.",
+        "kaynaklar": ["aust_prescr_demir_2021"],
+        "durum": "taslak"
+      }
+    ],
+    "b12": [
+      {
+        "id": "b12_tahlil_oncesi",
+        "tur": "tahlil_oncesi",
+        "kosul": {},
+        "mesaj": "B12 tahlilinden önce takviyeye başlamak sonucu yanıltabilir: daha önce kullanılan multivitamin ya da yüksek miktarlı B12, eksikliği olan kişide bile kandaki B12 düzeyini normal görünen aralığa çıkarabilir, dokulardaki eksikliği ise her zaman gidermez. Eksiklikten şüpheleniliyorsa tahlili takviyeden önce yaptırın; takviye kullanıyorsanız hekiminize söyleyin.",
+        "kaynaklar": ["wolffenbuttel_b12_2019"],
+        "durum": "taslak"
+      }
+    ],
+    "d3": [
+      {
+        "id": "d3_tahlil_oncesi",
+        "tur": "tahlil_oncesi",
+        "kosul": {},
+        "mesaj": "D vitamini takviyesi kandaki 25(OH)D düzeyini artırır; takviyeye başladıktan sonra yapılan tahlil başlangıçtaki düzeyi göstermez. Tahlil yapılacaksa kullandığınız takviyeleri hekiminize söyleyin.",
+        "kaynaklar": ["zittermann_d_doz_yanit_2014"],
+        "durum": "taslak"
+      }
+    ]
+  }
+}

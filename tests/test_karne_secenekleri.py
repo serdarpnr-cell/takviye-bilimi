@@ -5,6 +5,7 @@ import re
 import pytest
 from pydantic import ValidationError
 
+from server import veri
 from server.app import KARNE_ARAYUZU, MCP_APP_MIME, TALIMATLAR, mcp
 from server.araclar import _SECENEKLER, SORULAR, _aralik, _puanla, yasam_karnesi
 from server.arayuz import karne_html
@@ -57,9 +58,26 @@ def test_kod_cevabi_etiketiyle_gosterilir():
     assert hareket["cevap"] == "1–2 gün"
 
 
-def test_kodla_kural_tetiklenir():
+def test_kodla_kural_tetiklenir(monkeypatch):
+    monkeypatch.setattr(veri, "monografi", lambda em_id: {"id": em_id})
     assert yasam_karnesi(TAM_KOD)["takviye_baglantilari"]
-    assert _aralik("balik_haftalik", "ayda_1_3") == (0.25, 0.75)
+    assert _aralik("balik_haftalik", "ayda_1_3") == (0.25, 0.99)
+
+
+def test_her_soruda_en_fazla_dort_secenek():
+    # TB-08: Claude'un tıklanabilir soru kartı en fazla 4 soru × 4 seçenek alır.
+    assert all(len(s["secenekler"]) <= 4 for s in SORULAR)
+    assert "önce ilk dört soru" in yasam_karnesi()["soru_yonergesi"]
+
+
+async def test_sayisal_alanlar_sayi_ya_da_kod_kabul_eder():
+    # TB-07: katı istemciler için şema anyOf (sayı | enum) olarak yayımlanır.
+    arac = next(t for t in await mcp.list_tools() if t.name == "yasam_karnesi")
+    alanlar = arac.inputSchema["$defs"]["KarneCevaplari"]["properties"]
+    for ad in ("hareket_gun", "uyku_saat", "sebze_meyve_porsiyon", "balik_haftalik"):
+        turler = {x.get("type") for x in alanlar[ad]["anyOf"]}
+        assert {"integer", "string"} <= turler or {"number", "string"} <= turler, ad
+        assert any("enum" in x for x in alanlar[ad]["anyOf"]), ad
 
 
 def test_tanimsiz_kod_reddedilir():
@@ -68,7 +86,7 @@ def test_tanimsiz_kod_reddedilir():
 
 
 def test_sunucu_talimati_secenekli_soruyu_soyler():
-    assert "Karne sorularını tek seferde ve seçenekleriyle sor" in TALIMATLAR
+    assert "Karne sorularını seçenekleriyle iki adımda sor" in TALIMATLAR
 
 
 async def test_arac_arayuz_kaynagina_baglidir():

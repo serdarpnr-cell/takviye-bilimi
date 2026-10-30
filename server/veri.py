@@ -36,7 +36,77 @@ def _yukle(goreli_yol: str) -> dict:
 
 @lru_cache(maxsize=1)
 def urunler() -> list[dict]:
-    return _yukle("urunler.json")["urunler"]
+    return katalog_dogrula(_yukle("urunler.json")["urunler"])
+
+
+# --------------------------------------------------------------------------- #
+# Katalog doğrulaması: şüpheli satırlar karantinaya alınır, hesaplamalara katılmaz.
+# --------------------------------------------------------------------------- #
+
+# Etiketteki miktarın beslenme referans değeri (BRD) yüzdesine bölümü, o maddenin BRD'sini verir. Bir maddenin
+# katalogdaki ürünlerden çıkan BRD'lerinin ortancası esas alınır; bir satır bu değerin yarısı ile iki katı dışında
+# kalıyorsa miktar ile yüzde birbirini tutmuyor demektir. Kural en az KONSENSUS_EN_AZ satırı olan maddelere uygulanır.
+BRD_TOLERANSI = 2
+KONSENSUS_EN_AZ = 3
+_BIRIM_ADLARI = {1_000: ("mg", "µg"), 1 / 1_000: ("µg", "mg")}
+
+
+def brd_yuzdesi(metin: str | None) -> float | None:
+    """'%500', '%9285,70', 'NE* %100' → sayı; '**' (BRD yok) ya da boş → None."""
+    m = re.search(r"\d[\d.,]*", metin or "")
+    if not m:
+        return None
+    sayi = m.group(0)
+    if "," in sayi:
+        sayi = sayi.replace(".", "").replace(",", ".")
+    return float(sayi) or None
+
+
+def _ima_edilen_brd(em_id: str, satir: dict) -> float | None:
+    std = standart_miktar(em_id, satir["miktar"], satir["birim"])
+    yuzde = brd_yuzdesi(satir["brd"])
+    return std * 100 / yuzde if std and yuzde else None
+
+
+def katalog_dogrula(liste: list[dict]) -> list[dict]:
+    """Her içerik satırına, şüpheliyse 'karantina' alanı ekler: gerekçe ve varsa olası doğru birim."""
+    tanimli = kurallar()["etken_maddeler"]
+    satirlar = [(e["etken_madde"], e) for u in liste for e in u["etken_maddeler"] if e["etken_madde"] in tanimli]
+    orneklem: dict[str, list[float]] = {}
+    for em_id, e in satirlar:
+        b = _ima_edilen_brd(em_id, e)
+        if b:
+            orneklem.setdefault(em_id, []).append(b)
+    konsensus = {em_id: sorted(v)[len(v) // 2] for em_id, v in orneklem.items() if len(v) >= KONSENSUS_EN_AZ}
+
+    for em_id, e in satirlar:
+        e.pop("karantina", None)
+        if e["miktar"] is None and e["miktar_metni"] and _birim_kodu(tanimli[em_id]["birim"]) in ("g", "mg", "ug"):
+            # Ayrıştırıcı miktarı okuyamadı ya da makul bulmadı (birimsiz, üst sınırın çok üstünde).
+            e["karantina"] = {"gerekce": " ".join(e["okuma_notlari"]) or f"'{e['miktar_metni']}' okunamadı."}
+            continue
+        b = _ima_edilen_brd(em_id, e)
+        if b is None or em_id not in konsensus:
+            continue
+        oran = b / konsensus[em_id]
+        if 1 / BRD_TOLERANSI <= oran <= BRD_TOLERANSI:
+            continue
+        kayit = {"gerekce": (
+            f"Etiketteki miktar ({e['miktar_metni']}) ile beslenme referans değeri yüzdesi ({e['brd']}) birbirini tutmuyor."
+        )}
+        for katsayi, (eski, yeni) in _BIRIM_ADLARI.items():
+            if _birim_kodu(e["birim"]) == _birim_kodu(eski) and katsayi / BRD_TOLERANSI <= oran <= katsayi * BRD_TOLERANSI:
+                kayit["olasi_birim"] = yeni
+                kayit["gerekce"] += f" Yüzdeyle tutarlı birim {yeni}; sitedeki birim büyük olasılıkla hatalı."
+        e["karantina"] = kayit
+    return liste
+
+
+def satir_miktari(satir: dict) -> float | None:
+    """İçerik satırının standart birimdeki miktarı; karantinadaki ya da çevrilemeyen satırda None."""
+    if satir.get("karantina") or not satir["etken_madde"]:
+        return None
+    return standart_miktar(satir["etken_madde"], satir["miktar"], satir["birim"])
 
 
 @lru_cache(maxsize=1)
@@ -63,6 +133,89 @@ def beyanlar() -> dict:
 def urun_beyanlari() -> dict:
     """Ürün id'si → ürün sayfasındaki sağlık ve beslenme beyanları."""
     return _yukle("beyanlar/urun_beyanlari.json")["urunler"]
+
+
+# --------------------------------------------------------------------------- #
+# Ürün sayfası beyanları: parça satırlar birleştirilir, her beyan etken maddeye eşlenir (TB-15).
+# urun_rehberi ve etken_madde_rehberi aynı fonksiyonu kullanır.
+# --------------------------------------------------------------------------- #
+
+# Beyan metninde eşleşme için kullanılmayan kısa eşanlamlılar (element simgeleri vb.): yanlış eşleşme üretir.
+_BEYAN_DISI_ADLAR = {"mg", "fe", "ca", "se", "cu", "mn", "mo", "cr", "zn", "d2", "k1"}
+# Omega-3 parçaları tek madde sayılır.
+KATALOG_GRUBU = {"epa": "omega3", "dha": "omega3", "toplam_omega3": "omega3"}
+
+
+def _parca_mi(satir: str) -> bool:
+    """Sitede bir beyan bazen birkaç satıra bölünür: 'B12 vitamini' / 'Normal enerji …,' / '… katkıda bulunur.'"""
+    t = satir.replace("\u200b", "").strip()
+    return t.endswith((",", ";", ":")) or (not t.endswith(".") and len(t.split()) <= 3)
+
+
+def beyan_satirlarini_birlestir(satirlar: list[str]) -> list[str]:
+    """Parça satırları izleyen satırla birleştirir; metin kelimesi kelimesine korunur, yalnızca satırlar birleşir."""
+    sonuc, birikim = [], []
+    for satir in satirlar:
+        birikim.append(satir.replace("\u200b", "").strip())
+        if not _parca_mi(satir):
+            sonuc.append(" ".join(birikim))
+            birikim = []
+    if birikim:
+        sonuc.append(" ".join(birikim))
+    return sonuc
+
+
+@lru_cache(maxsize=1)
+def _beyan_adlari() -> list[tuple[str, str]]:
+    """(normalize ad, etken madde kimliği) çiftleri; uzun adlar önce denenir."""
+    ciftler = set()
+    for em_id, bilgi in kurallar()["etken_maddeler"].items():
+        for ad in [bilgi["ad"].split("(")[0], *bilgi["esanlamlar"]]:
+            n = normalize(ad)
+            if n and n not in _BEYAN_DISI_ADLAR:
+                ciftler.add((n, KATALOG_GRUBU.get(em_id, em_id)))
+    return sorted(ciftler, key=lambda c: -len(c[0]))
+
+
+def urun_saglik_beyanlari(u: dict) -> list[dict]:
+    """Ürün sayfasındaki sağlık beyanları: her biri {metin, etken_maddeler}.
+
+    Beyan bir maddeyi adıyla anıyorsa o maddeye eşlenir. Adı geçmiyorsa ve ürün tek bir madde içeriyorsa o maddeye,
+    birden fazla madde içeriyorsa hiçbirine eşlenmez (hangi maddeye ait olduğu sayfadan anlaşılmaz).
+    """
+    kimlikler = {KATALOG_GRUBU.get(e["etken_madde"], e["etken_madde"]) for e in u["etken_maddeler"] if e["etken_madde"]}
+    sonuc = []
+    for metin in beyan_satirlarini_birlestir(urun_beyanlari().get(u["id"], {}).get("saglik", [])):
+        n = f" {normalize(metin)} "
+        adlar = {em for ad, em in _beyan_adlari() if f" {ad} " in n and em in kimlikler}
+        if not adlar and len(kimlikler) == 1:
+            adlar = set(kimlikler)
+        sonuc.append({"metin": metin, "etken_maddeler": sorted(adlar)})
+    return sonuc
+
+
+@lru_cache(maxsize=1)
+def sikayet_yollari() -> dict:
+    return _yukle("sikayet_yollari.json")["yollar"]
+
+
+def sikayet_id(metin: str) -> str | None:
+    """Serbest metindeki şikâyeti (ör. 'yorgunum', 'halsizlik') yol kimliğine çevirir."""
+    n = f" {normalize(metin)} "
+    for sid, yol in sikayet_yollari().items():
+        if any(f" {normalize(e)} " in n for e in [sid, *yol["esanlamlar"]]):
+            return sid
+    return None
+
+
+@lru_cache(maxsize=1)
+def _zorunlu_uyarilar() -> dict:
+    return _yukle("zorunlu_uyarilar.json")["uyarilar"]
+
+
+def zorunlu_uyarilar(em_id: str) -> list[dict]:
+    """Kanıt kartından bağımsız güvenlik uyarıları. Kurul onayı beklerken de (taslak etiketiyle) sunulur."""
+    return _zorunlu_uyarilar().get(em_id, [])
 
 
 @lru_cache(maxsize=1)

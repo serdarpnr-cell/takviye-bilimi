@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kanıt kartı</title>
+<style>
+__ORTAK_CSS__
+  .sonuc-karti h3 { font-size: 15px; }
+  .populasyon { color: var(--ikincil); font-size: 13px; margin-bottom: 4px; }
+  details { margin-top: 6px; }
+  summary { cursor: pointer; color: var(--vurgu); font-size: 13px; }
+  .grup { border-left: 3px solid var(--vurgu); padding-left: 10px; margin: 8px 0; }
+</style>
+</head>
+<body>
+<main>
+  <section id="icerik"><p class="ikincil">Kanıt kartı yükleniyor…</p></section>
+</main>
+<script>
+__ORTAK_JS__
+const { el, rozet } = TB;
+const DUZEY = { guclu: ["Güçlü kanıt", "iyi"], orta: ["Orta düzey kanıt", "orta"], zayif: ["Zayıf kanıt", ""], yetersiz: ["Yetersiz kanıt", ""] };
+const YON = { fayda: ["Fayda", "iyi"], etkisiz: ["Etkisiz", "orta"], zarar: ["Dikkat: zarar", "kotu"], belirsiz: ["Belirsiz", ""] };
+let girdi = {};
+
+function liste(baslik, ogeler, sinif = "", kapali = false) {
+  if (!ogeler || !ogeler.length) return null;
+  const govde = el("div", { className: `kart ${sinif}`.trim() }, el("ul", {}, ...ogeler.map((o) => el("li", { textContent: o }))));
+  // İkincil bölümler kapalı başlar; kart kısa kalır.
+  return kapali ? el("details", {}, el("summary", { textContent: `${baslik} (${ogeler.length})` }), govde)
+                : el("section", {}, el("h2", { textContent: baslik }), govde);
+}
+
+function yuzKiside(y) {
+  return el("div", {},
+    el("p", { className: "ikincil", textContent: `100 kişide: ${y.olay}` }),
+    el("div", { className: "karsilastirma" }, ...y.gruplar.map((g, i) =>
+      el("div", {}, el("strong", { textContent: `${g.etiket}: ${g.sayi}` }), TB.noktaDizisi(g.sayi, i ? "dolu" : "karsi", g.etiket)))));
+}
+
+function sonucKarti(k) {
+  const [dz, ds] = DUZEY[k.duzey] || [k.duzey, ""];
+  const [yn, ys] = YON[k.sonuc_yonu] || [k.sonuc_yonu, ""];
+  return el("div", { className: "kart sonuc-karti" },
+    el("h3", { textContent: k.sonuc_alani }),
+    el("div", { className: "populasyon", textContent: k.populasyon }),
+    el("div", { className: "rozetler" }, rozet(dz, ds), rozet(yn, ys), k.durum ? rozet("Taslak", "uyari") : null),
+    el("p", { textContent: k.halk_ozeti }),
+    k.mutlak_fark_100 ? yuzKiside(k.mutlak_fark_100) : el("p", { className: "ikincil", textContent: k.mutlak_fark }),
+    el("details", {}, el("summary", { textContent: "Ayrıntı" }),
+      el("p", { textContent: `Mutlak fark: ${k.mutlak_fark}` }),
+      el("p", { textContent: `Çalışmalarda kullanılan miktar: ${k.calismalarda_kullanilan_dozlar}` }),
+      el("p", { textContent: `Ne bilmiyoruz: ${k.ne_bilmiyoruz}` }),
+      el("p", { className: "ikincil", textContent: `Dayanak: ${k.dayanak.join("; ")}` })));
+}
+
+function katalog(v) {
+  if (!v.katalogdaki_urunler?.length) return v.katalog_kapsami ? el("p", { className: "ikincil", textContent: v.katalog_kapsami }) : null;
+  const o = v.katalog_ozeti;
+  const kutu = el("div", {});
+  const ekle = (urunler) => urunler.forEach((u) => kutu.append(el("div", { className: "kart" },
+    el("strong", { textContent: u.ad }),
+    el("div", { className: "rozetler" }, rozet(u.tek_icerikli ? "Yalnızca bu madde" : "Kombine"), rozet(u.yas_siniri),
+      rozet(u.parti_analizi_var ? "Parti analizi var" : "Yayımlanmış parti analizi yok")),
+    el("p", { className: "ikincil", textContent: u.porsiyondaki_miktar.join(" · ") }))));
+  ekle(v.katalogdaki_urunler);
+  const bolum = el("section", {}, el("h2", { textContent: "Katalogdaki ürünler" }),
+    el("p", { className: "ikincil", textContent: `${o.kapsam} ${o.siralama_olcutu}` }), kutu);
+  if (o.kalan_urun_sayisi > 0) {
+    // Sayfalama modelden gizli katalog_sayfasi aracıyla yapılır; modelin bağlamı şişmez.
+    let sayfa = 1;
+    const dugme = el("button", { className: "ikinci", type: "button", textContent: `Diğer ürünler (${o.kalan_urun_sayisi})` });
+    dugme.addEventListener("click", async () => {
+      dugme.disabled = true;
+      try {
+        sayfa += 1;
+        const s = await TB.istek("tools/call", { name: "katalog_sayfasi",
+          arguments: { etken_madde: girdi.etken_madde || v.etken_madde_adi, sayfa, ...(girdi.yas ? { yas: girdi.yas } : {}) } });
+        const d = s?.structuredContent;
+        ekle(d?.urunler || []);
+        if (!d || sayfa >= d.toplam_sayfa) dugme.remove(); else dugme.disabled = false;
+      } catch (e) { dugme.textContent = "Ürünler yüklenemedi"; }
+    });
+    bolum.append(dugme);
+  }
+  return bolum;
+}
+
+function ciz(sonuc) {
+  const v = sonuc?.structuredContent;
+  if (!v || !v.kisa_ozet) return;
+  const b = document.getElementById("icerik");
+  TB.doldur(b, 
+    el("h1", { textContent: v.etken_madde_adi || "Kanıt kartı" }),
+    el("div", { className: "rozetler" }, v.kanit_durumu ? rozet(v.kanit_durumu.startsWith("Taslak") ? "Taslak · kurul onayı bekliyor" : v.kanit_durumu, "uyari") : null),
+    ...(v.zorunlu_uyarilar || []).map((u) => el("div", { className: "kart guvenlik" }, el("strong", { textContent: "Önemli" }),
+      el("p", { textContent: u.mesaj }), el("p", { className: "ikincil", textContent: `Dayanak: ${u.dayanak.join("; ")}` }))),
+    v.senin_grubun ? el("div", { className: "grup" }, el("strong", { textContent: `Senin grubun: ${v.senin_grubun.grup}` }),
+      el("p", { textContent: v.senin_grubun.gerekce })) : null,
+    el("p", { textContent: v.genel_ozet || v.kisa_ozet }),
+    v.kanit_duzeyi?.length ? el("section", {}, el("h2", { textContent: "Ne biliyoruz" }), ...v.kanit_duzeyi.map(sonucKarti)) : null,
+    v.formlar ? el("section", {}, el("h2", { textContent: "Formlar" }),
+      ...Object.values(v.formlar).map((m) => el("div", { className: "kart" }, el("p", { textContent: m })))) : null,
+    v.tahlil_notu ? el("section", {}, el("h2", { textContent: "Tahlil" }), el("div", { className: "kart" }, el("p", { textContent: v.tahlil_notu }))) : null,
+    v.genel_kilavuz ? el("p", {}, "Genel bilgi: ", TB.baglanti(v.genel_kilavuz.url, `${v.genel_kilavuz.baslik} (${v.genel_kilavuz.kurum}, ${v.genel_kilavuz.dil})`)) : null,
+    v.efsa_ust_sinir ? el("section", {}, el("h2", { textContent: "Güvenlik tavanı" }), el("div", { className: "kart" },
+      el("strong", { textContent: v.efsa_ust_sinir.deger || "Belirlenmemiş" }),
+      el("p", { className: "ikincil", textContent: `${v.efsa_ust_sinir.kapsam} ${v.efsa_ust_sinir.not}` }))) : null,
+    liste("Dikkat", v.dikkat_edecekler, "guvenlik"),
+    liste("Etkileşimler", (v.etkilesimler || []).map((e) => `${e.ile.join(", ")}: ${e.mesaj}`)),
+    liste("Hekime sorulacaklar", v.hekime_sorulacaklar, "", true),
+    liste("Ürün sayfası beyanları", v.urun_sayfasi_beyanlari?.metinler, "", true),
+    v.urun_sayfasi_beyanlari?.metinler?.length ? el("p", { className: "ikincil", textContent: v.urun_sayfasi_beyanlari.not }) : null,
+    katalog(v),
+    TB.kaynaklar(v.kaynaklar),
+    el("p", { className: "ikincil", textContent: v.uyari }));
+}
+
+TB.baslat("takviye-bilimi-kanit", { sonuc: ciz, girdi: (a) => { girdi = a; } });
+</script>
+</body>
+</html>

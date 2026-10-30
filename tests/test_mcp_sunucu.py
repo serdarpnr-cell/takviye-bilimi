@@ -15,6 +15,7 @@ from mcp.client.streamable_http import streamable_http_client
 from mcp.shared.memory import create_connected_server_and_client_session
 
 from server.app import mcp
+from server.ozet import OZET_SINIRI
 from server.veri import UYARI
 
 KOK = Path(__file__).resolve().parent.parent
@@ -28,6 +29,7 @@ CAGRILAR = {
         "diger_urun_icerikleri": [{"ad": "Multi", "icerikler": [{"etken_madde": "D vitamini", "miktar": 800, "birim": "IU"}]}],
     },
     "etken_madde_rehberi": {"etken_madde": "D vitamini", "yas": 41},
+    "sikayet_yolu": {"sikayet": "Kendimi yorgun hissediyorum", "yas": 41, "cinsiyet": "kadin"},
     "yasam_karnesi": {"cevaplar": {"hareket_gun": 2, "uyku_saat": 7, "sebze_meyve_porsiyon": 3,
                                    "balik_haftalik": 1, "sigara": "hayir", "stres": "bazen"}},
 }
@@ -35,7 +37,8 @@ CAGRILAR = {
 
 async def _arac_testleri(oturum: ClientSession) -> None:
     araclar = (await oturum.list_tools()).tools
-    assert {t.name for t in araclar} == set(CAGRILAR)
+    # katalog_sayfasi görsel kartın kendi çağırdığı araçtır (modelden gizli).
+    assert {t.name for t in araclar} == set(CAGRILAR) | {"katalog_sayfasi"}
     for t in araclar:
         assert t.annotations.readOnlyHint is True
     for ad, arg in CAGRILAR.items():
@@ -44,6 +47,9 @@ async def _arac_testleri(oturum: ClientSession) -> None:
         assert sonuc.structuredContent["uyari"] == UYARI
         assert sonuc.structuredContent["kaynaklar"], ad
         assert "Takviye edici gıdalar ilaç değildir" in sonuc.content[0].text
+        # Modele kısa özet, karta tam veri.
+        assert len(sonuc.content[0].text) <= OZET_SINIRI, ad
+        assert sonuc.structuredContent["kisa_ozet"] in sonuc.content[0].text
 
 
 async def test_bellek_ici_protokol():

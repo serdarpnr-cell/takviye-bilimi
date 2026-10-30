@@ -7,19 +7,26 @@ from typing import Annotated, Any
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
-from mcp.types import ToolAnnotations
+from mcp.types import CallToolResult, ToolAnnotations
 from pydantic import Field
 
-from . import araclar, arayuz
+from . import araclar, arayuz, ozet, veri
 
 TALIMATLAR = (
     "Takviye Bilimi, takviye edici gıdalar hakkında Türkçe, markadan bağımsız etiket ve kanıt bilgisi sunar. "
     "Orzax tarafından geliştirilmiştir. Araçları yalnızca takviye ürünleri, takviye rutini, parti analizi "
     "veya yaşam tarzı karnesiyle ilgili sorularda çağır. Tanı koyma, kişiye doz önerme, belirli bir ürünü "
     "alması gerektiğini söyleme. Her yanıtta 'uyari' alanındaki notu kullanıcıya ilet. "
-    "Karne sorularını tek seferde ve seçenekleriyle sor; kullanıcı aralık seçerse seçenek kodunu ilet."
+    "Karne sorularını seçenekleriyle iki adımda sor (önce 4, sonra 2 soru); kullanıcı seçenek seçerse kodunu ilet. "
+    "Araç yanıtı kısa bir özettir; ayrıntı görsel karttadır, eksik bilgi için web araması yapma. "
+    + veri.VERI_NOTU
 )
+# Görsel kartın kendi çağırdığı, modelden gizlenen araçlar (MCP Apps).
+YALNIZCA_KART = {"ui": {"visibility": ["app"]}}
 KARNE_ARAYUZU = "ui://takviye-bilimi/karne"
+KANIT_ARAYUZU = "ui://takviye-bilimi/kanit"
+URUN_ARAYUZU = "ui://takviye-bilimi/urun"
+RUTIN_ARAYUZU = "ui://takviye-bilimi/rutin"
 MCP_APP_MIME = "text/html;profile=mcp-app"
 
 # Sadece okuma yapan, dış dünyaya dokunmayan araçlar.
@@ -57,6 +64,7 @@ mcp = FastMCP(
 
 @mcp.tool(
     title="Ürün rehberi",
+    meta={"ui": {"resourceUri": URUN_ARAYUZU}},
     description=(
         "Katalogdaki bir takviye ürününün etiket bilgisini verir: etken madde miktarları, beslenme referans değeri, "
         "bileşim, etiketteki kullanım, yaş sınırı ve ürün sayfasındaki sağlık beyanları. Katalog şu an yalnızca Orzax "
@@ -66,8 +74,9 @@ mcp = FastMCP(
 )
 def urun_rehberi(
     urun: Annotated[str, Field(description="Ürün adı, ör. 'Ocean D3K2 Damla'")],
-) -> dict[str, Any]:
-    return araclar.urun_rehberi(urun)
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı: ürünü kullanacak kişinin yaşı")] = None,
+) -> CallToolResult:
+    return ozet.sonuc("urun_rehberi", araclar.urun_rehberi(urun, yas))
 
 
 @mcp.tool(
@@ -80,12 +89,13 @@ def urun_rehberi(
 )
 def parti_analizi(
     karekod_veya_parti_no: Annotated[str, Field(description="Karekod içeriği (URL veya GS1 metni) ya da parti numarası")],
-) -> dict[str, Any]:
-    return araclar.parti_analizi(karekod_veya_parti_no)
+) -> CallToolResult:
+    return ozet.sonuc("parti_analizi", araclar.parti_analizi(karekod_veya_parti_no))
 
 
 @mcp.tool(
     title="Kişisel rutin kontrolü",
+    meta={"ui": {"resourceUri": RUTIN_ARAYUZU}},
     description=(
         "Kullanıcının kullandığı takviyeleri birlikte kontrol eder: tekrar eden etken madde, EFSA üst sınırı aşımı, "
         "etiket uyarıları, ilaç grubu etkileşimleri ve hekime sorulacak sorular. Doz önermez. "
@@ -103,8 +113,8 @@ def kisisel_rutin(
         list[araclar.DigerUrun] | None,
         Field(description="Katalogda olmayan ürünlerin etiketteki içerikleri"),
     ] = None,
-) -> dict[str, Any]:
-    return araclar.kisisel_rutin(yas, cinsiyet, evre, ilac_grubu, mevcut_urunler, diger_urun_icerikleri)
+) -> CallToolResult:
+    return ozet.sonuc("kisisel_rutin", araclar.kisisel_rutin(yas, cinsiyet, evre, ilac_grubu, mevcut_urunler, diger_urun_icerikleri))
 
 
 @mcp.tool(
@@ -124,15 +134,16 @@ def yasam_karnesi(
         Field(description="6 sorunun cevapları; sayısal sorularda sayı ya da seçenek kodu (ör. '1_2_gun')"),
     ] = None,
     yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş")] = None,
-) -> dict[str, Any]:
-    return araclar.yasam_karnesi(cevaplar, yas)
+) -> CallToolResult:
+    return ozet.sonuc("yasam_karnesi", araclar.yasam_karnesi(cevaplar, yas))
 
 
 @mcp.tool(
     title="Etken madde rehberi",
+    meta={"ui": {"resourceUri": KANIT_ARAYUZU}},
     description=(
-        "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, EFSA üst sınırını, etkileşimlerini ve katalogdaki "
-        "ürünleri kaynaklarıyla verir. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
+        "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, güvenlik uyarılarını, EFSA üst sınırını ve "
+        "etkileşimlerini kaynaklarıyla verir; kanıt kartı yoksa ürün listelemez. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
         "sorulduğunda. Kullanma: belirli bir ürün sorulduğunda."
     ),
     annotations=SALT_OKUMA,
@@ -144,8 +155,39 @@ def etken_madde_rehberi(
     evre: Annotated[araclar.Evre | None, Field(description="İsteğe bağlı gebelik veya emzirme durumu")] = None,
     sigara: Annotated[araclar.Sigara | None, Field(description="İsteğe bağlı tütün kullanımı")] = None,
     ilac_grubu: Annotated[list[araclar.IlacGrubu] | None, Field(description="İsteğe bağlı ilaç grupları; ilaç adı gerekmez")] = None,
+) -> CallToolResult:
+    return ozet.sonuc("etken_madde_rehberi", araclar.etken_madde_rehberi(etken_madde, yas, cinsiyet, evre, sigara, ilac_grubu))
+
+
+@mcp.tool(
+    title="Şikâyet yolu",
+    description=(
+        "Kullanıcı bir yakınmadan (ör. yorgunluk, halsizlik) yola çıkıp ne kullanması gerektiğini sorduğunda önce "
+        "bunu kullan. Dikkat edilecek işaretleri, hekimin isteyebileceği tahlilleri, yaşam karnesini ve ilgili kanıt "
+        "kartlarını tek yanıtta verir; ürün önermez."
+    ),
+    annotations=SALT_OKUMA,
+)
+def sikayet_yolu(
+    sikayet: Annotated[str, Field(description="Kullanıcının yakınması, ör. 'yorgunluk', 'hep yorgunum'")],
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş (yıl)")] = None,
+    cinsiyet: araclar.Cinsiyet | None = None,
+) -> CallToolResult:
+    return ozet.sonuc("sikayet_yolu", araclar.sikayet_yolu(sikayet, yas, cinsiyet))
+
+
+@mcp.tool(
+    title="Katalog sayfası (görsel kart)",
+    description="Görsel kartın sayfalama için çağırdığı araçtır; modelden gizlidir. Kanıt kartı olmayan maddede ürün döndürmez.",
+    annotations=SALT_OKUMA,
+    meta=YALNIZCA_KART,
+)
+def katalog_sayfasi(
+    etken_madde: Annotated[str, Field(description="Etken madde adı")],
+    sayfa: Annotated[int, Field(ge=1, le=50, description="Sayfa numarası (her sayfada 5 ürün)")] = 1,
+    yas: Annotated[int | None, Field(ge=0, le=120, description="İsteğe bağlı yaş; yaş sınırı dışındaki ürünler elenir")] = None,
 ) -> dict[str, Any]:
-    return araclar.etken_madde_rehberi(etken_madde, yas, cinsiyet, evre, sigara, ilac_grubu)
+    return araclar.katalog_sayfasi(etken_madde, sayfa, yas)
 
 
 @mcp.resource(
@@ -157,6 +199,39 @@ def etken_madde_rehberi(
 )
 def karne_arayuzu() -> str:
     return arayuz.karne_html()
+
+
+@mcp.resource(
+    KANIT_ARAYUZU,
+    name="kanit",
+    title="Kanıt kartı",
+    description="Etken maddenin kanıt düzeyini, 100 kişilik ikon dizisini, güvenlik uyarılarını ve katalogu kart olarak gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def kanit_arayuzu() -> str:
+    return arayuz.kart_html("kanit")
+
+
+@mcp.resource(
+    URUN_ARAYUZU,
+    name="urun",
+    title="Ürün kartı",
+    description="Ürünün etiket bilgisini, EFSA sınır göstergesini ve ürün sayfası beyanlarını kart olarak gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def urun_arayuzu() -> str:
+    return arayuz.kart_html("urun")
+
+
+@mcp.resource(
+    RUTIN_ARAYUZU,
+    name="rutin",
+    title="Rutin kartı",
+    description="Takviyelerden toplam alımı ürün başına yığılmış çubuk ve EFSA çizgisiyle, uyarıları rozetlerle gösterir.",
+    mime_type=MCP_APP_MIME,
+)
+def rutin_arayuzu() -> str:
+    return arayuz.kart_html("rutin")
 
 
 def main() -> None:

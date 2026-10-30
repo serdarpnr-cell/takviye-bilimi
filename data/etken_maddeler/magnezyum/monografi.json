@@ -1,0 +1,36 @@
+{
+  "id": "magnezyum",
+  "ad": "Magnezyum",
+  "katalog_kimlikleri": ["magnezyum"],
+  "beyan_anahtarlari": ["magnezyum"],
+  "kisa_ozet": "Magnezyum kasların, sinirlerin ve enerji metabolizmasının normal çalışması için gereklidir. İleri yaştaki kişilerin nedeni bilinmeyen kas kramplarında magnezyum plasebodan farklı bulunmadı. Ürün beyanlarındaki yorgunluğa katkı ifadesi, eksiklik yokken yorgunluğu gidereceğini göstermez.",
+  "kimde_kanit_var": [
+    {
+      "grup": "Gebelikte bacak krampı olanlar",
+      "kosul": {"evre": ["gebe"]},
+      "gerekce": "Çalışmalar çelişkili; bu grupta daha fazla araştırma gerekiyor.",
+      "kaynaklar": ["cochrane_magnezyum_kramp_2020"]
+    },
+    {
+      "grup": "Nedeni bilinmeyen kas krampı olan ileri yaştaki yetişkinler",
+      "kosul": {"yas_min": 60},
+      "gerekce": "Magnezyum kramp sayısını plaseboya göre anlamlı azaltmadı (orta kesinlikte kanıt).",
+      "kaynaklar": ["cochrane_magnezyum_kramp_2020", "magnezyum_gece_krampi_2017"]
+    }
+  ],
+  "kimde_kanit_var_notu": "Uyku, kan basıncı, migren ve yorgunluk sonuç alanları bu sürümde kartlanmadı.",
+  "dikkat_kurallari": [
+    {
+      "kosul": {},
+      "mesaj": "Magnezyum takviyelerinde en sık mide-bağırsak yakınmaları (ör. ishal) bildirildi. EFSA üst sınırı yalnızca takviye ve eklenmiş magnezyum içindir; besinlerdeki magnezyum dahil değildir.",
+      "kaynaklar": ["cochrane_magnezyum_kramp_2020", "efsa_ul_ozet_2025"]
+    }
+  ],
+  "hekime_sorulacaklar": ["Kramplarımın nedeni araştırılmalı mı?", "Kullandığım ilaçlarla magnezyum arasında etkileşim var mı?"],
+  "uretici_icerikleri": [],
+  "kaynaklar": ["nih_ods_magnezyum", "cochrane_magnezyum_kramp_2020", "efsa_ul_ozet_2025"],
+  "durum": "taslak",
+  "onaylayan": null,
+  "onay_tarihi": null,
+  "son_arama_tarihi": "2026-10-30"
+}

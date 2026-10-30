@@ -12,13 +12,20 @@
     {
       "grup": "1–18 yaş çocuk ve ergenler",
       "gerekce": "Endocrine Society kılavuzu, beslenmeye bağlı raşitizmi önlemek ve solunum yolu enfeksiyonu riskini azaltma potansiyeli nedeniyle öneriyor.",
-      "kaynaklar": ["endocrine_d_2024"]
+      "kaynaklar": ["endocrine_d_2024"],
+      "kosul": {"yas_min": 1, "yas_max": 18}
     },
-    {"grup": "75 yaş ve üstü", "gerekce": "Endocrine Society kılavuzu, ölüm riskini azaltma potansiyeli nedeniyle öneriyor.", "kaynaklar": ["endocrine_d_2024"]},
+    {
+      "grup": "75 yaş ve üstü",
+      "gerekce": "Endocrine Society kılavuzu, ölüm riskini azaltma potansiyeli nedeniyle öneriyor.",
+      "kaynaklar": ["endocrine_d_2024"],
+      "kosul": {"yas_min": 75}
+    },
     {
       "grup": "Gebeler",
       "gerekce": "Endocrine Society kılavuzu, preeklampsi ve erken doğum gibi gebelik sorunlarının riskini azaltma potansiyeli nedeniyle öneriyor.",
-      "kaynaklar": ["endocrine_d_2024"]
+      "kaynaklar": ["endocrine_d_2024"],
+      "kosul": {"evre": ["gebe"]}
     },
     {
       "grup": "Yüksek riskli prediyabeti olanlar",
@@ -27,8 +34,9 @@
     },
     {
       "grup": "75 yaş altı sağlıklı yetişkinler",
-      "gerekce": "Aynı kılavuz, hastalık riskini azaltmak amacıyla referans alımın üzerinde D vitamini kullanımını önermiyor.",
-      "kaynaklar": ["endocrine_d_2024"]
+      "gerekce": "Endocrine Society kılavuzu, hastalık riskini azaltmak amacıyla referans alımın üzerinde D vitamini kullanımını önermiyor.",
+      "kaynaklar": ["endocrine_d_2024"],
+      "kosul": {"yas_min": 19, "yas_max": 74}
     }
   ],
   "kimde_kanit_var_notu": "Öneriler ABD Endocrine Society kılavuzundandır; kişisel karar ve miktar hekimle verilir.",
