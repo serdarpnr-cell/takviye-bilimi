@@ -18,9 +18,9 @@
     "semantic_hash": "c92858a4c2c237cca4fb8eeae0c20b32"
   },
   "data/kurallar.json": {
-    "mtime": 1793346942.713115,
-    "seen": 1793348051.756501,
-    "ast_hash": "e58d6cdf37cfa5fe26db1315c088a003",
+    "mtime": 1793348574.6534855,
+    "seen": 1793349713.1309361,
+    "ast_hash": "6ffd38698a248c0eb54fa12c503c87b9",
     "semantic_hash": ""
   },
   "data/urunler.json": {
@@ -54,21 +54,21 @@
     "semantic_hash": "1c3e780b58af59a2b8bfb983edfbc0b6"
   },
   "server/app.py": {
-    "mtime": 1793347944.7665656,
-    "seen": 1793348051.7565606,
-    "ast_hash": "357ea577a1ee10df07f38222f3804546",
+    "mtime": 1793349582.8785362,
+    "seen": 1793349713.130968,
+    "ast_hash": "53eee0b7416f11be656127869955554d",
     "semantic_hash": ""
   },
   "server/araclar.py": {
-    "mtime": 1793347880.7129765,
-    "seen": 1793348051.7565622,
-    "ast_hash": "cdefdf67da1031a26b1b3ba01eaa9c85",
+    "mtime": 1793349604.352217,
+    "seen": 1793349713.13097,
+    "ast_hash": "6fe5788db3903675ab4349084b383900",
     "semantic_hash": ""
   },
   "server/veri.py": {
-    "mtime": 1793347726.212065,
-    "seen": 1793348051.7565656,
-    "ast_hash": "a644af0d848babe2860ce444ed001692",
+    "mtime": 1793349457.4276726,
+    "seen": 1793349713.1309774,
+    "ast_hash": "8883781728948884bcc832bb95e05527",
     "semantic_hash": ""
   },
   "tests/conftest.py": {
@@ -78,15 +78,15 @@
     "semantic_hash": "28d27006d23333d8474e52d41258f329"
   },
   "tests/test_kisisel_rutin.py": {
-    "mtime": 1793347439.6898658,
-    "seen": 1793348051.7565799,
-    "ast_hash": "5bdd88ef55e29b2985703737fc0d1199",
+    "mtime": 1793348619.7940054,
+    "seen": 1793349713.1309953,
+    "ast_hash": "c3501ed57174cb62ef2496d02eb25e75",
     "semantic_hash": ""
   },
   "tests/test_mcp_sunucu.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.7565813,
-    "ast_hash": "0c775e31afdf659b504643bf62f511c7",
+    "mtime": 1793349636.0251696,
+    "seen": 1793349713.130997,
+    "ast_hash": "0afac77c17c6fe9df2a30e8bfdf6414d",
     "semantic_hash": ""
   },
   "tests/test_parti_analizi.py": {
@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "tests/test_urun_rehberi.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.7565835,
-    "ast_hash": "5f8e34d2d3962ea63c42438d6114d691",
+    "mtime": 1793348619.792944,
+    "seen": 1793349713.1310043,
+    "ast_hash": "f76975ea59181158c7ccb5cf8cd97a7c",
     "semantic_hash": ""
   },
   "tests/test_veri.py": {
@@ -108,10 +108,10 @@
     "semantic_hash": ""
   },
   "tests/test_yasam_karnesi.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.756586,
-    "ast_hash": "63e36577933ce33c48491875ca64f7cd",
-    "semantic_hash": "63e36577933ce33c48491875ca64f7cd"
+    "mtime": 1793348340.3483887,
+    "seen": 1793349713.1310086,
+    "ast_hash": "32d390414544c80d258ccb9768fd5128",
+    "semantic_hash": ""
   },
   ".claude/CLAUDE.md": {
     "mtime": 1793346942.7050905,
@@ -126,9 +126,9 @@
     "semantic_hash": "7fa0c67b5339931301e3b47017ead503"
   },
   "README.md": {
-    "mtime": 1793348045.2853189,
-    "seen": 1793348051.7565913,
-    "ast_hash": "b8ca862220fab2c880a918853fe9b202",
+    "mtime": 1793349698.663228,
+    "seen": 1793349713.1310287,
+    "ast_hash": "b508298421834234fe0b2b651e3aba7d",
     "semantic_hash": ""
   },
   "docs/KANIT_PROTOKOLU.md": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "data/kaynaklar.json": {
-    "mtime": 1793347835.89324,
-    "seen": 1793348051.7564993,
-    "ast_hash": "5510b109b3bd8166877d498d4a29f1fa",
+    "mtime": 1793349418.9305787,
+    "seen": 1793349713.1309345,
+    "ast_hash": "0fc0946ead06053001cf8b384db35af1",
     "semantic_hash": ""
   },
   "scripts/kaynak_dogrula.py": {
@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "tests/test_kaynaklar.py": {
-    "mtime": 1793347908.5937345,
-    "seen": 1793348051.7565784,
-    "ast_hash": "d4e85e7ebcbb3d1c02351f9bfc136a4b",
+    "mtime": 1793349225.4657154,
+    "seen": 1793349713.130993,
+    "ast_hash": "01592aa6757e0136d4afcaea8fdb1c23",
     "semantic_hash": ""
   },
   "data/etken_maddeler/d3/kartlar/kanser_kalp_damar__50_yas_ustu.json": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "data/etken_maddeler/d3/monografi.json": {
-    "mtime": 1793346942.713115,
-    "seen": 1793348051.756496,
-    "ast_hash": "2925553b8597e81de517283de97e7683",
+    "mtime": 1793348534.0575304,
+    "seen": 1793349713.130912,
+    "ast_hash": "cacc9363eaf940a40ef7c7751b51fc00",
     "semantic_hash": ""
   },
   "scripts/lint_ifadeler.py": {
@@ -210,15 +210,15 @@
     "semantic_hash": ""
   },
   "tests/test_etken_madde_rehberi.py": {
-    "mtime": 1793347897.5112777,
-    "seen": 1793348051.7565708,
-    "ast_hash": "c235aed4d53c9f194966ad3890645389",
+    "mtime": 1793349312.0892315,
+    "seen": 1793349713.1309838,
+    "ast_hash": "0daba48d48a2060141eb27421b241607",
     "semantic_hash": ""
   },
   "tests/test_kanit_kartlari.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.7565727,
-    "ast_hash": "44b5842e12d0e541e38e0f9398e1f234",
+    "mtime": 1793349234.6660495,
+    "seen": 1793349713.130986,
+    "ast_hash": "70e22951bffe78ac8a3e76ee0dc78262",
     "semantic_hash": ""
   },
   "data/etken_maddeler/d3/arama_kaydi.md": {
@@ -228,15 +228,15 @@
     "semantic_hash": ""
   },
   "data/karne_kurallari.json": {
-    "mtime": 1793346942.713115,
-    "seen": 1793348051.7564974,
-    "ast_hash": "63a4ea5cb69a5ef833554e7fc967bf6b",
+    "mtime": 1793348303.0733273,
+    "seen": 1793349713.1309319,
+    "ast_hash": "fcb4d846454d2bf4f5bb9a990bfa5f5c",
     "semantic_hash": ""
   },
   "tests/test_karne_kurallari.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.7565744,
-    "ast_hash": "8f81542173fed20450f9fe002855c676",
+    "mtime": 1793349312.0892315,
+    "seen": 1793349713.1309874,
+    "ast_hash": "3feeeec189bb95b9907bef5f129e4ee8",
     "semantic_hash": ""
   },
   "server/arayuz.py": {
@@ -246,15 +246,15 @@
     "semantic_hash": ""
   },
   "tests/test_karne_secenekleri.py": {
-    "mtime": 1793346942.7294202,
-    "seen": 1793348051.756576,
-    "ast_hash": "35b07529e737a9d05443347811ff4fae",
+    "mtime": 1793348352.0646877,
+    "seen": 1793349713.1309896,
+    "ast_hash": "c3c3264a8af718a8345d75b206df9fd7",
     "semantic_hash": ""
   },
   "server/arayuz/karne.html": {
-    "mtime": 1793347974.9360163,
-    "seen": 1793348051.7565997,
-    "ast_hash": "33f20331a188c56eda5bf6c07df1a072",
+    "mtime": 1793348303.0743754,
+    "seen": 1793349713.1310525,
+    "ast_hash": "cd128cb0ba645fd70055bbd0ea15d26a",
     "semantic_hash": ""
   },
   "data/zorunlu_uyarilar.json": {
@@ -270,9 +270,9 @@
     "semantic_hash": ""
   },
   "scripts/olcum.py": {
-    "mtime": 1793347253.525109,
-    "seen": 1793348051.756554,
-    "ast_hash": "053b1cfde56d5b1b5c25cb5cf66f5d53",
+    "mtime": 1793349671.353253,
+    "seen": 1793349713.1309595,
+    "ast_hash": "c78f74f6bc366c076fd631e9e6068f47",
     "semantic_hash": ""
   },
   "tests/test_arayuz_alt_bilgi.py": {
@@ -309,6 +309,132 @@
     "mtime": 1793347367.3452113,
     "seen": 1793348051.756597,
     "ast_hash": "9f0596e0b65c97a22968c4e5f3c3f930",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/b12/kartlar/bilissel_islev_ve_yorgunluk__eksikligi_olmayan_yetiskin.json": {
+    "mtime": 1793349240.386075,
+    "seen": 1793349713.130893,
+    "ast_hash": "289bb92aa9990c4eb5fde3e2259bcaa0",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/b12/kartlar/serum_duzeyi__eksikligi_olan_yetiskin.json": {
+    "mtime": 1793349240.3853571,
+    "seen": 1793349713.1308968,
+    "ast_hash": "7db5103bc17b5b1165f1ad830392d758",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/b12/monografi.json": {
+    "mtime": 1793349206.8259447,
+    "seen": 1793349713.1308987,
+    "ast_hash": "924b5e7699e080180d5d471f6dc6279c",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/demir/kartlar/anemi_ve_demir_eksikligi__adet_goren_kadin.json": {
+    "mtime": 1793349240.386716,
+    "seen": 1793349713.130915,
+    "ast_hash": "46a76a173fe6de240b2731d56dcf26a3",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/demir/kartlar/sindirim_yan_etkileri__agizdan_demir_kullanan_yetiskin.json": {
+    "mtime": 1793349240.388144,
+    "seen": 1793349713.1309168,
+    "ast_hash": "7181d7305e9776334f705f3da7ebfb6f",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/demir/kartlar/yorgunluk__anemisi_olmayan_demir_eksikligi.json": {
+    "mtime": 1793349240.3873115,
+    "seen": 1793349713.130918,
+    "ast_hash": "144b03bd99c2e37601729941a090dfb4",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/demir/monografi.json": {
+    "mtime": 1793349206.8263142,
+    "seen": 1793349713.13092,
+    "ast_hash": "28d11b223654d77cd2bc458d6b9ba36e",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/magnezyum/kartlar/kas_kramplari__ileri_yas_idiyopatik.json": {
+    "mtime": 1793349240.388949,
+    "seen": 1793349713.1309214,
+    "ast_hash": "f1424a382c5a544d1008111464894b09",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/magnezyum/monografi.json": {
+    "mtime": 1793349206.8266041,
+    "seen": 1793349713.130923,
+    "ast_hash": "eb15fff378be655afdb7545db09fc0e5",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/omega3/kartlar/erken_dogum__gebeler.json": {
+    "mtime": 1793349240.3903737,
+    "seen": 1793349713.130925,
+    "ast_hash": "48ff48c56419a281c190fe28701b213d",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/omega3/kartlar/kalp_damar_olaylari__genel_yetiskin.json": {
+    "mtime": 1793349240.3896387,
+    "seen": 1793349713.130927,
+    "ast_hash": "9ac5120e1f703fcbf265961d76962a65",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/omega3/monografi.json": {
+    "mtime": 1793349206.8269026,
+    "seen": 1793349713.1309292,
+    "ast_hash": "74a8774b52130c89097d5abcd7d5153b",
+    "semantic_hash": ""
+  },
+  "data/sikayet_yollari.json": {
+    "mtime": 1793349434.1972387,
+    "seen": 1793349713.1309383,
+    "ast_hash": "fc621ba7c5493a60442d957c3992e1a9",
+    "semantic_hash": ""
+  },
+  "server/ozet.py": {
+    "mtime": 1793349649.82964,
+    "seen": 1793349713.1309748,
+    "ast_hash": "72cf0634cd1c7651f3e7e6ae1d0b1710",
+    "semantic_hash": ""
+  },
+  "tests/test_ozet.py": {
+    "mtime": 1793349636.0292506,
+    "seen": 1793349713.1309988,
+    "ast_hash": "05be3004a2ca41e3c2122c5d67201eb4",
+    "semantic_hash": ""
+  },
+  "tests/test_sikayet_yolu.py": {
+    "mtime": 1793349476.0872505,
+    "seen": 1793349713.1310022,
+    "ast_hash": "a3e6486088d263d83f51d262cd9fa308",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/b12/arama_kaydi.md": {
+    "mtime": 1793349294.6373496,
+    "seen": 1793349713.131031,
+    "ast_hash": "a945d491847016d2f822773d4ed865c0",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/demir/arama_kaydi.md": {
+    "mtime": 1793349294.6395879,
+    "seen": 1793349713.131035,
+    "ast_hash": "d15cbdb6e9306d93066ba18563fc4602",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/magnezyum/arama_kaydi.md": {
+    "mtime": 1793349279.076128,
+    "seen": 1793349713.1310365,
+    "ast_hash": "10ed16b4f03c85fa08dd0d31a5cfd8b9",
+    "semantic_hash": ""
+  },
+  "data/etken_maddeler/omega3/arama_kaydi.md": {
+    "mtime": 1793349279.077603,
+    "seen": 1793349713.1310382,
+    "ast_hash": "25dc89e87f46b116bb7feb17e57bd285",
+    "semantic_hash": ""
+  },
+  "docs/olcumler/2026-10-30_faz1_sonra.md": {
+    "mtime": 1793349675.2925584,
+    "seen": 1793349713.1310463,
+    "ast_hash": "4926d030b69db8d0ac0d684228d271b4",
     "semantic_hash": ""
   }
 }
