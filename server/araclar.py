@@ -653,6 +653,28 @@ TASLAK_NOTU = "Taslak: bu kanıt kartı medikal kurul onayı bekliyor."
 TASLAK_UYARI_NOTU = "Taslak: bu güvenlik uyarısı medikal kurul onayı bekliyor; onay beklerken de gösterilir."
 
 
+# Kanıt kartı hazırlanana kadar yönlendirilen genel bilgi sayfası (kurum belgesi, doğrulanmış).
+GENEL_KILAVUZ = {
+    "d3": "nih_ods_d_vitamini", "omega3": "nih_ods_omega3", "b12": "nih_ods_b12", "folik_asit": "nih_ods_folat",
+    "demir": "nih_ods_demir", "magnezyum": "nih_ods_magnezyum", "c_vitamini": "nih_ods_c_vitamini",
+    "cinko": "nih_ods_cinko", "multivitamin": "nih_ods_multivitamin", "beta_karoten": "nih_ods_a_vitamini_karotenoidler",
+    "e_vitamini": "nih_ods_e_vitamini", "probiyotik": "nih_ods_probiyotik",
+}
+
+
+def _katalog_sayisi_metni(sayi: int) -> str:
+    return (f"Katalogda bu maddeyi içeren {sayi} ürün var. Katalog şu an yalnızca Orzax ürünlerini içerir. "
+            "Belirli bir ürünün etiket bilgisi için ürün adıyla sorulabilir.")
+
+
+def _genel_kilavuz(em_id: str) -> dict | None:
+    kid = GENEL_KILAVUZ.get(em_id)
+    if not kid or not veri.kaynaklar([kid]):
+        return None
+    k = veri.kaynaklar([kid])[0]
+    return {"baslik": k["baslik"], "kurum": k["kurum_veya_dergi"], "url": k["url"], "dil": "İngilizce"}
+
+
 def _rehber_id(ad: str) -> str | None:
     if veri.normalize(ad) in _MULTIVITAMIN_ADLARI:
         return "multivitamin"
@@ -729,14 +751,14 @@ def etken_madde_rehberi(
              if aranan and any(aranan in veri.normalize(e["etiketteki_ad"]) for e in u["etken_maddeler"])),
             key=veri.normalize,
         )
+        # Kanıt kartı olmayan maddede ürün listesi dönmez (TB-05); yalnızca katalog kapsamı sayıyla yazılır.
         return veri.zarf({
             "kisa_ozet": (
-                f"'{etken_madde}' için kanıt kartı yok."
-                + (" Katalogda bu adı içeren ürünler aşağıda." if urunler else " Adı farklı yazmayı deneyin (ör. 'D vitamini', 'omega-3').")
+                f"'{etken_madde}' için kanıt kartı yok; kanıt kartı olmayan maddede ürün listesi gösterilmez."
+                + ("" if urunler else " Adı farklı yazmayı deneyin (ör. 'D vitamini', 'omega-3').")
             ),
             "kanit_karti_hazirlanan_maddeler": [_rehber_adi(i) for i in REHBER_KAPSAMI],
-            "katalogda_bu_adi_iceren_urunler": urunler,
-            "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
+            "katalog_kapsami": _katalog_sayisi_metni(len(urunler)),
         }, veri.kaynaklar(["orzax_urunler"]))
 
     profil = {"yas": yas, "cinsiyet": cinsiyet, "evre": evre, "sigara": sigara,
@@ -840,15 +862,12 @@ def etken_madde_rehberi(
             beyan_urunleri.append(u)
 
     if m is None:
-        durum_metni = (f"{ad} için kanıt kartı henüz hazırlanmadı ya da medikal kurul onayı bekliyor. "
-                       "Aşağıda yalnızca EFSA değeri, ürün sayfalarındaki beyanlar ve katalog bilgisi var.")
-    kaynak_idleri += (m or {}).get("kaynaklar", []) + (m or {}).get("uretici_icerikleri", [])
+        return _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorular, len(katalog), kaynak_idleri)
+    kaynak_idleri += m.get("kaynaklar", []) + m.get("uretici_icerikleri", [])
     for alan in ("besinle_karsilama", "tahlil_notu"):
-        kaynak_idleri += (m or {}).get(alan, {}).get("kaynaklar", [])
-    for g in (m or {}).get("kimde_kanit_var", []):
+        kaynak_idleri += m.get(alan, {}).get("kaynaklar", [])
+    for g in m.get("kimde_kanit_var", []):
         kaynak_idleri += g["kaynaklar"]
-    if not kaynak_idleri:
-        kaynak_idleri = ["orzax_urunler"]
     # Bağımsız kaynaklar önce, üretici içerikleri sonra.
     kayitlar = veri.kaynak_kayitlari()
     sirali = sorted(dict.fromkeys(kaynak_idleri), key=lambda i: kayitlar[i]["tur"] == "uretici_icerigi")
@@ -860,11 +879,11 @@ def etken_madde_rehberi(
     )
 
     return veri.zarf({
-        "kisa_ozet": on_ek + (m["kisa_ozet"] if m else durum_metni),
+        "kisa_ozet": on_ek + m["kisa_ozet"],
         "zorunlu_uyarilar": zorunlu,
-        **({"kanit_durumu": TASLAK_NOTU} if m and m["durum"] == "taslak" else {}),
-        "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in (m or {}).get("kimde_kanit_var", [])],
-        **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m and m.get("kimde_kanit_var_notu") else {}),
+        **({"kanit_durumu": TASLAK_NOTU} if m["durum"] == "taslak" else {}),
+        "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in m.get("kimde_kanit_var", [])],
+        **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m.get("kimde_kanit_var_notu") else {}),
         "kanit_duzeyi": kanit,
         "kanit_duzeyi_olcegi": (
             "guclu: birden fazla yüksek kaliteli çalışmada tutarlı; orta: tutarlı ama sınırlı ya da kalite sorunlu; "
@@ -879,8 +898,8 @@ def etken_madde_rehberi(
                 "Katalogda yalnızca bu maddeyi içeren ürün olmadığı için etken madde düzeyinde beyan listelenmedi."
             ),
         },
-        "besinle_karsilama": (m or {}).get("besinle_karsilama", {}).get("metin"),
-        **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m and m.get("tahlil_notu") else {}),
+        "besinle_karsilama": m.get("besinle_karsilama", {}).get("metin"),
+        **({"tahlil_notu": m["tahlil_notu"]["metin"]} if m.get("tahlil_notu") else {}),
         "efsa_ust_sinir": efsa,
         "etkilesimler": etkilesimler,
         "etkilesim_notu": (
@@ -894,3 +913,29 @@ def etken_madde_rehberi(
         "siralama_olcutu": "Alfabetik. Sponsorlu veya öncelikli sıralama yoktur.",
         "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, kaynak_listesi)
+
+
+def _kartsiz_yanit(em_id, ad, on_ek, zorunlu, efsa, etkilesimler, dikkat, sorular, urun_sayisi, kaynak_idleri) -> dict:
+    """Kanıt kartı yoksa ürün listesi ve ürün sayfası beyanları dönmez (TB-05); güvenlik bilgisi kalır."""
+    kilavuz = _genel_kilavuz(em_id)
+    kaynak_idleri = list(kaynak_idleri) + ([GENEL_KILAVUZ[em_id]] if kilavuz else []) or ["orzax_urunler"]
+    return veri.zarf({
+        "kisa_ozet": (
+            on_ek + f"{ad} için kanıt kartı hazırlanıyor ya da medikal kurul onayı bekliyor. "
+            "Kanıt kartı hazır olana kadar ürün listesi gösterilmez."
+            + (" Genel bilgi için kurum sayfasına bakılabilir." if kilavuz else "")
+        ),
+        "zorunlu_uyarilar": zorunlu,
+        "kanit_durumu": "Kanıt kartı hazırlanıyor.",
+        "genel_kilavuz": kilavuz,
+        "efsa_ust_sinir": efsa,
+        "etkilesimler": etkilesimler,
+        "etkilesim_notu": (
+            None if etkilesimler else
+            "Kural tablosunda bu madde için tanımlı etkileşim yok; bu, etkileşim olmadığı anlamına gelmez."
+        ),
+        "dikkat_edecekler": dikkat,
+        "hekime_sorulacaklar": list(dict.fromkeys(sorular)),
+        "katalog_kapsami": _katalog_sayisi_metni(urun_sayisi),
+        "gizlilik": "Profil bilgileri yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
+    }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))

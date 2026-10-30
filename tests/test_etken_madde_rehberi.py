@@ -4,7 +4,7 @@ import re
 import pytest
 
 from server import veri
-from server.araclar import REHBER_KAPSAMI, _VITAMIN_MINERAL, etken_madde_rehberi
+from server.araclar import REHBER_KAPSAMI, _VITAMIN_MINERAL, _katalog_eslesmesi, etken_madde_rehberi
 
 ALANLAR = {
     "kisa_ozet", "kimde_kanit_var", "kanit_duzeyi", "onayli_saglik_beyanlari", "besinle_karsilama", "efsa_ust_sinir",
@@ -94,8 +94,10 @@ def test_taslak_gosterilmezse_kanit_yerine_durum_bildirilir(monkeypatch, uyari_v
     y = etken_madde_rehberi("D vitamini")
     uyari_var(y)
     assert "kurul onayı bekliyor" in y["kisa_ozet"]
-    assert y["kanit_duzeyi"] == [] and y["kimde_kanit_var"] == []
-    assert y["efsa_ust_sinir"] and y["katalogdaki_urunler"] and y["kaynaklar"]
+    assert "kanit_duzeyi" not in y and "kimde_kanit_var" not in y
+    # Kart yayında değilse ürün listesi de dönmez (TB-05); güvenlik bilgisi kalır.
+    assert "katalogdaki_urunler" not in y
+    assert y["efsa_ust_sinir"] and y["zorunlu_uyarilar"] and y["genel_kilavuz"] and y["kaynaklar"]
 
 
 @pytest.mark.parametrize("em_id", REHBER_KAPSAMI)
@@ -107,19 +109,34 @@ def test_ilk_setin_her_maddesi_yanit_uretir(em_id, taslak):
 
 
 def test_multivitamin_katalogu_esige_gore():
-    y = etken_madde_rehberi("multivitamin")
-    assert y["katalogdaki_urunler"]
-    urunler = {u["ad"]: u for u in veri.urunler()}
-    for u in y["katalogdaki_urunler"]:
-        kimlikler = {e["etken_madde"] for e in urunler[u["ad"]]["etken_maddeler"]} & _VITAMIN_MINERAL
-        assert len(kimlikler) >= 5, u["ad"]
+    eslesen = [u for u in veri.urunler() if _katalog_eslesmesi("multivitamin", u)]
+    assert eslesen
+    for u in veri.urunler():
+        kimlikler = {e["etken_madde"] for e in u["etken_maddeler"]} & _VITAMIN_MINERAL
+        assert bool(_katalog_eslesmesi("multivitamin", u)) == (len(kimlikler) >= 5), u["ad"]
 
 
-def test_kart_disi_madde_katalogdan_bulunur():
+@pytest.mark.parametrize("ad", ["omega-3", "B12", "magnezyum", "demir", "multivitamin"])
+def test_kanit_karti_yoksa_urun_listesi_donmez(ad):
+    # TB-05: genel soruya yalnızca ürün listesi dönmez; kanıt kartı hazırlanıyor notu ve kurum sayfası döner.
+    y = etken_madde_rehberi(ad, yas=42, cinsiyet="erkek")
+    assert "katalogdaki_urunler" not in y
+    assert "onayli_saglik_beyanlari" not in y
+    assert "ürün listesi gösterilmez" in y["kisa_ozet"]
+    assert y["kanit_durumu"] == "Kanıt kartı hazırlanıyor."
+    assert y["genel_kilavuz"]["url"].startswith("https://ods.od.nih.gov/factsheets/")
+    assert re.search(r"Katalogda bu maddeyi içeren \d+ ürün var", y["katalog_kapsami"])
+    assert all(k["tur"] != "uretici_icerigi" for k in y["kaynaklar"])
+    assert not any(u["ad"] in json.dumps(y, ensure_ascii=False) for u in veri.urunler())
+
+
+def test_kart_disi_madde_urun_adi_listelemez():
     y = etken_madde_rehberi("kreatin")
-    assert "Ocean Kreatin" in y["katalogda_bu_adi_iceren_urunler"]
+    assert "katalogda_bu_adi_iceren_urunler" not in y
+    assert "Ocean Kreatin" not in json.dumps(y, ensure_ascii=False)
+    assert re.search(r"içeren [1-9]\d* ürün var", y["katalog_kapsami"])
     bos = etken_madde_rehberi("xyz")
-    assert bos["katalogda_bu_adi_iceren_urunler"] == []
+    assert "içeren 0 ürün var" in bos["katalog_kapsami"]
     assert len(bos["kanit_karti_hazirlanan_maddeler"]) == 12
 
 

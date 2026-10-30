@@ -131,8 +131,8 @@ def yasam_karnesi(
 @mcp.tool(
     title="Etken madde rehberi",
     description=(
-        "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, EFSA üst sınırını, etkileşimlerini ve katalogdaki "
-        "ürünleri kaynaklarıyla verir. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
+        "Bir etken maddenin kanıt düzeyini, kimde kanıt olduğunu, güvenlik uyarılarını, EFSA üst sınırını ve "
+        "etkileşimlerini kaynaklarıyla verir; kanıt kartı yoksa ürün listelemez. Kullan: bir maddenin işe yarayıp yaramadığı ya da kimlere uygun olduğu "
         "sorulduğunda. Kullanma: belirli bir ürün sorulduğunda."
     ),
     annotations=SALT_OKUMA,

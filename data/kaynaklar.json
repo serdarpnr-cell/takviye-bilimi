@@ -395,6 +395,138 @@
       "alintilar": ["There was a logarithmic association between vitamin D dose per kg body weight per day and increment in circulating 25OHD."],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_d_vitamini": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin D (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminD-Consumer/",
+      "alintilar": ["What is vitamin D and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_omega3": {
+      "tur": "kurum_bilgi",
+      "baslik": "Omega-3 Fatty Acids (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/",
+      "alintilar": ["What are omega-3 fatty acids and what do they do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_b12": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin B12 (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/",
+      "alintilar": ["What is vitamin B12 and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_folat": {
+      "tur": "kurum_bilgi",
+      "baslik": "Folate (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Folate-Consumer/",
+      "alintilar": ["What is folate and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_demir": {
+      "tur": "kurum_bilgi",
+      "baslik": "Iron (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Iron-Consumer/",
+      "alintilar": ["What is iron and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_magnezyum": {
+      "tur": "kurum_bilgi",
+      "baslik": "Magnesium (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/",
+      "alintilar": ["What is magnesium and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_c_vitamini": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin C (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
+      "alintilar": ["What is vitamin C and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_cinko": {
+      "tur": "kurum_bilgi",
+      "baslik": "Zinc (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Zinc-Consumer/",
+      "alintilar": ["What is zinc and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_multivitamin": {
+      "tur": "kurum_bilgi",
+      "baslik": "Multivitamin/mineral Supplements (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/MVMS-Consumer/",
+      "alintilar": ["What are multivitamin/mineral (MVM) dietary supplements?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_a_vitamini_karotenoidler": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin A and Carotenoids (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminA-Consumer/",
+      "alintilar": ["What are vitamin A and carotenoids and what do they do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_e_vitamini": {
+      "tur": "kurum_bilgi",
+      "baslik": "Vitamin E (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/VitaminE-Consumer/",
+      "alintilar": ["What is vitamin E and what does it do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "nih_ods_probiyotik": {
+      "tur": "kurum_bilgi",
+      "baslik": "Probiotics (Fact Sheet for Consumers)",
+      "kurum_veya_dergi": "NIH Office of Dietary Supplements",
+      "yil": null,
+      "url": "https://ods.od.nih.gov/factsheets/Probiotics-Consumer/",
+      "alintilar": ["What are probiotics and what do they do?"],
+      "dogrulandi": true,
+      "erisim_tarihi": "2026-10-30",
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }
