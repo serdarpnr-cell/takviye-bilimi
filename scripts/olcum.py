@@ -7,7 +7,8 @@ Sunucuyu gerçek HTTP üzerinden (Streamable HTTP, /mcp) ayrı bir süreçte ba�
 (docs/olcumler/ altındaki raporlarda listelenir) art arda çağırır. Her senaryo için p50 ve p95 süre ile
 modele dönen metnin karakter sayısı ve yaklaşık token sayısı yazılır.
 
-Token sayısı kaba tahmindir: karakter / 4. Türkçe metinde gerçek sayı daha yüksek olabilir.
+Token sayısı kaba tahmindir: karakter / 3 (Türkçe için temkinli). Ölçülen, modele giden metin içeriğidir;
+görsel karta giden structuredContent ayrıca karakter olarak raporlanır.
 Sonuç docs/olcumler/<tarih>_<etiket>.md dosyasına yazılır. Kişisel veri yoktur; senaryolar test personasıdır.
 """
 
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import datetime as dt
 import os
 import socket
@@ -52,7 +54,8 @@ SENARYOLAR: list[tuple[str, str, list[tuple[str, dict]]]] = [
         "etken_madde": "D vitamini", "yas": 42, "cinsiyet": "erkek"})]),
     ("9", "Rutin: Collagen Mag Plus", [("kisisel_rutin", {
         "yas": 40, "cinsiyet": "kadin", "mevcut_urunler": ["Day2Day The Collagen Mag Plus"]})]),
-    ("10", "\"Yorgunum\": B12 + demir + magnezyum", [
+    ("10", "\"Yorgunum\": sikayet_yolu (v2 yolu)", [("sikayet_yolu", {"sikayet": "Kendimi yorgun hissediyorum"})]),
+    ("10b", "\"Yorgunum\": eski yol, B12 + demir + magnezyum", [
         ("etken_madde_rehberi", {"etken_madde": "B12"}),
         ("etken_madde_rehberi", {"etken_madde": "demir"}),
         ("etken_madde_rehberi", {"etken_madde": "magnezyum"})]),
@@ -78,19 +81,20 @@ async def _olc(url: str, tekrar: int) -> list[dict]:
             async with ClientSession(oku, yaz) as oturum:
                 await oturum.initialize()
                 for no, ad, cagrilar in SENARYOLAR:
-                    sureler, karakter = [], 0
+                    sureler, karakter, kart = [], 0, 0
                     for i in range(tekrar + 1):
                         bas = time.perf_counter()
-                        karakter = 0
+                        karakter = kart = 0
                         for arac, arg in cagrilar:
                             yanit = await oturum.call_tool(arac, arg)
                             if yanit.isError:
                                 raise RuntimeError(f"{no} {arac}: {yanit.content}")
                             karakter += sum(len(c.text) for c in yanit.content if c.type == "text")
+                            kart += len(json.dumps(yanit.structuredContent or {}, ensure_ascii=False))
                         if i:  # İlk çağrı ısınmadır, ölçüme katılmaz.
                             sureler.append((time.perf_counter() - bas) * 1000)
                     sonuclar.append({"no": no, "ad": ad, "cagri": len(cagrilar), "p50": statistics.median(sureler),
-                                     "p95": _yuzdelik(sureler, 95), "karakter": karakter, "token": karakter // 4})
+                                     "p95": _yuzdelik(sureler, 95), "karakter": karakter, "token": karakter // 3, "kart": kart})
     return sonuclar
 
 
@@ -122,15 +126,17 @@ def main() -> int:
         f"# Ölçüm · {a.etiket} · {dt.date.today().isoformat()}",
         "",
         f"Yerel HTTP sunucusu (`TB_TASLAK_GOSTER=1`), senaryo başına {a.tekrar} tekrar, ilk çağrı ısınma olarak atıldı. "
-        "Süre, senaryodaki tüm araç çağrılarının toplamıdır (ms). Token = karakter / 4, kaba tahmin.",
+        "Süre, senaryodaki tüm araç çağrılarının toplamıdır (ms). Token = modele giden metin karakteri / 3 (temkinli tahmin). "
+        "Kart = görsel karta giden structuredContent karakteri (modelin bağlamına girmez).",
         "",
-        "| # | Senaryo | Çağrı | p50 ms | p95 ms | Modele dönen karakter | ≈ token |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
-        *(f"| {s['no']} | {s['ad']} | {s['cagri']} | {s['p50']:.1f} | {s['p95']:.1f} | {s['karakter']:,} | {s['token']:,} |"
+        "| # | Senaryo | Çağrı | p50 ms | p95 ms | Modele dönen karakter | ≈ token | Kart karakteri |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        *(f"| {s['no']} | {s['ad']} | {s['cagri']} | {s['p50']:.1f} | {s['p95']:.1f} | {s['karakter']:,} | {s['token']:,} | {s['kart']:,} |"
           for s in sonuclar),
         "",
         f"Senaryoların p95 değerleri arasında en yüksek dilim: {tum_p95:.1f} ms. "
-        f"1.500 token'ı aşan senaryo: {sum(s['token'] > 1500 for s in sonuclar)} / {len(sonuclar)}.",
+        f"Modele dönen yanıt, senaryo p95'i: ≈ {_yuzdelik([s['token'] / s['cagri'] for s in sonuclar], 95):,.0f} token / çağrı. "
+        f"1.500 token'ı aşan çağrı içeren senaryo: {sum(s['token'] / s['cagri'] > 1500 for s in sonuclar)} / {len(sonuclar)}.",
         "",
     ]
     CIKTI.mkdir(parents=True, exist_ok=True)

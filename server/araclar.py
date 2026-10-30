@@ -752,6 +752,33 @@ def _katalog_eslesmesi(em_id: str, u: dict) -> list[dict]:
     return [e for e in u["etken_maddeler"] if e["etken_madde"] in kimlikler]
 
 
+def _katalog_urunleri(em_id: str, yas: int | None) -> tuple[list[dict], list[dict], list[dict]]:
+    """(eşleşen, yaşa uygun ve sıralı, yaş sınırı dışında) ürünler. Sıra: yalnızca bu maddeyi içerenler önce, sonra alfabetik."""
+    eslesen = [u for u in veri.urunler() if _katalog_eslesmesi(em_id, u)]
+    yas_disi = [u for u in eslesen if yas is not None and _yas_disinda(u["yas_siniri"], yas)]
+    uygun = sorted((u for u in eslesen if u not in yas_disi),
+                   key=lambda x: (not _tek_icerikli(x, em_id), veri.normalize(x["ad"])))
+    return eslesen, uygun, yas_disi
+
+
+def _madde_beyanlari(u: dict, em_id: str) -> list[str]:
+    """Ürün sayfası beyanlarından bu maddeye eşlenenler; ürün rehberiyle aynı kaynak (TB-15)."""
+    hedef = veri.KATALOG_GRUBU.get(em_id, em_id)
+    return [b["metin"] for b in veri.urun_saglik_beyanlari(u) if em_id == "multivitamin" or hedef in b["etken_maddeler"]]
+
+
+def _katalog_ogesi(u: dict, em_id: str, beyanlar: list[str]) -> dict:
+    return {
+        "ad": u["ad"],
+        "marka": u["marka"],
+        "tek_icerikli": _tek_icerikli(u, em_id),
+        "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in _katalog_eslesmesi(em_id, u)],
+        "yas_siniri": _yas_metni(u["yas_siniri"]),
+        "urun_sayfasi_beyanlari": beyanlar,
+        "parti_analizi_var": False,
+    }
+
+
 def _beyan_anahtari(beyan: str, anahtarlar: list[str]) -> str:
     """"D vitamini normal kemiklerin…" ile "Normal kemiklerin…" aynı beyandır: baştaki madde adı karşılaştırmaya katılmaz."""
     n = veri.normalize(beyan)
@@ -896,26 +923,12 @@ def etken_madde_rehberi(
 
     # Katalog (TB-14): yaş sınırına uyanlar; tek içerikliler önce, sonra alfabetik; en fazla KATALOG_SINIRI ürün.
     anahtarlar = [veri.normalize(a) for a in (m or {}).get("beyan_anahtarlari", [])]
-    eslesen = [u for u in veri.urunler() if _katalog_eslesmesi(em_id, u)]
-    yas_disi = [u for u in eslesen if yas is not None and _yas_disinda(u["yas_siniri"], yas)]
-    uygun = sorted((u for u in eslesen if u not in yas_disi),
-                   key=lambda x: (not _tek_icerikli(x, em_id), veri.normalize(x["ad"])))
-    hedef = veri.KATALOG_GRUBU.get(em_id, em_id)
+    eslesen, uygun, yas_disi = _katalog_urunleri(em_id, yas)
     katalog, beyan_metinleri, beyan_urunleri = [], [], []
     for u in uygun:
-        # Beyanlar ürün rehberiyle aynı kaynaktan ve maddeye eşlenerek gelir (TB-15).
-        beyanlar = [b["metin"] for b in veri.urun_saglik_beyanlari(u)
-                    if em_id == "multivitamin" or hedef in b["etken_maddeler"]]
+        beyanlar = _madde_beyanlari(u, em_id)
         if len(katalog) < KATALOG_SINIRI:
-            katalog.append({
-                "ad": u["ad"],
-                "marka": u["marka"],
-                "tek_icerikli": _tek_icerikli(u, em_id),
-                "porsiyondaki_miktar": [f"{e['etiketteki_ad']}: {_etiket_miktari(e, u)}" for e in _katalog_eslesmesi(em_id, u)],
-                "yas_siniri": _yas_metni(u["yas_siniri"]),
-                "urun_sayfasi_beyanlari": beyanlar,
-                "parti_analizi_var": False,
-            })
+            katalog.append(_katalog_ogesi(u, em_id, beyanlar))
         if em_id != "multivitamin" and beyanlar:
             for b in beyanlar:
                 anahtar = _beyan_anahtari(b, anahtarlar)
@@ -1080,3 +1093,24 @@ def sikayet_yolu(sikayet: str, yas: int | None = None, cinsiyet: str | None = No
         "urun_notu": "Bu yol ürün önermez. Belirli bir ürünün etiket bilgisi için ürün adıyla sorulabilir.",
         "gizlilik": "Bilgiler yalnızca bu yanıtı üretmek için işlendi; saklanmadı ve loglanmadı.",
     }, veri.kaynaklar(dict.fromkeys(kaynak_idleri)))
+
+
+def katalog_sayfasi(etken_madde: str, sayfa: int = 1, yas: int | None = None) -> dict:
+    """Görsel kartın sayfalama aracı (modelden gizli). Kanıt kartı sunulamayan maddede ürün döndürmez (TB-05)."""
+    em_id = _rehber_id(etken_madde)
+    if em_id is None or veri.monografi(em_id) is None:
+        return veri.zarf({
+            "kisa_ozet": "Kanıt kartı olmayan maddede ürün listesi gösterilmez.",
+            "urunler": [], "sayfa": sayfa, "toplam_sayfa": 0,
+        }, veri.kaynaklar(["orzax_urunler"]))
+    _, uygun, yas_disi = _katalog_urunleri(em_id, yas)
+    toplam_sayfa = max(1, -(-len(uygun) // KATALOG_SINIRI))
+    secilen = uygun[(sayfa - 1) * KATALOG_SINIRI: sayfa * KATALOG_SINIRI]
+    return veri.zarf({
+        "kisa_ozet": f"{_rehber_adi(em_id)}: {len(uygun)} ürünün {sayfa}. sayfası.",
+        "urunler": [_katalog_ogesi(u, em_id, _madde_beyanlari(u, em_id)) for u in secilen],
+        "sayfa": sayfa, "toplam_sayfa": toplam_sayfa, "toplam_urun": len(uygun),
+        **({"yas_siniri_disinda_kalan": len(yas_disi)} if yas_disi else {}),
+        "siralama_olcutu": ("Yalnızca bu maddeyi içeren ürünler önce, sonra alfabetik. "
+                            "Sponsorlu veya öncelikli sıralama yoktur; sıra bir öneri değildir."),
+    }, [veri.urun_kaynagi(u) for u in secilen] or veri.kaynaklar(["orzax_urunler"]))

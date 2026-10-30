@@ -37,7 +37,11 @@ Bilmen gerekenler:
 | `sikayet_yolu` | `sikayet` (ör. "hep yorgunum"), isteğe bağlı `yas`, `cinsiyet` | Şikâyetten yola çıkan giriş: kırmızı bayraklar (yaşa ve cinsiyete göre), hekimin isteyebileceği ilk basamak tahliller, tahlil öncesi takviye uyarıları, yaşam karnesi önerisi ve ilgili kanıt kartları. Ürün listesi döndürmez. Yollar `data/sikayet_yollari.json` dosyasındadır; şu an yalnızca yorgunluk. |
 | `yasam_karnesi` | `cevaplar` (6 alan; sayı ya da seçenek kodu, ör. `"1_2_gun"`), isteğe bağlı `yas` | 6 soruluk testin karnesi (0–12 puan), en fazla 3 hedef, `takviye_baglantilari` (ör. az balık → omega-3 kanıtını incele), `guvenlik_uyarilari` (ör. sigara → beta-karoten). Takviye bağlantısı yalnızca kanıt kartı hazır maddelere kurulur. Kurallar `data/karne_kurallari.json` dosyasındadır. Cevaplar eksikse soruları `secenekler[] {etiket, deger}` ile (her soruda en fazla 4 seçenek, 4 + 2 soru akışı) döndürür. Hedeflerin `ilk_adim` alanı mevcut seviyeye göre değişir. |
 
-Her yanıtta şu alanlar bulunur: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
+### Model katmanı ve görsel kart (mimari v2)
+
+Her araç iki parça döner: modele en fazla 4.500 karakterlik (≈ 1.500 token) kısa metin özeti (`server/ozet.py`; en fazla 5 ürün, 5 kaynak, sonda `uyari` cümlesi) ve görsel karta tam veri (`structuredContent`). MCP Apps desteklemeyen istemci de anlamlı metin özeti alır. Sabit veri notu sunucu talimatındadır. `katalog_sayfasi` görsel kartın sayfalama için çağırdığı araçtır; `_meta.ui.visibility: ["app"]` ile modelden gizlenir ve kanıt kartı olmayan maddede ürün döndürmez. Ölçüm: `.venv/bin/python scripts/olcum.py --etiket <ad>` (`docs/olcumler/`).
+
+`structuredContent` her yanıtta şu alanları taşır: `kaynaklar`, `uyari` ("Takviye edici gıdalar ilaç değildir. Kişisel kullanım miktarı ve tedavi için hekiminize danışın."), `gelistirici` ve `veri_notu`.
 
 ### Kaynaklar
 
