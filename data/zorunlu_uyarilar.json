@@ -1,0 +1,23 @@
+{
+  "_not": "Kanıt kartından bağımsız, her zaman gösterilen güvenlik uyarıları (TB-03). Kurul onayı beklerken 'taslak' etiketiyle sunulur; uyarının yokluğu onaysız uyarıdan daha risklidir. kosul alanı etken_madde_rehberi profiliyle eşleşir (boş: herkese).",
+  "uyarilar": {
+    "demir": [
+      {
+        "id": "demir_tahlilsiz_kullanma",
+        "tur": "tahlilsiz_kullanma",
+        "kosul": {},
+        "mesaj": "Demir takviyesine, eksiklik kan tahliliyle doğrulanmadan başlanmamalıdır. Kılavuzlar eksikliğin tahlille doğrulanmasını ve her eksiklikte nedeninin araştırılmasını önerir; neden, sindirim sisteminde ciddi bir hastalık da olabilir. Anemisi olmayan kişilerde demir kullanımının yararına dair kanıt sınırlıdır.",
+        "kaynaklar": ["bsg_demir_eksikligi_2021", "pasricha_demir_eksikligi_2021", "aust_prescr_demir_2021"],
+        "durum": "taslak"
+      },
+      {
+        "id": "demir_erkek",
+        "tur": "grup_notu",
+        "kosul": {"cinsiyet": ["erkek"]},
+        "mesaj": "Erkeklerde demir eksikliği çıkarsa nedeni hekimle araştırılmalıdır: demir eksikliği anemisi olan erkeklerin ve menopoz sonrası kadınların yaklaşık üçte birinde, çoğunlukla sindirim sisteminde olan altta yatan bir neden bulunur.",
+        "kaynaklar": ["bsg_demir_eksikligi_2021", "pasricha_demir_eksikligi_2021"],
+        "durum": "taslak"
+      }
+    ]
+  }
+}

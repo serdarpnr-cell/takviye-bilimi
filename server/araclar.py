@@ -650,6 +650,7 @@ _VITAMIN_MINERAL = {
 # Omega-3 rehberi EPA ve DHA'yı ayrı satır olarak yazan ürünleri de kapsar.
 _KATALOG_KIMLIKLERI = {"omega3": {"omega3", "epa", "dha", "toplam_omega3"}}
 TASLAK_NOTU = "Taslak: bu kanıt kartı medikal kurul onayı bekliyor."
+TASLAK_UYARI_NOTU = "Taslak: bu güvenlik uyarısı medikal kurul onayı bekliyor; onay beklerken de gösterilir."
 
 
 def _rehber_id(ad: str) -> str | None:
@@ -743,6 +744,20 @@ def etken_madde_rehberi(
     m = veri.monografi(em_id)
     ad = m["ad"] if m else _rehber_adi(em_id)
     kaynak_idleri: list[str] = []
+
+    # Zorunlu güvenlik uyarıları (TB-03, TB-04): kanıt kartı olsa da olmasa da, en üstte.
+    zorunlu = []
+    for u in veri.zorunlu_uyarilar(em_id):
+        if _kosul_saglanir(u["kosul"], profil):
+            zorunlu.append({
+                "mesaj": u["mesaj"],
+                "dayanak": [_kunye(i) for i in u["kaynaklar"]],
+                **({"durum": TASLAK_UYARI_NOTU} if u["durum"] == "taslak" else {}),
+            })
+            kaynak_idleri += u["kaynaklar"]
+    # "Tahlilsiz kullanma" uyarısının ilk cümlesi özetin ilk cümlesi olur.
+    on_ek = next((u["mesaj"].split(". ")[0] + ". " for u in veri.zorunlu_uyarilar(em_id)
+                  if u["tur"] == "tahlilsiz_kullanma" and _kosul_saglanir(u["kosul"], profil)), "")
 
     # Kanıt düzeyi: sonuç alanı bazında.
     kanit = []
@@ -845,7 +860,8 @@ def etken_madde_rehberi(
     )
 
     return veri.zarf({
-        "kisa_ozet": m["kisa_ozet"] if m else durum_metni,
+        "kisa_ozet": on_ek + (m["kisa_ozet"] if m else durum_metni),
+        "zorunlu_uyarilar": zorunlu,
         **({"kanit_durumu": TASLAK_NOTU} if m and m["durum"] == "taslak" else {}),
         "kimde_kanit_var": [{"grup": g["grup"], "gerekce": g["gerekce"]} for g in (m or {}).get("kimde_kanit_var", [])],
         **({"kimde_kanit_var_notu": m["kimde_kanit_var_notu"]} if m and m.get("kimde_kanit_var_notu") else {}),

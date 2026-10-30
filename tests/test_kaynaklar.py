@@ -4,7 +4,9 @@ import pytest
 
 from server import araclar, veri
 
-TURLER = {"kilavuz", "meta_analiz", "rct", "duzenleyici", "uretici_icerigi"}
+# "sistematik_derleme" meta-analiz yapmayan sistematik derlemedir; "derleme" anlatı derlemesidir ve yalnızca
+# güvenlik uyarılarında dayanak olur, kanıt düzeyine katılmaz.
+TURLER = {"kilavuz", "meta_analiz", "sistematik_derleme", "derleme", "rct", "duzenleyici", "uretici_icerigi"}
 YANIT_ALANLARI = {"baslik", "kurum_veya_dergi", "yil", "tur", "url", "pmid"}
 
 # Her aracın her dönüş yolu: soru, bulunamadı, belirsiz, tam sonuç.

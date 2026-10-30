@@ -331,6 +331,46 @@
       "lint_bulgulari": [],
       "dogrulandi": true,
       "dogrulama_tarihi": "2026-10-29"
+    },
+    "bsg_demir_eksikligi_2021": {
+      "tur": "kilavuz",
+      "pmid": "34497146",
+      "baslik": "British Society of Gastroenterology guidelines for the management of iron deficiency anaemia in adults",
+      "kurum_veya_dergi": "Gut",
+      "yil": 2021,
+      "alintilar": [
+        "Approximately a third of men and postmenopausal women presenting with IDA have an underlying pathological abnormality, most commonly in the GI tract.",
+        "We recommend that iron deficiency should be confirmed by iron studies prior to investigation.",
+        "IDA can be caused by a range of GI pathologies including cancer"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "pasricha_demir_eksikligi_2021": {
+      "tur": "derleme",
+      "pmid": "33285139",
+      "baslik": "Iron deficiency",
+      "kurum_veya_dergi": "Lancet",
+      "yil": 2021,
+      "alintilar": [
+        "An underlying cause should be sought in all patients presenting with iron deficiency",
+        "endoscopic investigation to exclude bleeding gastrointestinal lesions is warranted in men and postmenopausal women presenting with iron deficiency anaemia"
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
+    },
+    "aust_prescr_demir_2021": {
+      "tur": "derleme",
+      "pmid": "35002031",
+      "baslik": "Non-anaemic iron deficiency",
+      "kurum_veya_dergi": "Aust Prescr",
+      "yil": 2021,
+      "alintilar": [
+        "There is limited evidence about the benefits of giving iron to people who do not have anaemia.",
+        "Serum iron has a diurnal variation and the ideal specimen is a fasting morning sample after oral iron supplementation has been withheld for at least 24 hours before testing."
+      ],
+      "dogrulandi": true,
+      "dogrulama_tarihi": "2026-10-30"
     }
   }
 }

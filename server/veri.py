@@ -136,6 +136,16 @@ def urun_beyanlari() -> dict:
 
 
 @lru_cache(maxsize=1)
+def _zorunlu_uyarilar() -> dict:
+    return _yukle("zorunlu_uyarilar.json")["uyarilar"]
+
+
+def zorunlu_uyarilar(em_id: str) -> list[dict]:
+    """Kanıt kartından bağımsız güvenlik uyarıları. Kurul onayı beklerken de (taslak etiketiyle) sunulur."""
+    return _zorunlu_uyarilar().get(em_id, [])
+
+
+@lru_cache(maxsize=1)
 def kaynak_kayitlari() -> dict:
     return _yukle("kaynaklar.json")["kaynaklar"]
 
